@@ -52,7 +52,8 @@ group :development, :test do
   gem 'spring', '>=1.3.0'
   gem 'database_cleaner'
   gem 'cucumber-rails', :require => false
-  gem 'capybara-webkit' #i(rachel) did 'brew install qt' on mac [or 'apt-get install libqtwebkit-dev' on linux] to get this gem working for headless javascript tests in cucumber
+  gem 'capybara', '2.4.4'
+  gem 'capybara-webkit', '1.8.0' #i(rachel) did 'brew install qt' on mac [or 'apt-get install libqtwebkit-dev' on linux] to get this gem working for headless javascript tests in cucumber
   gem 'headless'
   gem 'rspec-rails', '~>3.2.1'
   gem 'simplecov'

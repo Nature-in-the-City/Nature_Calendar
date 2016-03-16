@@ -9,6 +9,15 @@ SimpleCov.start 'rails'
 require 'cucumber/rails'
 require 'fakeweb'
 
+Capybara::Webkit.configure do |config|
+  config.allow_url("csi.gstatic.com")
+  config.allow_url("static1.squarespace.com")
+  config.allow_url("www.google.com")
+  config.allow_url("fonts.googleapis.com")
+  config.allow_url("use.typekit.net")
+  config.allow_url("maps.googleapis.com")
+end
+
 Before do
   file = File.join(Rails.root, 'features', 'support', 'backup.html')
   fake_response = File.read(file)
