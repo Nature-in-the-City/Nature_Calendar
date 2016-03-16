@@ -3,7 +3,7 @@ require 'cucumber/rspec/doubles'
 
 Given /I am an authorized organizer of the group/ do
   # Here I'm using credentials to access the sandbox at Meetup
-  tester = Meetup.new(group_id: '1556336', group_urlname: 'Meetup-API-Testing')
+  tester = Meetup.new(group_id: '19713962', group_urlname: 'NatureWalk')
   allow(Meetup).to receive(:new).and_return(tester)
 end
 
