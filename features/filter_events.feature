@@ -1,3 +1,4 @@
+@javascript
 Feature: Filter Events by family friendly
   
   As a parent
@@ -5,7 +6,7 @@ Feature: Filter Events by family friendly
   I want to filter the event calendar by family friendly
   
 Background:
-  Given I am on the Calendar page
+  Given I am on the calendar page
   And the month is March 2016
   
 Scenario: Filter by family friendly
