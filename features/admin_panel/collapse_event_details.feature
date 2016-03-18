@@ -44,6 +44,6 @@ Scenario: Displayed event details should be displayed after returning from anoth
   When  I press "Show More" on "Hike4"
   Then  I press the "Past" tab
   And   I press "Show More" on "Hike1"
-  When  I press "Upcoming"
+  When  I press the "Upcoming" tab
   Then  the details of "Hike4" should not be hidden
   But   the details of "Hike5" should be hidden

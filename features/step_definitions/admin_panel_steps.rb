@@ -1,13 +1,13 @@
 
-Given /I see the "Admin" panel$/ do
+Given /^I see the Admin panel$/ do
     expect(page).to have_css('#events_box')
 end
 
-Given /I see the "(.*?)" status tab$/ do |tab|
+Given /^I see the "(.*?)" status tab$/ do |tab|
     expect(page).to have_content(tab)
 end
 
-Given /I see the following status tabs: (.*?)$/ do |tabs|
+Given /^I see the following status tabs: (.*?)$/ do |tabs|
     t = tabs.split(", ")
     t.map &:downcase
     t.each do |tab|
@@ -24,7 +24,6 @@ Then /I press the "(.*?)" tab$/ do |tab|
 end
 
 Then /^I should (?:|only )see (.*) events$/ do |stat|
-    pending
     expected_status = stat.split(", ")
     if expected_status.length > 1
         expected_status.each do |status|
@@ -59,46 +58,34 @@ Then /I should( not)? see "(.*)" before "(.*)"/ do |negated, first_item, second_
     expect(page.body =~ rx).to be_truthy
 end
 
-Given(/^I am displaying "([^"]*)" events$/) do |arg1|
+Given /^I am displaying "(.*)" events$/  do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Then(/^the details of "([^"]*)" should be hidden$/) do |arg1|
+Then /^the details of "(.*)" should be hidden$/ do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-When(/^I press "([^"]*)" on "([^"]*)"$/) do |arg1, arg2|
+When /^I press "(.*)" on "(.*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Then(/^the details of "([^"]*)" should not be hidden$/) do |arg1|
+Then /^the details of "(.*)" should not be hidden$/ do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I display the details of "([^"]*)"$/) do |arg1|
+Given /^I display the details of "(.*)"$/ do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-When(/^I press "([^"]*)"$/) do |arg1|
+Given /^I am displaying the "(.*)" events$/ do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I am displaying the "([^"]*)" events$/) do |arg1|
+Then /^I should see the following details displayed below "(.*)":  ("(.*)"(,)?)+$/ do |event_name, detail_list|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Then(/^I should see the following details displayed below "([^"]*)":  "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3, arg4, arg5, arg6, arg7|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^I should not see the following events: "([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^I should see the following details displayed below "([^"]*)": "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3, arg4, arg5, arg6, arg7|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^I should not see the following events:"([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3|
+Then /^I should( not)? see the following events: ("(.*)"(,)?)+$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end

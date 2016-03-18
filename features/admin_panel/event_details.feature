@@ -26,16 +26,16 @@ Scenario: Display pending event details
   Given I am displaying the "Pending" events
   Then  I should see "Hike2"
   And   I should see the following details displayed below "Hike2": "Name", "Start Time", "End Time", "Location", "Description", "Status"
-  But   I should not see the following events:"Hike1", "Hike3", "Hike4"
+  But   I should not see the following events: "Hike1", "Hike3", "Hike4"
 
 Scenario: Display rejected event details
   Given I am displaying the "Rejected" events
   Then  I should see "Hike3"
   And   I should see the following details displayed below "Hike3": "Name", "Start Time", "End Time", "Location", "Description", "Status"
-  But   I should not see the following events:"Hike1", "Hike2", "Hike4"
+  But   I should not see the following events: "Hike1", "Hike2", "Hike4"
 
 Scenario: Display past event details
   Given I am displaying the "Past" events
   Then  I should see "Hike1"
   And   I should see the following details displayed below "Hike1": "Name", "Start Time", "End Time", "Location", "Description", "Status"
-  But   I should not see the following events:"Hike2", "Hike3", "Hike4"
+  But   I should not see the following events: "Hike2", "Hike3", "Hike4"
