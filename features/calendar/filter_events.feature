@@ -1,28 +1,24 @@
+@javascript
 Feature: Filter Events by family friendly
   
   As a parent
   So that I can find Nature in the City Events appropriate for my children
   I want to filter the event calendar by family friendly
   
-Given the following events exist:
-  | Name                    | Location | event_date     | event_type      |
-  | Event1                  | SF       | 25-Feb-2016    | family_friendly |
-  | Event2                  | SF       | 26-March-2016  |                 |
-  | Event3                  | SF       | 21-March-2016  |                 |
-  | Event4                  | SF       | 10-March-2016  | family_friendly |
-
-  And  I am on the Calendar page
+Background:
+  Given I am on the calendar page
+  And the month is March 2016
   
 Scenario: Filter by family friendly
-  Given I check "Filter by Family Friendly"
-  And I view calendar month "February"
-  Then I should see "Event1"
-  And I view calendar month "March"
-  Then I should see "Event4"
-  And I should not see "Event2"
-  And I should not see "Event3"
+  Given I check the filter for "Family Friendly"
+  Then I should see "Market Street Prototyping Festival"
+  And I should see "Nerds on Safari: Market Street"
+  Given the month is May 2016
+  And I should not see "Bay to Breakers"
   
-Scenario: No family friendly events available
-  Given I check "Filter by Family Friendly"
-  And I view calendar month "
+Scenario: Filter by family friendly and free
+  Given I check the filter for "Family Friendly"
+  And I check the filter for "Free"
+  Then I should see "Market Street Prototyping Festival"
+  And I should not see "Nerds on Safari: Market Street"
  
