@@ -7,39 +7,6 @@
     %div
       = msg
 
-  #color_keys
-    %table
-      %tr
-        %td{width: '20px'}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#2E9AFE"}
-
-        %td Hike
-      %tr
-        %td{width: '20px'}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#86B404"}
-
-        %td Plant
-      %tr
-        %td{width: '20px'}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#FAAC58"}
-
-        %td Volunteer
-      %tr
-        %td{width: '20px'}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#F7FE2E"}
-
-        %td Learn
-      %tr
-        %td{width: '20px'}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#F781BE"}
-
-        %td Performance
-
   #title_box
     - if user_signed_in?
       #admin_panel
@@ -75,6 +42,39 @@
           = submit_tag 'Suggest Event', class: ['main_organization', 'event_creation_button', 'button_right']
 
     .clear
+    
+  #color_keys
+    %table
+      %tr
+        %td{:class => "color_cube"}
+          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
+            %rect{:width => 15, :height => 15, :fill => "#2E9AFE"}
+
+        %td{:class => "color_category"} Hike
+        
+        %td{:class => "color_cube"}
+          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
+            %rect{:width => 15, :height => 15, :fill => "#86B404"}
+
+        %td{:class => "color_category"} Plant
+        
+        %td{:class => "color_cube"}
+          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
+            %rect{:width => 15, :height => 15, :fill => "#FAAC58"}
+
+        %td{:class => "color_category"} Volunteer
+        
+        %td{:class => "color_cube"}
+          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
+            %rect{:width => 15, :height => 15, :fill => "#F7FE2E"}
+
+        %td{:class => "color_category"} Learn
+        
+        %td{:class => "color_cube"}
+          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
+            %rect{:width => 15, :height => 15, :fill => "#F781BE"}
+
+        %td{:class => "color_category"} Performance
 
   - # Div for calendar and sidepanel
   #wrap

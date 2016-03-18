@@ -12,6 +12,7 @@ Feature: push new calendar events to meetup
     And I am on the calendar page
     And I click on the "+" button
     And I fill in the "Name" field with "Nature Walk"
+    And I check "Enable Venue"
     And I fill in the "autocomplete" field with "145 N Jackson st Glendale 91206"
     And I accept the google maps suggested address
     And I select "8/18/2015, 4:30pm" as the "start" date and time

@@ -1,0 +1,63 @@
+#e_name
+  .field Name
+  = text_field :event, 'name', placeholder: 'Name', class: 'edit_text_field'
+  
+#e_email
+  .field Email
+  = text_field :event, 'contact_email', placeholder: 'example@gmail.com', class: 'edit_text_field'
+
+#e_image.colored
+  .field Image Upload
+  = file_field :event, :image, id: 'image', accept: 'image/*'
+
+#e_start_time
+  .field Start Time
+  = datetime_select :event, :start, default: default_time, datetime_separator: '', time_separator: '', ampm: true
+
+#e_end_time.colored
+  .field End Time
+  = datetime_select :event, :end,  default: default_time, datetime_separator: '', time_separator: '', ampm: true
+
+#e_venue_name
+  = check_box_tag 'venue_check'
+  = label_tag 'venue_check', 'Enable Venue', class: 'field'
+  #venue_label.field Venue Name
+  = text_field :event, :venue_name, class: 'edit_text_field'
+
+#e_location.colored
+  #location_label.field Location
+  = text_field_tag :autocomplete, nil, placeholder: 'Enter your address', onFocus: 'initialize();', class: 'edit_text_field'
+
+  #e_address
+    .field Street Address
+    = text_field :event, 'st_number', placeholder: 'not required'
+    = text_field :event, 'st_name'
+
+  #e_city
+    .field City
+    = text_field :event, 'city', class: 'medium_edit_text_field'
+
+  #e_state
+    .field State
+    = text_field :event, 'state', class: 'short_edit_text_field'
+
+  #e_zip
+    .field Zip
+    = text_field :event, 'zip', size: '6', class: 'short_edit_text_field', placeholder: 'not required'
+
+  #e_country
+    .field Country
+    = text_field :event, 'country', class: 'short_edit_text_field'
+
+  #map
+
+#e_how_to_find_us
+  .field How to find us
+  = text_area :event, 'how_to_find_us', :cols =>'40', :rows => '2', class: 'edit_text_field'
+
+#e_description.colored
+  .field Description
+  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field tinymce'
+
+= tinymce_assets
+= tinymce
