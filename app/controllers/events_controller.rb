@@ -68,10 +68,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @suggested_event = false
-    if params[:suggested_event] then
-      @suggested_event = true
-    end
+    @suggested_event = params[:suggested_event]
     handle_response
   end
 
