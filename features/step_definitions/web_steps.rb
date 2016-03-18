@@ -23,6 +23,7 @@ require 'uri'
 require 'cgi'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "selectors"))
+Capybara.javascript_driver = :webkit
 
 module WithinHelpers
   def with_scope(locator)
@@ -31,6 +32,9 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
+When /^I press "(.*)"$/ do |button|
+  click_on(button)
+end
 
 # Single-line step scoper
 When /^(.*) within (.*[^:])$/ do |step, parent|
@@ -97,7 +101,7 @@ end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
   if page.respond_to? :should
-    page.should have_content(text)
+    expect(page).to have_content(text)
   else
     assert page.has_content?(text)
   end

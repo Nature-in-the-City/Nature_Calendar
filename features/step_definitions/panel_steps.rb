@@ -26,6 +26,8 @@ Then(/^I should see the "(.*)" in the panel$/) do |panel|
     expect(page).to have_content("Edit Event")
   when "new form"
     expect(page).to have_content("New Event")
+  when "suggest form"
+    expect(page).to have_content("Suggest Your Event")
   end
 end
 
