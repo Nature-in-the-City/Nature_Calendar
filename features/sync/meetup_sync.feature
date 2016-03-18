@@ -1,3 +1,4 @@
+@sync
 Feature:
   As an admin user
   So I can make all nature events in SF available on my calendars

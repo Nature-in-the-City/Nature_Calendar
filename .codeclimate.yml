@@ -4,3 +4,12 @@ languages:
   PHP: true
   Python: true
 exclude_paths:
+- "vendor/assets/javascripts/fullcalendar.js"
+- "features/support/stored_data.rb"
+- "app/assets/javascripts/google_map.js"
+- "spec/models/registration_spec.rb"
+- "features/step_definitions/generate_calendar_steps.rb"
+- "app/assets/javascripts/third_party_events.js"
+- "features/step_definitions/authentication_steps.rb"
+- "spec/models/guest_spec.rb"
+- "features/step_definitions/web_steps.rb"

@@ -1,5 +1,5 @@
 # in features/admin_panel/collapse_event_details.feature
-
+@admin_panel
 Feature: Hide the details of events displayed in the admin panel
   As an admin
   So that the admin panel isn’t cluttered

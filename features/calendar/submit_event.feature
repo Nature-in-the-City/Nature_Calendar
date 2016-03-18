@@ -1,4 +1,4 @@
-@javascript
+@calendar @javascript
 Feature: Guests can suggest Events for approval by an admin
   
   As a guest of Nature in the City

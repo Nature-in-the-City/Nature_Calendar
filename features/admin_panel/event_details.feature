@@ -1,3 +1,4 @@
+@admin_panel
 Feature: View event details on the admin page.
 	As an admin user
 	So that I see all of the details of an event

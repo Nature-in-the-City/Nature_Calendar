@@ -1,4 +1,4 @@
-
+@admin_panel
 Feature: View events by status on the admin page.
 	As an admin user
 	So that I can easily switch between events of different status groups
