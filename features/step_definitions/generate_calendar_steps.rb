@@ -6,7 +6,7 @@ end
 
 And /^the month is ([A-Za-z]*) (\d+)$/ do |month, year|
   @date = month + " " + year
-  page.execute_script("$('#calendar').fullCalendar('gotoDate', new Date(2015, #{to_num(month)}))")
+  page.execute_script("$('#calendar').fullCalendar('gotoDate', new Date(2016, #{to_num(month)}))")
 end
 
 Then /^the month should be ([A-Za-z]*) (\d+)$/ do |month, year|

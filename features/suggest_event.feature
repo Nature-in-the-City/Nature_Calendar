@@ -12,10 +12,11 @@ Feature: Guests can suggest Events for approval by an admin
     Then I should see the "Suggest Your Event" in the panel
   
   Scenario: Submit an Event
-    And I fill in the required event form details
-    And I press "suggest"
-    Then I should see "Your Event was successfully submitted for approval!"
+    When I fill in the required event form details for event "Garden Party" on "3/22/2016" and submit
+    When I go to the calendar page
+    And the month is March 2016
+    Then I should see "Garden Party"
   
   Scenario: Submit Event failure
-    When I press "suggest"
-    Then I should see "You must fill out all required fields (marked with a *)"
+    When I press "submit_suggest_event"
+    Then I should not see "Successfully added 'Garden Party'"
