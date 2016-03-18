@@ -66,7 +66,7 @@ Then /^the details of "(.*)" should be hidden$/ do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-When /^I press "(.*)" on "(.*)"$/ do |arg1, arg2|
+When /^I press the "(.*)" on "(.*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
