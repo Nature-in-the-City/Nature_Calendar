@@ -117,3 +117,31 @@ def path_to_event(page_name, event_name)
   page_name = page_name.downcase
   path_to("the #{page_name} page for #{event_name}")
 end
+
+Given(/^I know event "([^"]*)": "([^"]*)"$/) do |arg1, arg2|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Then(/^I should have "([^"]*)": "([^"]*)"$/) do |arg1, arg2|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Then(/^the "([^"]*)" event should exits on "([^"]*)" platforms$/) do |arg1, arg2|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Then(/^the event should exist on "([^"]*)" platforms$/) do |arg1|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Given(/^I create a new event called "([^"]*)"$/) do |arg1|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Given(/^the event takes place on "([^"]*)"$/) do |arg1|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Given(/^I click on the event "([^"]*)"$/) do |arg1|
+  puts 'features/step_definitions/event_steps.rb'
+end

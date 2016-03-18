@@ -97,14 +97,14 @@
     %ul{:class => 'nav nav-tabs'}
       - @tabs.each do |tab|
         - if tab.eql? "Upcoming"
-          %li{:class => 'active'}
+          %li{class: 'active', id: "#{tab}"}
             %a{:href =>"##{tab.downcase}_events", 'data-toggle' => 'tab'} #{tab}
         - else
-          %li
+          %li{id: "#{tab}"}
             - if tab.eql? "Pending"
               %a{:href =>"#pending_events", 'data-toggle' => 'tab'} Pending (#{@pending_count})
             - else
-              %li
+              %li{id: "#{tab}"}
                 - if tab.eql? "Pending"
                   %a{:href =>"#pending_events", 'data-toggle' => 'tab'} Pending (#{@pending_count})
                 - else
