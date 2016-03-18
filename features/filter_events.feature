@@ -11,10 +11,13 @@ Background:
 Scenario: Filter by family friendly
   Given I check the filter for "Family Friendly"
   Then I should see "Market Street Prototyping Festival"
+  And I should see "Nerds on Safari: Market Street"
   Given the month is May 2016
   And I should not see "Bay to Breakers"
   
-Scenario: No family friendly events available
-  Given I check "Filter by Family Friendly"
-  And I view calendar month "
+Scenario: Filter by family friendly and free
+  Given I check the filter for "Family Friendly"
+  And I check the filter for "Free"
+  Then I should see "Market Street Prototyping Festival"
+  And I should not see "Nerds on Safari: Market Street"
  
