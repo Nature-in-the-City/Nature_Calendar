@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 20160306160329) do
     t.string   "name",                                                           null: false
     t.string   "organization"
     t.text     "description"
+    t.string   "url"
     t.decimal  "cost",               precision: 8, scale: 2, default: 0.0
     t.string   "venue_name"
     t.integer  "st_number"

@@ -212,6 +212,19 @@ h2 {
   border-bottom-right-radius: 2px;
 }
 
+#color_keys {
+  width: 600px;
+  padding-bottom: 15px;
+}
+
+#color_keys td.color_cube {
+  width: 20px;
+}
+
+#color_keys td.color_category {
+  width: 100px;
+}
+
 #calendar, #panel_header, #panel_wrapper, #panel, .button {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box;    /* Firefox, other Gecko */

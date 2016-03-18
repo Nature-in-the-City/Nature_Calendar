@@ -1,8 +1,8 @@
-%h4.default_event_message Suggest Event
+%h4.default_event_message Suggest Your Event
 
 = form_tag events_path, id: 'create_event', remote: true, format: :js, :multipart => true, authenticity_token: true do
   -# this path does an ajax post to the event controller action create
-  = render 'event_form'
+  = render 'suggest_event_form'
   = hidden_field_tag 'suggested_event', 'True'
-  = submit_tag "Suggest Event", class:'button_right', id: 'suggest'
+  = submit_tag "Suggest Event", class:'button_right', id: 'submit_suggest_event'
   = submit_tag "Cancel",  name: 'cancel', id: 'cancel', class: 'button_left'
