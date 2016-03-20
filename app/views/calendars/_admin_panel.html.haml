@@ -54,17 +54,20 @@
               - if tab.eql? "Upcoming"
                 = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
               - else
-                = submit_tag 'accept', disabled: 'true'
+                = submit_tag 'accept'
           .container.col-sm-4
             = form_tag  do
               -# this will call editing
               = submit_tag 'edit'
-          .container.col-sm-4
-            = form_tag do
-              -# this will delete
-              - if tab.eql? "Rejected"
-                = submit_tag 'reject', class: [ 'disabled' ]
-              - else
+          - if tab.eql? "Rejected"
+            .container.col-sm-4
+              = form_tag do
+                -# this will permanently delete an event
+                = submit_tag 'delete'
+          - else
+            .container.col-sm-4
+              = form_tag do
+                -# this will move an event to the rejected area
                 = submit_tag 'reject'
     %br
 
