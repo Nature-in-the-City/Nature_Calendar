@@ -1,60 +1,73 @@
 -# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
+
 %br
 - if @event_relations[tab].count > 0
   - @event_relations[tab].each do |event|
-    .container{:id => "#{tab.downcase}_title"}
+    .container{ id: "#{event.id}_title" }
       .col-sm-8
         %h3= "#{event.name}"
       .col-sm-4
         %button= "Show More"
-    .container{:id => "#{tab.downcase}_details"}
-      #top{:class => "row"}
-        #date.col-sm-3
-          Date:
-          .container=event.start.strftime("%b %-d, %Y")
-        #cost.col-sm-3
-          Cost:
+    .container{ id: "#{event.id}_details" }
+      #top{ class: "row" }
+        #date.col-sm-2
+          Date
+          .container
+            =event.start.strftime("%b %-d, %Y")
+        #cost.col-sm-2
+          Cost
           .container= "$#{event.cost}"
-        #tags.col-sm-3
-          Tags:
-          .container="#{event.tags}"
-        #contact_1.col-sm-3
-          Contact Info:
-          .container= "Name: #{event.contact_name_last}, #{event.contact_name_first}"
+        #tags.col-sm-3.container
+          Tags
+          .containers
+            %p="#{event.tags}"
+        #contact_1.col-sm-3.container
+          Contact Info
+          - if event.contact_name_first
+            .container="Name: #{event.contact_name_last}, #{event.contact_name_first}"
+          - else
+            .container="Name:"
           .container= "Phone: #{event.contact_phone}"
-          
-      #bottom{:class => "row"}
-        #time.col-sm-3{:id => "_Time"}
-          Time:
-          .container="Start: #{event.start.strftime("%r")}"
-          .container= "End: #{event.end.strftime("%r")}"
-        #location.col-sm-3{:id => "_Location"}
-          Location:
-          .container= "#{event.st_number} #{event.st_name}"
-          .container= "#{event.city}, CA #{event.zip}"
-        #description.col-sm-3{:id => "_Description"}
+
+      #bottom{ class: "row container" }
+        #time{ id: "_Time", class: "container col-sm-2" }
+          Time
+          .container
+            #start="Start: #{event.start.strftime("%r")}"
+            #end= "End: #{event.end.strftime("%r")}"
+        #location.col-sm-2.container{ id: "_Location" }
+          Location
+          .container
+            #street= "#{event.st_number} #{event.st_name}"
+            #city= "#{event.city}, CA #{event.zip}"
+        #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid
             %p= event.description
-        #contact_2.col-sm-3{:id => "val_Email"}
-          .container-fluid
-            %p="Email: #{event.contact_email}"
-          .container="Org: #{event.organization}"
+        #contact_2.col-sm-3.container{ id: "val_Email" }
+          .container
+            #email= "Email: #{event.contact_email}"
+            #org= "Org: #{event.organization}"
+          .container.col-sm-4
+            = form_tag  do
+              -# this will call editing
+              - if tab.eql? "Upcoming"
+                = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
+              - else
+                = submit_tag 'accept', disabled: 'true'
+          .container.col-sm-4
+            = form_tag  do
+              -# this will call editing
+              = submit_tag 'edit'
+          .container.col-sm-4
+            = form_tag do
+              -# this will delete
+              - if tab.eql? "Rejected"
+                = submit_tag 'reject', class: [ 'disabled' ]
+              - else
+                = submit_tag 'reject'
     %br
-    -# OLD TABLE 
-    -#%table{:id => "#{tab.downcase}_#{event.id}"}
-      -#%tbody
-        -#%tr
-          -#%td
-            -#%h3= event.name
-          -#%td= "Organization: #{event.organization}"
-          -#%td= "Venue: #{event.venue_name}"
-        -#%tr
-          -#%td= event.description
-        -#%tr
-          -#%td= "Start: #{event.start}"
-          -#%td= "End: #{event.end}"
-    -#%br
+
 - else
   %ul
     %li= "There are no #{tab} events"

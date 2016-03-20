@@ -3,8 +3,6 @@ class AccountsController < ApplicationController
   before_action :is_root
 
   def create
-    puts 'AccountsController'
-    puts params
     @user = User.new email: params[:user][:email], password: params[:user][:password], reset_password_token: params[:user][:reset_password_token]
     if @user.save
       flash[:notice] = "Account successfully created"

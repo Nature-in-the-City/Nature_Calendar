@@ -89,33 +89,33 @@
     .clear
     
 #events_box
-  %div{:class => 'container'}
+  %div{ class: 'container' }
     %br
     %h2 Events
     %br
   #upcoming.container
-    %ul{:class => 'nav nav-tabs'}
+    %ul.nav.nav-tabs.containter.clearfix
       - @tabs.each do |tab|
         - if tab.eql? "Upcoming"
           %li{class: 'active', id: "#{tab}"}
-            %a{:href =>"##{tab.downcase}_events", 'data-toggle' => 'tab'} #{tab}
+            %a{ href: "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
         - else
           %li{id: "#{tab}"}
             - if tab.eql? "Pending"
-              %a{:href =>"#pending_events", 'data-toggle' => 'tab'} Pending (#{@pending_count})
+              %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
             - else
               %li{id: "#{tab}"}
                 - if tab.eql? "Pending"
-                  %a{:href =>"#pending_events", 'data-toggle' => 'tab'} Pending (#{@pending_count})
+                  %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
                 - else
-                  %a{:href =>"##{tab.downcase}_events", 'data-toggle' => 'tab'} #{tab}
+                  %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
       
-      %div{:class=>'tab-content clearfix'}
+      %div.tab-content.clearfix.container
         %br
         - @tabs.each do |tab|
           - if tab.eql? "Upcoming"
-            %div{:class => 'tab-pane active', :id =>"#{tab.downcase}_events"}
-              = render :partial => 'admin_panel', :locals => {:tab => tab}
+            %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
+              = render partial: 'admin_panel', locals: {tab: tab}
           - else
-            %div{:class => 'tab-pane', :id =>"#{tab.downcase}_events"}
-              = render :partial => 'admin_panel', :locals => {:tab => tab}
+            %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
+              = render partial: 'admin_panel', locals: { tab: tab }
