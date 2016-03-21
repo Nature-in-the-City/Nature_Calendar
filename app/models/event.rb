@@ -6,6 +6,11 @@ class Event < ActiveRecord::Base
                     path: "public/assets/:id/:style/:basename.:extension", default_url: "/assets/missing.png"
 
   do_not_validate_attachment_file_type :image
+  
+  def self.initialize
+    @contact = EventContact.new(self)
+    @location = Location.new(self)
+  end
 
   DEFAULT_DATE_FORMAT = '%b %e, %Y at %l:%M%P'
   DEFAULT_TIME_FORMAT = '%l:%M%P'
@@ -70,7 +75,6 @@ class Event < ActiveRecord::Base
         return ""
     end
   end
-      
 
   def self.get_remote_events(options={})
     meetup_events = Meetup.new.pull_events(options)
@@ -312,4 +316,29 @@ class Event < ActiveRecord::Base
     end
   end
 
+end
+
+
+class EventContact
+  def initialize(event)
+    @event = event
+  end
+  attr_reader :event
+  delegate :contact_name_first, :contact_name_last,
+           :contact_name_first=, :contact_name_last=,
+           :contact_email, :contact_phone,
+           :contact_email=, :contact_phone=,
+           :to => :event
+end
+
+class Location
+  def initialize(event)
+    @event = event
+  end
+  attr_reader :event
+  delegate :st_name, :st_name=, :st_number, :st_number=,
+           :state, :state=, :zip, :zip=, :to => :event
+  def within_radius? (zip, radius)
+    puts 'call ajax method begun in calendar js file'
+  end
 end

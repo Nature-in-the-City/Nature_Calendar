@@ -95,7 +95,7 @@ users = [{ email: 'admin123@admin.com',
   ]
 
 events.each do |event|
-  Event.create(event)
+  Event.create!(event)
 end
 
 guests.each do |guest|

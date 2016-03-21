@@ -23,8 +23,8 @@
             %p="#{event.tags}"
         #contact_1.col-sm-3.container
           Contact Info
-          - if event.contact_name_first
-            .container="Name: #{event.contact_name_last}, #{event.contact_name_first}"
+          - if event.contact_first
+            .container="Name: #{event.contact_last}, #{event.contact_first}"
           - else
             .container="Name:"
           .container= "Phone: #{event.contact_phone}"

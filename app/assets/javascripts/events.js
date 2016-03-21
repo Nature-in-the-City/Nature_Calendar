@@ -86,3 +86,32 @@ var renderEvent = function(event) {
     calendar.fullCalendar('gotoDate', eventDate);
 };
 
+/** Returns the zipcodes within dist_from_center of zip_center */
+var checkZipcodeRadius = function(zip_center, dist_from_center, units) {
+    var api_key = "OoZsJzcAcAkDFySGpVRykDBm5jfInQdbfcDYMPzYqTB6suMRqEqKh17mkm5IdiTs"
+    
+    var url = "https://www.zipcodeapi.com/rest/"+api_key+"/radius.json/"+zip_center+"/"+dist_from_center+"/"+units+""
+    
+    /** Handle successful response */
+    function handleResp(data)
+    {
+        /** TODO: handle data
+         * see https://www.zipcodeapi.com/API
+         */
+            
+    }
+    
+    $.ajax({
+        "url": url,
+        "dataType": "json"
+    }).done(function(data){
+        
+        handleResp(data);
+    }).fail(function(data){
+        
+        /* TODO: handle failures */
+        
+    })
+};
+
+// TODO: Bind checkZipcodeRadius to button

@@ -119,3 +119,16 @@
           - else
             %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
               = render partial: 'admin_panel', locals: { tab: tab }
+%br
+#sync
+  %h2 Sync Status
+  .container.row
+    #sync_status.container.col-sm-8
+      .button_right Sync Now
+      = render partial: 'sync_panel'
+    #add_cal.container.col-sm-4
+      %h3 Add New Calendar
+      %form_tag
+        = label :user, :email, "URL"
+        = text_field :user, :email
+        %input{:type => "submit", :value => "Add"}
