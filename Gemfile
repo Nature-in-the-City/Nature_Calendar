@@ -41,6 +41,8 @@ gem 'rails-html-sanitizer'
 gem 'remotipart'
 # Task scheduler
 gem 'rufus-scheduler'
+# Font Awesome Icons
+gem 'font-awesome-sass'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record

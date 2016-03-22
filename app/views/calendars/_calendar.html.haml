@@ -91,7 +91,8 @@
 #events_box
   %div{ class: 'container' }
     %br
-    %h2 Events
+    %h2
+      %strong Events
     %br
   #upcoming.container
     %ul.nav.nav-tabs.containter.clearfix
@@ -120,10 +121,11 @@
             %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
               = render partial: 'admin_panel', locals: { tab: tab }
 %br
-#sync
-  %h2 Sync Status
+#sync_status
+  %h2
+    %strong Sync Status
   .container.row
-    #sync_status.container.col-sm-8
+    #status.container.col-sm-8
       .button_right Sync Now
       = render partial: 'sync_panel'
     #add_cal.container.col-sm-4
@@ -132,3 +134,17 @@
         = label :user, :email, "URL"
         = text_field :user, :email
         %input{:type => "submit", :value => "Add"}
+
+:javascript
+  $(document).ready(function(){
+    var show_btns = $("a:contains('Show')");
+    
+    show_btns.each(function(index){
+    
+      $(this).on("click", function() {
+      
+        $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
+      });
+    });
+  });
+  

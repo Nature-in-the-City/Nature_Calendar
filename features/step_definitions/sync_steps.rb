@@ -1,9 +1,10 @@
 Given /^I see the "(.*)" panel$/ do |panel_name|
-  expect(page).to have_css("div#{panel_name}")
+  str = panel_name.downcase.split(" ").join("_")
+  expect(page).to have_css("div##{str}")
 end
 
 When /^I press the "(.*)" button$/  do |btn|
-  click_link("#{btn}")
+  click_button("#{btn}")
 end
 
 Given /^the following calendars have been linked:$/  do |table|

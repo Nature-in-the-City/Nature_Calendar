@@ -7,8 +7,11 @@
       .col-sm-8
         %h3= "#{event.name}"
       .col-sm-4
-        %button= "Show More"
-    .container{ id: "#{event.id}_details" }
+        %a{ id: "show_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
+          Show More
+          %i.fa.fa-angle-down
+    
+    .container{ id: "#{event.id}_details", class: "collapse" }
       #top{ class: "row" }
         #date.col-sm-2
           Date
@@ -43,34 +46,34 @@
         #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid
-            %p= event.description
+            %p=event.description
         #contact_2.col-sm-3.container{ id: "val_Email" }
           .container
             #email= "Email: #{event.contact_email}"
             #org= "Org: #{event.organization}"
-          .container.col-sm-4
-            = form_tag  do
-              -# this will call editing
-              - if tab.eql? "Upcoming"
-                = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
-              - else
-                = submit_tag 'accept'
-          .container.col-sm-4
-            = form_tag  do
-              -# this will call editing
-              = submit_tag 'edit'
-          - if tab.eql? "Rejected"
+          - if !tab.eql? "Past" 
             .container.col-sm-4
-              = form_tag do
-                -# this will permanently delete an event
-                = submit_tag 'delete'
-          - else
+              = form_tag  do
+                -# this will call editing
+                - if tab.eql? "Upcoming"
+                  = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
+                - else
+                  = submit_tag 'accept'
             .container.col-sm-4
-              = form_tag do
-                -# this will move an event to the rejected area
-                = submit_tag 'reject'
+              = form_tag  do
+                -# this will call editing
+                = submit_tag 'edit'
+            - if tab.eql? "Rejected"
+              .container.col-sm-4
+                = form_tag do
+                  -# this will permanently delete an event
+                  = submit_tag 'delete'
+            - else
+              .container.col-sm-4
+                = form_tag do
+                  -# this will move an event to the rejected area
+                  = submit_tag 'reject'
     %br
-
 - else
   %ul
     %li= "There are no #{tab} events"

@@ -428,6 +428,12 @@ h2 {
 	top:1px;
 }
 
+a.button {
+  @include button;
+  text-decoration: none;
+  padding: 0.3em;
+}
+
 
 #notice, #warning {
   background: rosybrown;
