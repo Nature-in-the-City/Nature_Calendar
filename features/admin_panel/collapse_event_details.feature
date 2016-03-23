@@ -8,39 +8,45 @@ Feature: Hide the details of events displayed in the admin panel
 Background:
   Given the following events exist:
   | name  | start         | end           | st_number | st_name   | city  | description   | status    | contact_email |
-  | Hike1 | Dec-21-2016   | Dec-21-2016   | 1210      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
-  | Hike2 | Dec-25-2016   | Dec-25-2016   | 1210      | street rd | SF    | A hike        | pending   | joe@cnn.com   |
-  | Hike3 | Dec-27-2016   | Dec-27-2016   | 1210      | street rd | SF    | A hike        | rejected  | joe@cnn.com   |
-  | Hike4 | Dec-30-2016   | Dec-30-2016   | 1210      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
-  | Hike5 | Dec-31-2016   | Dec-31-2016   | 1210      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
+  | HikeA | Dec-21-2016   | Dec-21-2016   | 1210      | street rd | SF    | A hike        | past      | joe@cnn.com   |
+  | Hike1 | Dec-25-2016   | Dec-25-2016   | 1211      | street rd | SF    | A hike        | pending   | joe@cnn.com   |
+  | HikeB | Dec-27-2016   | Dec-27-2016   | 1212      | street rd | SF    | A hike        | rejected  | joe@cnn.com   |
+  | Hike2 | Dec-30-2016   | Dec-30-2016   | 1213      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
+  | HikeC | Dec-31-2016   | Dec-31-2016   | 1214      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
 
-  And   I am logged in as the admin
-  And   I see the "Admin" panel
-  And   the date is "12/25/2016 06:00:00 AM"
+  And I am logged in as the admin
+  And I see the "Admin" panel
+  And the date is "12/25/2016 06:00:00 AM"
   And I am displaying the "Upcoming" events
 
 Scenario: Event details should be collapsed when you first visit the page
-  Then  I should see "Hike4"
-  And   the details of "Hike4" should be hidden
-  When  I press the "Rejected" tab
-  Then  I should see "Hike3"
-  And   the details of "Hike3" should be hidden
+  Given I see the "Upcoming" event "Hike2"
+  Then I should see a link to "Show More" details for "Hike2"
+  And the details of "Hike2" should be hidden
+  When I press the "Rejected" tab
+  Then I should see "HikeB"
+  And I should see a link to "Show More" details for "HikeB"
+  And the details of "HikeB" should be hidden
   
 Scenario: Event details should be visible when you click "Show More"
-  Then  I should see "Hike4"
-  And   the details of "Hike4" should be hidden
-  When  I press "Show More" on "Hike4"
-  Then  the details of "Hike4" should not be hidden
+  Given I see the "Upcoming" event "HikeC"
+  And the details of "HikeC" should be hidden
+  When I "Show More" details on "HikeC"
+  Then the details of "HikeC" should not be hidden
 
 Scenario: Event details should be hidden again when you click "Show Less"
-  When I display the details of "Hike4"
-  When I press "Show Less" on "Hike4"
-  Then the details of "Hike4" should be hidden
+  Given I see the "Upcoming" event "Hike2"
+  When I display the details for "Hike2"
+  And I "Show Less" details on "Hike2"
+  Then I should see a link to "Show More" details for "Hike2"
+  And the details of "Hike2" should be hidden
 
 Scenario: Displayed event details should be displayed after returning from another tab
-  When I press "Show More" on "Hike4"
-  Then I press the "Past" tab
-  And I press "Show More" on "Hike1"
-  When I press the "Upcoming" tab
-  Then the details of "Hike4" should not be hidden
-  But the details of "Hike5" should be hidden
+  Given I see the "Upcoming" event "HikeC"
+  When I "Show More" details on "HikeC"
+  Then the details of "HikeC" should not be hidden
+  When I press the "Past" tab
+  And I press the "Upcoming" tab
+  And I see the "Upcoming" event "HikeC"
+  Then the details of "HikeC" should not be hidden
+  But the details of "Hike2" should be hidden
