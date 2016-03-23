@@ -17,9 +17,9 @@ Background:
   And   I am logged in as the admin
   And   I see the "Admin" panel
   And   the date is "12/25/2016 06:00:00 AM"
+  And I am displaying the "Upcoming" events
 
 Scenario: Event details should be collapsed when you first visit the page
-  Given I am displaying "Upcoming" events
   Then  I should see "Hike4"
   And   the details of "Hike4" should be hidden
   When  I press the "Rejected" tab
@@ -27,23 +27,20 @@ Scenario: Event details should be collapsed when you first visit the page
   And   the details of "Hike3" should be hidden
   
 Scenario: Event details should be visible when you click "Show More"
-  Given I am displaying "Upcoming" events
   Then  I should see "Hike4"
   And   the details of "Hike4" should be hidden
   When  I press "Show More" on "Hike4"
   Then  the details of "Hike4" should not be hidden
 
 Scenario: Event details should be hidden again when you click "Show Less"
-  Given I am displaying "Upcoming" events
-  And   I display the details of "Hike4"
-  When  I press "Show Less" on "Hike4"
-  Then  the details of "Hike4" should be hidden
+  When I display the details of "Hike4"
+  When I press "Show Less" on "Hike4"
+  Then the details of "Hike4" should be hidden
 
 Scenario: Displayed event details should be displayed after returning from another tab
-  Given I am displaying "Upcoming" events
-  When  I press "Show More" on "Hike4"
-  Then  I press the "Past" tab
-  And   I press "Show More" on "Hike1"
-  When  I press the "Upcoming" tab
-  Then  the details of "Hike4" should not be hidden
-  But   the details of "Hike5" should be hidden
+  When I press "Show More" on "Hike4"
+  Then I press the "Past" tab
+  And I press "Show More" on "Hike1"
+  When I press the "Upcoming" tab
+  Then the details of "Hike4" should not be hidden
+  But the details of "Hike5" should be hidden

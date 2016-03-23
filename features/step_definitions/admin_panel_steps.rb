@@ -1,6 +1,6 @@
 
 Given /^I see the Admin panel$/ do
-    expect(page).to have_css('#events_box')
+    expect(page).to have_css('#admin')
 end
 
 Given /^I see the "(.*?)" status tab$/ do |tab|
@@ -32,10 +32,10 @@ Then /^I should (?:|only )see (.*) events$/ do |stat|
     else
         expect(page).to have_content(expected_status[0])
     end
-    options = %w(pending rejected past upcoming)
+    options = %w(Pending Rejected Past Upcoming)
     options.each do |opt|
         if !(expected_status.include? opt)
-            expect(page).to have_content(opt)
+            expect(page).not_to have_css("li##{opt}.active")
         end
     end
 end
@@ -58,16 +58,12 @@ Then /I should( not)? see "(.*)" before "(.*)"/ do |negated, first_item, second_
     expect(page.body =~ rx).to be_truthy
 end
 
-Given /^I am displaying "(.*)" events$/  do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
 When /^I press the "(.*)" on "(.*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
 Then /^the details of "(.*)" should( not)? be hidden$/ do |event, negated|
-    val = find("#{arg1}").visible?
+    val = find('h3', :text => "#{event}").visible?
     if negated
         expect(val).to be_falsy
     else
@@ -76,11 +72,14 @@ Then /^the details of "(.*)" should( not)? be hidden$/ do |event, negated|
 end
 
 Given /^I display the details of "(.*)"$/ do |arg1|
-  find("#{arg1}").visible?
+  vis = find("#{arg1}").visible?
+  expect(vis).to be_truthy
 end
 
-Given /^I am displaying the "(.*)" events$/ do |arg1|
-  expect(page).to have_css("##{arg1}[active]")
+Given /^I am displaying the "(.*)" events$/ do |tab_name|
+  step %{I follow "#{tab_name}"}
+  name = tab_name.downcase
+  expect(page).to have_css("##{name}_events.tab-pane.active")
 end
 
 Then /^I should see the following details displayed below "(.*)":  (.*)$/ do |event_name, detail_list|
@@ -90,12 +89,32 @@ Then /^I should see the following details displayed below "(.*)":  (.*)$/ do |ev
   end
 end
 
-Then /^I should( not)? see the following events: ("(.*)"(,)?)+$/ do |arg1, arg2, arg3|
-  expect(page).not_to have_content(arg1)
-  expect(page).not_to have_content(arg1)
-  expect(page).not_to have_content(arg1)
+Then /^I should( not)? see the following events: (.*)$/ do |negated, list|
+  items = list.split(", ")
+  found = find(:css, ".tab-pane.active")
+  items.each do |item|
+    if negated
+      expect(found).not_to have_content(item)
+    else
+      expect(found).to have_content(item)
+    end
+  end
 end
 
-Then(/^I should see the following details displayed below "([^"]*)": "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3, arg4, arg5, arg6, arg7|
-  pending # Write code here that turns the phrase above into concrete actions
+Then /^I should see "(.*)" details, including: (.*)$/ do |event, list|
+  fields = list.split(", ")
+  id = Event.where("name = ?", event).first.id
+  div_id = "#{id}_details"
+  found = find_by_id(div_id)
+  fields.each do |field|
+      expect(found).to have_content(field)
+  end
+end
+
+When /^I display the details for "(.*)"$/ do |event|
+  event_id = Event.where("name = ?", event).first.id
+  show_id = "showbtn_#{event_id}"
+  div_id = "#{event_id}_title"
+  find_by_id(div_id).click_link(show_id)
+  expect(find(:xpath, "//a[@id='#{show_id}']").text()).to have_content("Show Less")
 end

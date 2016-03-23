@@ -7,7 +7,7 @@
       .col-sm-8
         %h3= "#{event.name}"
       .col-sm-4
-        %a{ id: "show_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
+        %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
           Show More
           %i.fa.fa-angle-down
     
@@ -16,7 +16,7 @@
         #date.col-sm-2
           Date
           .container
-            =event.start.strftime("%b %-d, %Y")
+            = event.start.strftime("%b %-d, %Y")
         #cost.col-sm-2
           Cost
           .container= "$#{event.cost}"
