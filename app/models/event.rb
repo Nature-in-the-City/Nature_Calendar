@@ -2,8 +2,11 @@ class Event < ActiveRecord::Base
   has_many :registrations
   has_many :guests, through: :registrations
 
-  has_attached_file :image, styles: {original: "300x200"}, url: "/assets/:id/:style/:basename.:extension",
-                    path: "public/assets/:id/:style/:basename.:extension", default_url: "/assets/missing.png"
+  has_attached_file :image,
+                    styles: {original: "300x200"},
+                    url: "/assets/:id/:style/:basename.:extension",
+                    path: "public/assets/:id/:style/:basename.:extension",
+                    default_url: "/assets/missing.png"
 
   do_not_validate_attachment_file_type :image
   
@@ -331,14 +334,28 @@ class EventContact
            :to => :event
 end
 
+# Event location information
 class Location
   def initialize(event)
     @event = event
   end
+  
   attr_reader :event
-  delegate :st_name, :st_name=, :st_number, :st_number=,
-           :state, :state=, :zip, :zip=, :to => :event
+  
+  delegate :st_name, :st_name=,
+           :st_number, :st_number=,
+           :state, :state=,
+           :zip, :zip=,
+           :city, :city=,
+           :country, :country=,
+           :to => :event
+  
+  def get_street
+    street = "#{@event.st_number} #{@event.st_name}"
+  end
+  
   def within_radius? (zip, radius)
     puts 'call ajax method begun in calendar js file'
   end
+  
 end

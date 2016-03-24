@@ -113,7 +113,6 @@
       
       %div.tab-content.clearfix.container
         %br
-        %br
         - @tabs.each do |tab|
           - if tab.eql? "Upcoming"
             %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
@@ -121,7 +120,7 @@
           - else
             %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
               = render partial: 'admin_panel', locals: { tab: tab }
-          %br
+        %br
 %br
 #sync_status
   %h2

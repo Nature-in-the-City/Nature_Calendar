@@ -1,6 +1,7 @@
 -# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
 
 %br
+%br
 - if @event_relations[tab].count > 0
   - @event_relations[tab].each do |event|
     .container{ id: "#{event.id}_title" }
