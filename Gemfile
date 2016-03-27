@@ -62,6 +62,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'codeclimate-test-reporter', require: nil
   gem 'fakeweb'
+  gem 'railroady' # class diagrams
 end
 
 group :production do
