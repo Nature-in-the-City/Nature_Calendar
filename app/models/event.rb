@@ -1,6 +1,8 @@
 class Event < ActiveRecord::Base
   has_many :registrations
   has_many :guests, through: :registrations
+  has_one :contact, :as => :use_type
+  has_one :address, :as => :use_type
 
   has_attached_file :image,
                     styles: {original: "300x200"},
@@ -76,6 +78,16 @@ class Event < ActiveRecord::Base
         return "volunteer"
       else
         return ""
+    end
+  end
+  
+  def self.update_event_statuses
+    all_events = Event.all
+    all_events.each do |event|
+      if event.is_past?
+        event.status = "past"
+        event.save
+      end
     end
   end
 
