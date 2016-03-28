@@ -8,6 +8,7 @@ class CalendarsController < ApplicationController
 
   def show
     @tabs = %w(Upcoming Pending Rejected Past)
+    Event.update_event_statuses
     @pending_count = Event.get_pending_events.count
     @pending = Event.get_pending_events.order(:start)
     @upcoming = Event.where(status: 'approved').order(:start)
