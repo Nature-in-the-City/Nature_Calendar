@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
   before_action :is_root
 
   def create
-    @user = User.new email: params[:user][:email], password: params[:user][:password], reset_password_token: params[:user][:reset_password_token]
+    @user = User.new{ password: params[:user][:password], reset_password_token: params[:user][:reset_password_token], contact_attributes: { email: params[:user][:email] } }
     if @user.save
       flash[:notice] = "Account successfully created"
       redirect_to calendar_path

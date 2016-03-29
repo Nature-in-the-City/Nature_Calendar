@@ -17,40 +17,37 @@
         #date.col-sm-2
           Date
           .container
-            = event.start.strftime("%b %-d, %Y")
+            = event.event_date_time.day_only
         #cost.col-sm-2
           Cost
           .container= "$#{event.cost}"
         #tags.col-sm-3.container
           Tags
           .containers
-            %p="#{event.tags}"
+            %p="#{Tag.format_valid_tags(event.tag)}"
         #contact_1.col-sm-3.container
           Contact Info
-          - if event.contact_first
-            .container="Name: #{event.contact_last}, #{event.contact_first}"
-          - else
-            .container="Name:"
-          .container= "Phone: #{event.contact_phone}"
+          .container="Name: #{event.contact.format_name}"
+          .container= "Phone: #{event.contact.phone}"
 
       #bottom{ class: "row container" }
         #time{ id: "_Time", class: "container col-sm-2" }
           Time
           .container
-            #start="Start: #{event.start.strftime("%r")}"
-            #end= "End: #{event.end.strftime("%r")}"
+            #start="Start: #{event.event_date_time.start_time}"
+            #end= "End: #{event.event_date_time.end_time}"
         #location.col-sm-2.container{ id: "_Location" }
           Location
           .container
-            #street= "#{event.st_number} #{event.st_name}"
-            #city= "#{event.city}, CA #{event.zip}"
+            #street= "#{event.address.street_address}"
+            #city= "#{event.address.city_state_zip}"
         #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid
             %p=event.description
         #contact_2.col-sm-3.container{ id: "val_Email" }
           .container
-            #email= "Email: #{event.contact_email}"
+            #email= "Email: #{event.contact.email}"
             #org= "Org: #{event.organization}"
           - if !tab.eql? "Past" 
             .container.col-sm-4

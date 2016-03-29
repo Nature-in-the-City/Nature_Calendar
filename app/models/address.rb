@@ -2,7 +2,7 @@ class Address < ActiveRecord::Base
     belongs_to :use_type, :polymorphic => true
     
     def street_address
-        suffix = ((self.suite_apt)? " ##{self.suite_apt}" : "")
+        suffix = ((self.apt_suite)? " ##{self.apt_suite}" : "")
         street = "#{self.st_number} #{self.st_name}#{suffix}"
     end
     
@@ -16,5 +16,9 @@ class Address < ActiveRecord::Base
     
     def in_radius?(zip, dist)
         puts "TODO: implement radius check"
+    end
+    
+    def set_venue name
+        self.venue_name = name
     end
 end

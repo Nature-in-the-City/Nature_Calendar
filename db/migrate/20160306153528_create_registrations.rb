@@ -1,8 +1,8 @@
 class CreateRegistrations < ActiveRecord::Migration
   def up
     create_table :registrations do |t|
-      t.integer   :event_id
-      t.integer   :guest_id
+      t.belongs_to :event, index: true
+      t.belongs_to :guest, index: true
       t.datetime  :updated
       t.timestamps
     end

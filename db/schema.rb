@@ -11,48 +11,64 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320193754) do
+ActiveRecord::Schema.define(version: 20160328235141) do
+
+  create_table "addresses", force: :cascade do |t|
+    t.integer  "use_type_id"
+    t.string   "use_type_type"
+    t.string   "st_name",                                 null: false
+    t.integer  "st_number",                               null: false
+    t.string   "city"
+    t.integer  "apt_suite"
+    t.string   "state",         limit: 2, default: "CA"
+    t.integer  "zip"
+    t.string   "country",                 default: "USA"
+    t.string   "venue_name"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "addresses", ["use_type_type", "use_type_id"], name: "index_addresses_on_use_type_type_and_use_type_id"
+
+  create_table "contacts", force: :cascade do |t|
+    t.integer  "use_type_id"
+    t.string   "use_type_type"
+    t.string   "name_first"
+    t.string   "name_last"
+    t.string   "email",         null: false
+    t.string   "phone"
+    t.string   "website"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "contacts", ["use_type_type", "use_type_id"], name: "index_contacts_on_use_type_type_and_use_type_id"
+
+  create_table "event_date_times", force: :cascade do |t|
+    t.integer  "event_id"
+    t.datetime "start"
+    t.datetime "end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "event_date_times", ["event_id"], name: "index_event_date_times_on_event_id"
 
   create_table "events", force: :cascade do |t|
-    t.string   "name",                                                                    null: false
+    t.string   "name",                                                        null: false
     t.string   "organization"
     t.text     "description"
     t.string   "url"
-    t.decimal  "cost",                       precision: 15, scale: 2, default: 0.0
-    t.datetime "start",                                                                   null: false
-    t.datetime "end"
+    t.decimal  "cost",           precision: 15, scale: 2, default: 0.0
     t.text     "how_to_find_us"
     t.integer  "meetup_id"
-    t.string   "status",                                              default: "pending"
+    t.string   "status",                                  default: "pending"
     t.datetime "updated"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "contact_first"
-    t.string   "contact_last"
-    t.string   "contact_email"
-    t.string   "contact_phone",   limit: 16
-    t.string   "venue_name"
-    t.integer  "st_number"
-    t.string   "st_name"
-    t.string   "city"
-    t.integer  "zip"
-    t.string   "state",           limit: 2,                           default: "CA"
-    t.string   "country",                                             default: "USA"
-    t.boolean  "free",                                                default: false
-    t.boolean  "family_friendly",                                     default: false
-    t.boolean  "hike",                                                default: false
-    t.boolean  "play",                                                default: false
-    t.boolean  "learn",                                               default: false
-    t.boolean  "volunteer",                                           default: false
-    t.boolean  "plant",                                               default: false
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
   end
 
   create_table "guests", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "phone"
-    t.string   "email"
-    t.string   "address"
     t.boolean  "is_anon"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -66,8 +82,25 @@ ActiveRecord::Schema.define(version: 20160320193754) do
     t.datetime "updated_at"
   end
 
+  add_index "registrations", ["event_id"], name: "index_registrations_on_event_id"
+  add_index "registrations", ["guest_id"], name: "index_registrations_on_guest_id"
+
+  create_table "tags", force: :cascade do |t|
+    t.integer  "event_id"
+    t.boolean  "free",            default: false
+    t.boolean  "family_friendly", default: false
+    t.boolean  "hike",            default: false
+    t.boolean  "play",            default: false
+    t.boolean  "learn",           default: false
+    t.boolean  "volunteer",       default: false
+    t.boolean  "plant",           default: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "tags", ["event_id"], name: "index_tags_on_event_id"
+
   create_table "users", force: :cascade do |t|
-    t.string   "email",                               null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"

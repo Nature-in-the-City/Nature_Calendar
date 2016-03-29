@@ -33,6 +33,8 @@ class GuestsController < ActionController::Base
   private
 
   def guest_params
-    params.require(:guest).permit(:first_name, :last_name, :phone, :email, :address, :city, :state, :zip, :is_anon)
+    params.require(:guest).permit(:name_first, :name_last, :phone, :email, :st_number, :st_name,
+                                  :apt_suite, :city, :state, :zip, :country, :is_anon,
+                                  :contact_attributes, :address_attributes)
   end
 end

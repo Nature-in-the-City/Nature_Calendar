@@ -3,6 +3,9 @@ class Event < ActiveRecord::Base
   has_many :guests, through: :registrations
   has_one :contact, :as => :use_type
   has_one :address, :as => :use_type
+  has_one :tag
+  has_one :event_date_time
+  accepts_nested_attributes_for :tag, :contact, :address, :event_date_time
 
   has_attached_file :image,
                     styles: {original: "300x200"},
@@ -11,11 +14,6 @@ class Event < ActiveRecord::Base
                     default_url: "/assets/missing.png"
 
   do_not_validate_attachment_file_type :image
-  
-  def self.initialize
-    @contact = EventContact.new(self)
-    @location = Location.new(self)
-  end
 
   DEFAULT_DATE_FORMAT = '%b %e, %Y at %l:%M%P'
   DEFAULT_TIME_FORMAT = '%l:%M%P'
@@ -33,52 +31,25 @@ class Event < ActiveRecord::Base
   def is_new?
     Event.find_by_meetup_id(meetup_id).nil?
   end
+  
+  def venue_name=(tag)
+    self.address.set_venue = tag
+  end
 
   def needs_updating?(latest_update)
     updated < latest_update
   end
 
   def is_past?
-    DateTime.now >= self.end
+    self.event_date_time.is_past?
   end
   
   def tags
-    event_tags = "None"
-    tags = %w(family_friendly free play plant hike learn volunteer)
-    count = 0
-    tags.each do |tag|
-      if self[tag]
-        val = format_tagname tag
-        if count == 0
-          event_tags = "#{val}"
-        else
-          event_tags += ", #{val}"
-        end
-        count += 1
-      end
-    end
-    return event_tags
+    return self.tag.valid_tags
   end
   
   def format_tagname tag
-    case tag
-      when "family_friendly"
-        return "Family-Friendly"
-      when "free"
-        return "Free"
-      when "play"
-        return "Play"
-      when "plant"
-        return "Plant"
-      when "hike"
-        return "Hike"
-      when "learn"
-        return "Learn"
-      when "volunteer"
-        return "volunteer"
-      else
-        return ""
-    end
+    Tag.format_tagname tag
   end
   
   def self.update_event_statuses
@@ -331,43 +302,4 @@ class Event < ActiveRecord::Base
     end
   end
 
-end
-
-
-class EventContact
-  def initialize(event)
-    @event = event
-  end
-  attr_reader :event
-  delegate :contact_name_first, :contact_name_last,
-           :contact_name_first=, :contact_name_last=,
-           :contact_email, :contact_phone,
-           :contact_email=, :contact_phone=,
-           :to => :event
-end
-
-# Event location information
-class Location
-  def initialize(event)
-    @event = event
-  end
-  
-  attr_reader :event
-  
-  delegate :st_name, :st_name=,
-           :st_number, :st_number=,
-           :state, :state=,
-           :zip, :zip=,
-           :city, :city=,
-           :country, :country=,
-           :to => :event
-  
-  def get_street
-    street = "#{@event.st_number} #{@event.st_name}"
-  end
-  
-  def within_radius? (zip, radius)
-    puts 'call ajax method begun in calendar js file'
-  end
-  
 end

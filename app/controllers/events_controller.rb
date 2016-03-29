@@ -86,6 +86,7 @@ class EventsController < ApplicationController
   def perform_create_transaction
     begin
       @event = Event.new(event_params)
+      puts @event
       assign_organization
       remote_event = Meetup.new.push_event(@event)
       @event.update_meetup_fields(remote_event)
@@ -119,7 +120,7 @@ class EventsController < ApplicationController
     begin
       remote_event = Meetup.new.edit_event({event: event, id: @event.meetup_id})
       @event.update_attributes(event_params)
-      @event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
+      @event.update_attributes(address_attributes: { venue_name: remote_event[:venue_name] })  # Necessary if meetup refused to create the venue
       @success = true
       @msg = "#{@event.name} successfully updated!"
     rescue Exception => e
@@ -159,10 +160,8 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:name, :organization, :venue_name, :st_number, :st_name, :city, :zip,
-                                  :state, :country, :start, :end, :description, :how_to_find_us, :image,
-                                  :street_number,  :cost, :route, :locality, :family_friendly, :free, :hike,
-                                  :volunteer, :play, :learn, :plant, :contact_email, :contact_name_first,
-                                  :contact_name_last, :contact_phone)
+    params.require(:event).permit(:name, :organization, :description, :how_to_find_us, :image,
+                                  :street_number, :cost, :route, :locality, :tag_attributes,
+                                  :contact_attributes, :address_attributes, :event_date_time_attributes)
   end
 end

@@ -2,6 +2,9 @@ class Guest < ActiveRecord::Base
   has_many :registrations
   has_many :events, through: :registrations
   has_many :registrations
+  has_one :contact, :as => :use_type
+  has_one :address, :as => :use_type
+  accepts_nested_attributes_for :contact, :address
 
   def all_non_anon
     Guest.where(is_anon: false)
