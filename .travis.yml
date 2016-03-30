@@ -13,3 +13,6 @@ script:
   - xvfb-run -a bundle exec cucumber --tags @admin_panel
 notifications:
   email: false
+addons:
+    code_climate:
+        repo_token: 544d02a95af429ea66bba3e19c5f3181c1c1347073c208ebc321a1fe496007a2

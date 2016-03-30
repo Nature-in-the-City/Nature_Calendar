@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'spec_helper'
 
 describe CalendarsController do
   before(:each) do

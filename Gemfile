@@ -35,7 +35,7 @@ gem 'devise'
 gem 'tinymce-rails'
 # Template framework set to HAML
 gem 'haml-rails'
-gem 'rubocop', :require => false
+gem 'rubocop', require: false
 gem 'paperclip'
 gem 'rails-html-sanitizer'
 gem 'remotipart'

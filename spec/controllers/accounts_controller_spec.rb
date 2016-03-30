@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'spec_helper'
 
 describe AccountsController do
   before(:each) do
