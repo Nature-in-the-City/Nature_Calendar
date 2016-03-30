@@ -127,7 +127,9 @@
     %strong Sync Status
   .container.row
     #status.container.col-sm-8
-      .button_right Sync Now
+      .button_right
+        Sync
+        %i.fa.fa-refresh
       = render partial: 'sync_panel'
     #add_cal.container.col-sm-4
       %h3 Add New Calendar
