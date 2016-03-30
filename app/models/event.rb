@@ -9,11 +9,6 @@ class Event < ActiveRecord::Base
                     default_url: "/assets/missing.png"
 
   do_not_validate_attachment_file_type :image
-  
-  def self.initialize
-    @contact = EventContact.new(self)
-    @location = Location.new(self)
-  end
 
   DEFAULT_DATE_FORMAT = '%b %e, %Y at %l:%M%P'
   DEFAULT_TIME_FORMAT = '%l:%M%P'
@@ -59,36 +54,32 @@ class Event < ActiveRecord::Base
   end
   
   def format_tagname tag
-    case tag
-      when "family_friendly"
-        return "Family-Friendly"
-      when "free"
-        return "Free"
-      when "play"
-        return "Play"
-      when "plant"
-        return "Plant"
-      when "hike"
-        return "Hike"
-      when "learn"
-        return "Learn"
-      when "volunteer"
-        return "volunteer"
-      else
-        return ""
+    tag_options = %w(family_friendly free play plant hike learn volunteer)
+    event_tags = []
+    if tag_object
+      tag_options.each do |tag|
+        event_tags.push(format_tagname(tag)) if self[tag]
+      end
     end
+    formatted = event_tags.join(", ")
+    return ((formatted.length > 0)? formatted : "None")
+  end
+  
+  def format_tagname tag
+    i = tag.split("_").map &:capitalize
+    return i.join("-")
   end
 
   def self.get_remote_events(options={})
     meetup_events = Meetup.new.pull_events(options)
     if meetup_events.respond_to?(:each)
-      meetup_events.each_with_object([]) {|event, candidate_events| candidate_events << Event.new(event)}
+      meetup_events.each_with_object([]) { |event, candidate_events| candidate_events << Event.new(event) }
     end
   end
 
   def self.process_remote_events(events)
     return if events.blank?
-    events.each {|event| Event.process_event(event)}
+    events.each { |event| Event.process_event(event) }
   end
 
   def self.process_event(event)
@@ -100,14 +91,14 @@ class Event < ActiveRecord::Base
   def self.remove_remotely_deleted_events(remote_events)
     return if remote_events.nil?
     remotely_deleted_ids = Event.get_remotely_deleted_ids(remote_events)
-    remotely_deleted_ids.each {|id| Event.find_by_meetup_id(id).destroy}
+    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy }
   end
 
   # This only applies to present and upcoming events. Past events cannot be deleted
   def self.get_remotely_deleted_ids(remote_events)
-    target_events = Event.where("start >= '#{DateTime.now}'")
-    local_event_ids = target_events.inject([]) {|array, event| array << event.meetup_id}
-    remote_event_ids = remote_events.inject([]) {|array, event| array << event.meetup_id}
+    target_events = Event.where("start >= ?", DateTime.now)
+    local_event_ids = target_events.inject([]) { |array, event| array << event.meetup_id }
+    remote_event_ids = remote_events.inject([]) { |array, event| array << event.meetup_id }
     local_event_ids - remote_event_ids
   end
 
@@ -122,7 +113,7 @@ class Event < ActiveRecord::Base
   def self.get_upcoming_third_party_events
     ids = Event.get_stored_upcoming_third_party_ids
     if ids.size > 0
-      options = {event_id: ids.join(',')}
+      options = { event_id: ids.join(',') }
       events = Event.get_remote_events({status: 'upcoming'}.merge options)
       return events if events
     end
@@ -141,9 +132,9 @@ class Event < ActiveRecord::Base
   def self.get_past_third_party_events(from=nil, to=nil)
     ids = Event.get_stored_past_third_party_ids
     if ids.size > 0
-      options = {event_id: ids.join(',')}
+      options = { event_id: ids.join(',') }
       range = Event.date_range(from, to)
-      events = Event.get_remote_events(({status: 'past'}.merge options).merge range)
+      events = Event.get_remote_events(({ status: 'past' }.merge options).merge range)
       return events if events
     end
     []
@@ -154,7 +145,7 @@ class Event < ActiveRecord::Base
   end
 
   def self.store_third_party_events(ids)
-    options = ids.respond_to?(:join) ? {event_id: ids.join(',')} : {}
+    options = ids.respond_to?(:join) ? { event_id: ids.join(',') } : {}
     Event.process_remote_events(Event.get_remote_events(options))
   end
 
@@ -189,7 +180,7 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_stored_upcoming_third_party_ids
-    ids = Event.where("start >= '#{DateTime.now}'").each_with_object([]) {|event, ids| ids << event.meetup_id if event.is_third_party?}
+    ids = Event.where("start >= '?'", DateTime.now).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
     ids[0...200]    # Meetup limits the number of ids you can send to them to 200
   end
 
@@ -197,7 +188,7 @@ class Event < ActiveRecord::Base
   # Only get third party events which ended the day before
   #
   def self.get_stored_past_third_party_ids
-    ids = Event.where(end: (DateTime.now - 1...DateTime.now)).each_with_object([]) {|event, ids| ids << event.meetup_id if event.is_third_party?}
+    ids = Event.where(end: (DateTime.now - 1...DateTime.now)).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
     ids[0...200]    # Meetup limits the number of ids you can send to them to 200
   end
 
@@ -217,7 +208,7 @@ class Event < ActiveRecord::Base
   def apply_update(new_event)
     new_pairs = new_event.attributes
     new_pairs.delete 'organization'      # We don't want to update the db with organization names coming from meetup
-    modified_pairs = new_pairs.select {|key, value| value && value != self[key]}
+    modified_pairs = new_pairs.select { |key, value| value && value != self[key] }
     update_attributes(modified_pairs)
   end
 
@@ -243,12 +234,12 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_requested_ids(data)
-    data.keys.select {|key| key =~ /^event.+$/} if data.respond_to? :keys
+    data.keys.select { |key| key =~ /^event.+$/ } if data.respond_to? :keys
   end
 
   def self.cleanup_ids(ids)
     clean_ids = []
-    ids.each {|id| clean_ids << id.gsub("event", "")} if ids.respond_to? :each
+    ids.each { |id| clean_ids << id.gsub("event", "") } if ids.respond_to? :each
     clean_ids
   end
 
@@ -280,12 +271,13 @@ class Event < ActiveRecord::Base
   end
 
   ##
-  # Used only during event creation. It basically gets a few selected fields from the newly created
-  # event we got back from meetup and it sticks them into the event for database storage purposes
+  # Used only during event creation. It basically gets a few selected fields
+  # from the newly created event we got back from meetup and it sticks them
+  # into the event for database storage purposes
   #
   def update_meetup_fields(event)
     keys = [:meetup_id, :updated, :url, :status]
-    keys.each {|key| self[key] = event[key]}
+    keys.each { |key| self[key] = event[key] }
   end
 
   def format_start_date
@@ -301,7 +293,7 @@ class Event < ActiveRecord::Base
   end
 
   def at_least_1_day_long?
-    (self.end - self.start) >= 1.day
+    (self.end - start) >= 1.day
   end
 
   def pick_end_time_type
@@ -319,43 +311,4 @@ class Event < ActiveRecord::Base
     end
   end
 
-end
-
-
-class EventContact
-  def initialize(event)
-    @event = event
-  end
-  attr_reader :event
-  delegate :contact_name_first, :contact_name_last,
-           :contact_name_first=, :contact_name_last=,
-           :contact_email, :contact_phone,
-           :contact_email=, :contact_phone=,
-           :to => :event
-end
-
-# Event location information
-class Location
-  def initialize(event)
-    @event = event
-  end
-  
-  attr_reader :event
-  
-  delegate :st_name, :st_name=,
-           :st_number, :st_number=,
-           :state, :state=,
-           :zip, :zip=,
-           :city, :city=,
-           :country, :country=,
-           :to => :event
-  
-  def get_street
-    street = "#{@event.st_number} #{@event.st_name}"
-  end
-  
-  def within_radius? (zip, radius)
-    puts 'call ajax method begun in calendar js file'
-  end
-  
 end
