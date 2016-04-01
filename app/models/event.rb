@@ -44,38 +44,18 @@ class Event < ActiveRecord::Base
     DateTime.now >= self.end
   end
   
-  def tags
-    event_tags = "None"
-    tags = %w(family_friendly free play plant hike learn volunteer)
-    count = 0
-    tags.each do |tag|
-      if self[tag]
-        val = format_tagname tag
-        if count == 0
-          event_tags = "#{val}"
-        else
-          event_tags += ", #{val}"
-        end
-        count += 1
-      end
-    end
-    return event_tags
-  end
-  
-  def format_tagname tag
+  def tag_string
     tag_options = %w(family_friendly free play plant hike learn volunteer)
     event_tags = []
-    if tag_object
-      tag_options.each do |tag|
-        event_tags.push(format_tagname(tag)) if self[tag]
-      end
+    tag_options.each do |tag|
+      event_tags.push(format_tag(tag)) if self[tag]
     end
     formatted = event_tags.join(", ")
     return ((formatted.length > 0)? formatted : "None")
   end
   
-  def format_tagname tag
-    i = tag.split("_").map &:capitalize
+  def format_tag a_tag
+    i = a_tag.split("_").map &:capitalize
     return i.join("-")
   end
 
