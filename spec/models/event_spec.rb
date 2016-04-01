@@ -429,17 +429,148 @@ RSpec.describe Event, type: :model do
     end
   end
   
-  describe ".tags" do
-    context "when no tags are true" do
-      it "should return and empty string"
-      it "should not error"
+  describe ".update_statuses" do
+    before(:all) do
+      @past_event = Event.create!(name: "Past Event", start: "Sept 1, 2015 10:00 AM", end: "Sept 1, 2015 4:00 PM", status: "past")
+      @pending_event = Event.create!(name: "Pending Event", start: DateTime.now + 1, end: DateTime.now + 1.5, status: "pending")
+      @upcoming_event = Event.create!(name: "Upcoming Event", start: DateTime.now + 2, end: DateTime.now + 2.5, status: "approved")
     end
     
-    context "when tags are true" do
-      it "should return the names of true tag values"
-      it "should not error"
+    after(:all) do
+      to_destroy = [@past_event, @pending_event, @upcoming_event]
+      to_destroy.each do |event|
+        Event.where(:name => event.name).destroy_all
+      end
+    end
+    
+    context "when everything is up to date" do
+      it "should not change any statuses" do
+        expect{Event.update_statuses}.to_not change{@upcoming_event.reload.status}
+        expect{Event.update_statuses}.to_not change{@past_event.reload.status}
+        expect{Event.update_statuses}.to_not change{@pending_event.reload.status}
+      end
+    end
+    
+    context "when some statuses are incorrect" do
+      it "should change incorrect statuses" do
+        @upcoming_event.update(start: DateTime.now - 1)
+        expect{Event.update_statuses}.to change{@upcoming_event.reload.status}.from("approved").to("past")
+        @pending_event.update(start: DateTime.now - 1)
+        expect{Event.update_statuses}.to change{@pending_event.reload.status}.from("pending").to("past")
+      end
+      
+      it "should not change correct statuses" do
+        expect(@past_event.reload.status).to eql("past")
+        expect{Event.update_statuses}.to_not change{@past_event.reload.status}
+      end
     end
   end
-
+  
+  describe "#tag_string" do
+    before(:all) do
+      @with_tags = Event.new(name: "Event with tags", family_friendly: true, hike: true, free: true, start: DateTime.now + 1)
+      @without_tags = Event.new(name: "Event without tags", start: DateTime.now + 1)
+    end
+    
+    context "when an event has no tags" do
+      it "should not error" do
+        expect{@without_tags.tag_string}.not_to raise_error
+      end
+      
+      it "should return 'None'" do
+        expect{@without_tags.tag_string}.to eql("None")
+      end
+    end
+    
+    context "when an event does have tags" do
+      it "should not raise an error" do
+        expect{@with_tags.tag_string}.not_to raise_error
+      end
+      
+      it "should return the names of true tag values" do
+        expect{@with_tags.tag_string}.to eql("Family-Freindly, Free, Hike")
+      end
+    end
+  end
+  
+  describe ".format_tag" do
+    it "should correct capitalization" do
+      expect{Event.format_tag "BaNaNAs"}.to eql{"Bananas"}
+    end
+    
+    context "when there is a hyphen" do
+      it "should not error" do
+        expect{Event.format_tag "hello_there"}.not_to raise_error
+      end
+      
+      it "should replace hyphen with dash" do
+        expect{Event.format_tag "hElLo_there_weirdo"}.to eql("Hello-There-Weirdo")
+      end
+      
+      it "should not add dashes to the front or end" do
+        expect{Event.format_tag "_HeLlO_WiScOnSiN_"}.to eql("Hello-Wisconsin")
+        expect{Event.format_tag "_HeLlO_"}.to eql("Hello")
+      end
+    end
+    
+    context "when there is not a hyphen" do
+      it "should not add a hyphen" do
+        expect{Event.format_tag "Hello there friend"}.to eql("Hellow there friend")
+      end
+    end
+  end
+  
+  describe "#at_least_1_day_long?" do
+    before(:all) do
+      @is_one_day = Event.new(name: "day-long event", start: DateTime.now, end: DateTime.now + 1)
+      @less_than_one_day = Event.new(name: "half-day event", start: DateTime.now, end: DateTime.now + 0.5)
+      @greater_than_one_day = Event.new(name: "two-day event", start: DateTime.now, end: DateTime.now + 2)
+    end
+    puts "in 1_day"
+    context "when event is less than a day long" do
+      it "should return false" do
+        expect(@less_than_one_day.at_least_1_day_long?).to be_falsey
+      end
+    end
+    
+    context "when an event is at least a day long" do
+      it "should return true" do
+        expect(@greater_than_one_day.at_least_1_day_long?).to be_truthy
+        expect(@is_one_day.at_least_1_day_long?).to be_truthy
+      end
+    end
+  end
+  
+  describe "#format_time" do
+    before(:all) do
+      eql = DateTime.now
+      @start_eqls_end = Event.new(name: "start = end", start: eql, end: eql)
+      @start_and_end_unique = Event.new(name: "start != end", start: DateTime.now, end: DateTime.now + 1)
+      @just_start = Event.new(name: "!end", start: DateTime.now)
+    end
+    
+    context "when formatted correctly" do
+      it "should not error" do
+        expect{@start_and_end_unique.format_time}.not_to raise_error
+      end
+      
+      it "should return the correct time" do
+        expect(@start_and_end_unique.format_time).to eql("#{@start_and_end_unique.format_start_date} to #{@start_and_end_unique.pick_end_time_type}")
+      end
+    end
+    
+    context "when incorrectly formatted" do
+      it "should not error" do
+        expect{@start_eqls_end.format_time}.not_to raise_error
+        expect{@just_start.format_time}.not_to raise_error
+      end
+      
+      it "should return the start time" do
+        expect(@start_eqls_end.format_time).to eql("#{@start_eqls_end.format_start_date}")
+        expect(@just_start.format_time).to eql("#{@just_start.format_start_date}")
+      end
+    end
+    
+  end
 end
 

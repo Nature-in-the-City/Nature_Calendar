@@ -54,7 +54,7 @@ class Event < ActiveRecord::Base
     return ((formatted.length > 0)? formatted : "None")
   end
   
-  def format_tag a_tag
+  def self.format_tag a_tag
     i = a_tag.split("_").map &:capitalize
     return i.join("-")
   end
@@ -292,12 +292,20 @@ class Event < ActiveRecord::Base
 
   def format_time
     start_time = format_start_date
-    if start != self.end
+    if self.end && start != self.end
       end_time = pick_end_time_type
       "#{start_time} to #{end_time}"
     else
       "#{start_time}"
     end
   end
+  
+  def self.update_statuses
+    upcoming_or_pending = Event.where.not(status: 'past')
+    upcoming_or_pending.each do |event|
+      event.update(status: 'past') if event.start < DateTime.now
+    end
+  end
+  
 
 end
