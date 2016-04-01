@@ -1,4 +1,4 @@
-@javascript
+@calendar @javascript
 Feature: Filter Events by family friendly
   
   As a parent
