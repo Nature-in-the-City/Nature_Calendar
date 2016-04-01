@@ -1,4 +1,6 @@
 class GuestsController < ActionController::Base
+  helper_method :respond_js, :handle_guest_registration
+  
   def new
     @event = Event.find(params[:event_id])
     respond_js
