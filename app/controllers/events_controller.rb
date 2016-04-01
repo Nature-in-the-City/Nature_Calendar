@@ -2,6 +2,8 @@ class EventsController < ApplicationController
   #before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :third_party]
 
   before_filter :check_for_cancel, only: [:create, :update, :third_party, :pull_third_party]
+  
+  
 
   def check_for_cancel
     render 'default', format: :js  if params[:cancel]
@@ -11,7 +13,7 @@ class EventsController < ApplicationController
   def index
     start_date = params[:start]
     end_date = params[:end]
-    @events = (start_date && end_date) ? Event.where(start: start_date.to_datetime..end_date.to_datetime) : Event.all
+    @events = (start_date && end_date) ? Event.active.where(start: start_date.to_datetime..end_date.to_datetime) : Event.active
     respond_to do |format|
       format.html
       format.json { render json: @events }

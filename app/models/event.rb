@@ -12,6 +12,8 @@ class Event < ActiveRecord::Base
 
   DEFAULT_DATE_FORMAT = '%b %e, %Y at %l:%M%P'
   DEFAULT_TIME_FORMAT = '%l:%M%P'
+  
+  scope :active, -> { where(status: "approved") }
 
   def as_json(options={})
     {
