@@ -7,6 +7,9 @@ class CalendarsController < ApplicationController
   end
 
   def show
+    if params[:event] then
+      @filter = params[:event][:filter]
+    end
     @tabs = %w(Upcoming Pending Rejected Past)
     @pending_count = Event.get_pending_events.count
     @pending = Event.get_pending_events.order(:start)

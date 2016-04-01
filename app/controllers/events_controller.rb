@@ -13,7 +13,16 @@ class EventsController < ApplicationController
   def index
     start_date = params[:start]
     end_date = params[:end]
-    @events = (start_date && end_date) ? Event.active.where(start: start_date.to_datetime..end_date.to_datetime) : Event.active
+    @events = (start_date && end_date) ? Event.approved.where(start: start_date.to_datetime..end_date.to_datetime) : Event.approved
+    
+    @filter = params[:filter]
+    case @filter
+    when 'family_friendly'
+      @events = @events.family_friendly
+    when 'free'
+      @events = @events.free
+    end
+      
     respond_to do |format|
       format.html
       format.json { render json: @events }

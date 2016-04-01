@@ -10,15 +10,14 @@ Background:
   And the month is March 2016
   
 Scenario: Filter by family friendly
-  Given I check the filter for "Family Friendly"
-  Then I should see "Market Street Prototyping Festival"
-  And I should see "Nerds on Safari: Market Street"
-  Given the month is May 2016
-  And I should not see "Bay to Breakers"
+  Given I select "Family Friendly" from "event_filter"
+  Then I should see "Market Street"
+  Given the month is April 2016
+  Then I should see "Nerds on Safari"
   
-Scenario: Filter by family friendly and free
-  Given I check the filter for "Family Friendly"
-  And I check the filter for "Free"
-  Then I should see "Market Street Prototyping Festival"
-  And I should not see "Nerds on Safari: Market Street"
+Scenario: Filter by free
+  Given I select "Free" from "event_filter"
+  Then I should see "Market Street"
+  Given the month is April 2016
+  Then I should not see "Nerds on Safari"
  
