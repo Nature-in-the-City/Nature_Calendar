@@ -33,3 +33,4 @@ exclude_paths:
 - features/step_definitions/authentication_steps.rb
 - spec/models/guest_spec.rb
 - features/step_definitions/web_steps.rb
+- lib/squarespace_svgs.rb
