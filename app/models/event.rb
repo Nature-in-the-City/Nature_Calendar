@@ -48,7 +48,7 @@ class Event < ActiveRecord::Base
     tag_options = %w(family_friendly free play plant hike learn volunteer)
     event_tags = []
     tag_options.each do |tag|
-      event_tags.push(format_tag(tag)) if self[tag]
+      event_tags.push(Event.format_tag(tag)) if self[tag]
     end
     formatted = event_tags.join(", ")
     return ((formatted.length > 0)? formatted : "None")
