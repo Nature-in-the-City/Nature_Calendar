@@ -3,7 +3,7 @@
 
 var init_object = {
     events: function(start, end, timezone, callback){
-        $.getJSON('events.json', {start: start.toDate(), end: end.toDate()}, function(data){
+        $.getJSON('events.json', {start: start.toDate(), end: end.toDate(), filter: getParam('event%5Bfilter%5D')}, function(data){
             callback(data);
         });
     },
@@ -103,3 +103,13 @@ var refreshCalendar = function() {
     setLayout();
     setPanelHeight();
 };
+
+var getParam = function(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}

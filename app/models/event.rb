@@ -13,7 +13,14 @@ class Event < ActiveRecord::Base
   DEFAULT_DATE_FORMAT = '%b %e, %Y at %l:%M%P'
   DEFAULT_TIME_FORMAT = '%l:%M%P'
   
-  scope :active, -> { where(status: "approved") }
+  scope :approved, -> { where(status: "approved") }
+  scope :family_friendly, -> { where(family_friendly: true) }
+  scope :free, -> { where(free: true) }
+  scope :hike, -> { where(hike: true) }
+  scope :play, -> { where(play: true) }
+  scope :learn, -> { where(learn: true) }
+  scope :volunteer, -> { where(volunteer: true) }
+  scope :plant, -> { where(plant: true) }
 
   def as_json(options={})
     {
