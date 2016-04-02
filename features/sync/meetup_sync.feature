@@ -22,15 +22,14 @@ Feature:
     
   Scenario: Exsiting synced Meetup groups should be linked when I refresh the page
     Given the following calendars have been linked:
-      | name        | meetup_id |
-      | Outdoors    | 12786890  |
-    When I visit the "Home" page
-    And I visit the "Admin" page
+      | organization      | url                         | calendar_id |
+      | Outdoors          | http://meetup.com/18264738  | 12786890    |
+    When I visit the "Admin" page
     Then I should see "Outdoors" in the "Sync Status" panel
     
   Scenario: Events of linked Meetup Calendars should auto-populate
     Given the following calendars have been linked:
-      | name        | url                           |
-      | NatureGroup | http://meetup.com/123456789  |
+      | organization    | url                          |
+      | NatureGroup     | http://meetup.com/123456789  |
     Then I should see events from "NatureGroup"
     And I should see the event "NatureGroup Meetup".

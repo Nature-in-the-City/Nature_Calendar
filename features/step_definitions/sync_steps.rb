@@ -7,9 +7,9 @@ When /^I press the "(.*)" button$/  do |btn|
   click_button("#{btn}")
 end
 
-Given /^the following calendars have been linked:$/  do |table|
-  table.each do |item|
-      #create the sync item
+Given /^the following calendars have been linked:$/  do |calendar_list|
+  calendar_list.hashes.each do |calendar|
+      Sync.create!(calendar)
   end
 end
 

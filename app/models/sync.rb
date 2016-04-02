@@ -13,8 +13,8 @@ class Sync < ActiveRecord::Base
     }
   end
 
-  def needs_syncing?(latest_sync)
-    last_sync < latest_sync
+  def needs_syncing?(current)
+    last_sync < current
   end
   
   def self.get_events(options={})

@@ -115,3 +115,7 @@ end
 users.each do |user|
   User.create!(user)
 end
+
+syncs.each do |sync|
+  Sync.create!(sync)
+end

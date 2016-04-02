@@ -1,13 +1,14 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
   
-  def check_calendar_type
-    if params[:url].include? "calendar.google.com"
-        return "google"
-    elsif params[:url].include? "meetup.com"
-        return "meetup"
+  def setup_calendar
+    url = @sync.url.to_str
+    if url =~ /google/
+        return true
+    elsif url =~ /meetup.com/
+        return true
     else
-        return "NA"
+        raise Exception, 'Invalid URL', caller
     end
   end
 
@@ -28,15 +29,11 @@ class SyncsController < ApplicationController
   def perform_create_transaction
     begin
       @sync = Sync.new(sync_params)
-      if is_google
-      elsif is_meetup
-      end
-      @sync.update_attributes(organization: org)
+      @success = setup_calendar
       @sync.save!
-      @success = true
       @msg = "Successfully synced '#{@sync.url}'!"
     rescue Exception => e
-      @msg = "Could not sync '#{@sync.url}':" + '\n' + e.to_s
+      @msg = "Could not sync '#{@sync.url}': " + e.to_s
     end
   end
     
