@@ -32,7 +32,7 @@
           = submit_tag '+', class: ['main_organization', 'event_creation_button']
 
         = form_tag third_party_events_path, method: :get, id: 'third_party', format: :js, remote: true  do
-          -#this path does an ajax GET to the event controller action "third_party"
+          -# this path does an ajax GET to the event controller action "third_party"
           = submit_tag '+ 3rd Party', class: ['event_creation_button','third_party_organization']
           
       - else
@@ -139,10 +139,10 @@
       = render partial: 'sync_panel'
     #add_cal.container.col-sm-4
       %h3 Add New Calendar
-      %form_tag
-        = label :user, :email, "URL"
-        = text_field :user, :email
-        %input{:type => "submit", :value => "Add"}
+      = form_tag syncs_path do
+        = label :sync, :url, "URL"
+        = text_field :sync, :url
+        = submit_tag 'Add Calendar'
 
 :javascript
   $(document).ready(function(){

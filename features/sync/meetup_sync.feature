@@ -1,4 +1,4 @@
-@javascript
+@sync @javascript
 Feature:
   As an admin user
   So I can make all nature events in SF available on my calendars
@@ -9,16 +9,16 @@ Feature:
     And I see the "Sync Status" panel
   
   Scenario: I should be able to add a meetup calendar to sync with by URL
-    When I fill in the "URL" field with "http://meethup.com/123456789"
+    When I fill in the "URL" field with "http://meetup.com/123456789"
     And I press the "Add" button
     Then I should be on the "Admin" page
-    And I should see "Outdoor Calendar sync successfully added"
+    And I should see "Successfully synced 'http://meetup.com/123456789'!"
     
   Scenario: Incorrect Meetup URLs should redirect with a message
-    When I fill in the "URL" field with "http://meethup.com/0000000"
+    When I fill in the "URL" field with "http://meetup.com/0000000"
     And I press the "Add" button
     Then I should be on the "Admin" page
-    And I should see "Invalid Sync URL"
+    And I should see "Could not sync 'http://meetup.com/0000000': Invalid URL"
     
   Scenario: Exsiting synced Meetup groups should be linked when I refresh the page
     Given the following calendars have been linked:

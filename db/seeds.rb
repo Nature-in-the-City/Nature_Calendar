@@ -93,6 +93,12 @@ users = [{ email: 'admin123@admin.com',
            level: 0,
            reset_password_token: 'token' }
   ]
+  
+syncs = [{ organization: 'Nature in the City',
+           url: 'http://www.meetup.com/Nature-in-the-City/',
+           last_sync: 'May 15 2016 06:00',
+           calendar_id: 656555558 }
+        ]
 
 events.each do |event|
   Event.create!(event)
