@@ -31,6 +31,6 @@ Feature:
   Scenario: Events of linked Meetup Calendars should auto-populate
     Given the following calendars have been linked:
       | name        | url                           |
-      | NatureGroup | http://meethup.com/123456789  |
+      | NatureGroup | http://meetup.com/123456789  |
     Then I should see events from "NatureGroup"
     And I should see the event "NatureGroup Meetup".

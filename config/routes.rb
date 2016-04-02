@@ -17,9 +17,9 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :syncs
-  
   resources :guests, only: [:new, :create]
 
   resources :accounts
+  
+  resources :syncs
 end
