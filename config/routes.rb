@@ -16,8 +16,10 @@ Rails.application.routes.draw do
       post 'pull_third_party'
     end
   end
-
+  
   resources :guests, only: [:new, :create]
 
   resources :accounts
+  
+  resources :syncs
 end

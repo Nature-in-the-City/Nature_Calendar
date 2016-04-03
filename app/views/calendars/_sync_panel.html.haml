@@ -1,14 +1,19 @@
 
 %table
-    %thead
-        %td Select
-        %td Calendar
-        %td Status
-        %td Last Sync
-    %tbody
-        %tr
-            %td 
-                = check_box_tag  "calendar"
-            %td Calendar Name
-            %td Status icon (√) + color
-            %td mm/dd/yyy hh:mm:ss
+  %thead
+    %td Select
+    %td Calendar
+    %td Status
+    %td Last Sync
+  %tbody
+    %tr
+      %td= check_box_tag  "calendar"
+      %td Calendar Organization
+      %td Status icon (√) + color
+      %td mm/dd/yyy hh:mm:ss
+    - @calendars.each do |calendar|
+      %tr
+        %td= check_box_tag  calendar.url
+        %td= calendar.organization
+        %td Status icon (√) + color
+        %td= calendar.last_sync
