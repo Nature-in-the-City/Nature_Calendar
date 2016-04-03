@@ -24,7 +24,9 @@
                 = link_to "Create new account", new_account_path, :method => :get
               %li
                 = link_to "Delete existing accounts", edit_account_path("root"), :method => :get
-
+    - else
+      = link_to('Sign In', new_user_session_path)
+    
     #event_creation_box
       - if user_signed_in?
         = form_tag new_event_path, method: :get, id: 'new_event', format: :js, remote: true do
@@ -32,7 +34,7 @@
           = submit_tag '+', class: ['main_organization', 'event_creation_button']
 
         = form_tag third_party_events_path, method: :get, id: 'third_party', format: :js, remote: true  do
-          -#this path does an ajax GET to the event controller action "third_party"
+          -# this path does an ajax GET to the event controller action "third_party"
           = submit_tag '+ 3rd Party', class: ['event_creation_button','third_party_organization']
           
       - else
@@ -95,54 +97,57 @@
     .clear
     
 #admin
-  %div{ class: 'container' }
-    %br
-    %h2
-      %strong Events
-    %br
-  #upcoming.container
-    %ul.nav.nav-tabs.containter.clearfix
-      - @tabs.each do |tab|
-        - if tab.eql? "Upcoming"
-          %li{class: 'active', id: "#{tab}"}
-            %a{ href: "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-        - else
-          %li{id: "#{tab}"}
-            - if tab.eql? "Pending"
-              %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
-            - else
-              %li{id: "#{tab}"}
-                - if tab.eql? "Pending"
-                  %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
-                - else
-                  %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-      
-      %div.tab-content.clearfix.container
-        %br
+  - if user_signed_in?
+    %div{ class: 'container' }
+      %br
+      %h2
+        %strong Events
+      %br
+    #upcoming.container
+      %ul.nav.nav-tabs.containter.clearfix
         - @tabs.each do |tab|
           - if tab.eql? "Upcoming"
-            %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
-              = render partial: 'admin_panel', locals: {tab: tab}
+            %li{class: 'active', id: "#{tab}"}
+              %a{ href: "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
           - else
-            %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
-              = render partial: 'admin_panel', locals: { tab: tab }
-        %br
+            %li{id: "#{tab}"}
+              - if tab.eql? "Pending"
+                %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
+              - else
+                %li{id: "#{tab}"}
+                  - if tab.eql? "Pending"
+                    %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
+                  - else
+                    %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
+      
+        %div.tab-content.clearfix.container
+          %br
+          - @tabs.each do |tab|
+            - if tab.eql? "Upcoming"
+              %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
+                = render partial: 'admin_panel', locals: {tab: tab}
+            - else
+              %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
+                = render partial: 'admin_panel', locals: { tab: tab }
+          %br
 %br
+
 #sync_status
-  %h2
-    %strong Sync Status
-  .container.row
-    #status.container.col-sm-8
-      .button_right
-        Sync
-        %i.fa.fa-refresh
-      = render partial: 'sync_panel'
-    #add_cal.container.col-sm-4
-      %h3 Add New Calendar
-      %form_tag
-        = label :user, :email, "URL"
-        = text_field :user, :email
-        %input{:type => "submit", :value => "Add"}
+  - if user_signed_in?
+    %h2
+      %strong Sync Status
+    .container.row
+      #status.container.col-sm-8
+        .button_right
+          Sync
+          %i.fa.fa-refresh
+        = render partial: 'sync_panel'
+      #add_cal.container.col-sm-4
+        %h3 Add New Calendar
+        = form_tag syncs_path do
+          = label :sync, :url, "URL"
+          = text_field :sync, :url
+          = submit_tag 'Add Calendar'
 
 :javascript
   $(document).ready(function(){

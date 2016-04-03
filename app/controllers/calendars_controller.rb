@@ -19,5 +19,6 @@ class CalendarsController < ApplicationController
     @event_relations = {"Upcoming" => @upcoming, "Pending" => @pending,
     "Rejected" => @rejected, "Past" => @past}
     @head, @body = WebScraper.instance.page_data
+    @calendars = Sync.all
   end
 end

@@ -3,8 +3,6 @@ class EventsController < ApplicationController
 
   before_filter :check_for_cancel, only: [:create, :update, :third_party, :pull_third_party]
   
-  
-
   def check_for_cancel
     render 'default', format: :js  if params[:cancel]
     render 'pull_third_party', format: :js  if params[:cancel_third_party]

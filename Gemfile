@@ -27,6 +27,9 @@ gem 'sdoc', group: :doc
 gem 'omniauth'
 gem 'omniauth-meetup'
 gem 'httparty'
+gem 'rMeetup'
+# google gems
+gem 'google-api-client'
 # integrate with Moment.js
 gem 'momentjs-rails'
 # authentication
