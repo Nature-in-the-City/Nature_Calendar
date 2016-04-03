@@ -111,7 +111,9 @@
               %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
           - elsif tab.eql? "Pending"
             %li{id: "#{tab}"}
-              %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab} (#{@pending_count})
+              %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' }
+                #{tab}
+                %span.badge 5
           - else
             %li{id: "#{tab}"}
               %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
