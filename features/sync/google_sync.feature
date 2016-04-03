@@ -19,10 +19,3 @@ Feature:
     And I press the "Add" button
     Then I should be on the "Admin" page
     And I should see "Could not sync 'http://badcalendarlink.com/fail_to/link_to=1232312': Invalid URL"
-    
-  Scenario: Events of linked Google Calendars should auto-populate
-    Given the following calendars have been linked:
-      | organization      | url                              |
-      | NatureGroup       | http://calendar.google.com/link1 |
-    Then I should see events from "NatureGroup"
-    And I should see the event "NatureGroup Meetup".
