@@ -18,7 +18,7 @@ Feature:
     When I fill in the "URL" field with "http://meetup.com/0000000"
     And I press the "Add" button
     Then I should be on the "Admin" page
-    And I should see "Could not sync 'http://meetup.com/0000000': Invalid URL"
+    And I should see "Successfully synced 'http://meetup.com/0000000'!"
     
   Scenario: Exsiting synced Meetup groups should be linked when I refresh the page
     Given the following calendars have been linked:
@@ -26,10 +26,3 @@ Feature:
       | Outdoors          | http://meetup.com/18264738  | 12786890    |
     When I visit the "Admin" page
     Then I should see "Outdoors" in the "Sync Status" panel
-    
-  Scenario: Events of linked Meetup Calendars should auto-populate
-    Given the following calendars have been linked:
-      | organization    | url                          |
-      | NatureGroup     | http://meetup.com/123456789  |
-    Then I should see events from "NatureGroup"
-    And I should see the event "NatureGroup Meetup".
