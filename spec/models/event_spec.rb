@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'rails_helper'
 
 RSpec.describe Event, type: :model do
+  
   describe "#is_new?" do
     context "with a new event" do
       it "returns positive" do
@@ -10,7 +11,6 @@ RSpec.describe Event, type: :model do
         expect(result).to be_truthy
       end
     end
-
     context "with an already pulled event" do
       it "returns negative" do
         id = '1000'
@@ -29,7 +29,6 @@ RSpec.describe Event, type: :model do
         expect(result).to be_truthy
       end
     end
-
     context "with no event update" do
       it "returns false" do
         event = Event.new(updated: Time.now)
@@ -42,7 +41,6 @@ RSpec.describe Event, type: :model do
   describe "#format_start_date" do
     let(:date) {Time.utc(2002, 10, 31, 0, 2)}
     let(:formatted_date) {'Oct 30, 2002 at  4:02pm'}
-
     it "returns the date in a simpler form" do
       event = Event.new(start: date)
       result = event.format_start_date
@@ -53,42 +51,36 @@ RSpec.describe Event, type: :model do
   describe "#format_end_date" do
     let(:date) {Time.utc(2002, 10, 31, 0, 2)}
     let(:formatted_date) {'Oct 30, 2002 at  4:02pm'}
-
     it "returns the date in a simpler form" do
       event = Event.new(end: date)
       result = event.format_end_date
       expect(result).to eq(formatted_date)
     end
   end
-
+  
   describe ".process_remote_events" do
     let(:event) {[Event.new]}
-
     context "with new events" do
       it "saves the event in the db" do
         expect_any_instance_of(Event).to receive(:save)
         Event.process_remote_events(event)
       end
     end
-
     context "with an updated event" do
       it "updates an already stored event with the fields of the input event" do
         event[0][:meetup_id] = '123'
         event[0][:updated] = Time.now + 200000
         old_event = Event.new(updated: Time.now, meetup_id: '123')
-
         allow(Event).to receive(:find_by_meetup_id).with('123').and_return(old_event)
         expect(old_event).to receive(:apply_update)
         Event.process_remote_events(event)
       end
     end
-
     context "with an old event" do
       it "does nothing for an old unchanged event" do
         event[0][:meetup_id] = '123'
         event[0][:updated] = Time.now
         stored_event = Event.new(updated: Time.now, meetup_id: '123')
-
         allow(Event).to receive(:find_by_meetup_id).with('123').and_return(stored_event)
         expect(stored_event).not_to receive(:apply_update)
         Event.process_remote_events(event)
@@ -102,12 +94,10 @@ RSpec.describe Event, type: :model do
                   meetup_name:"Amber Hasselbring", invited_guests:0,
                   updated: Time.now}]}
     let(:guest) {Guest.new(id: 1, first_name: 'chester', last_name: 'copperpot')}
-
-      before(:each) do
+    before(:each) do
         allow_any_instance_of(Event).to receive(:get_remote_rsvps).and_return(rsvp)
         allow(Guest).to receive(:find_by_meetup_rsvp).and_return(guest)
-      end
-
+    end
     context "with new events" do
       it "saves the rsvp in the db" do
         allow(Registration).to receive(:find_by).and_return(nil)
@@ -115,7 +105,6 @@ RSpec.describe Event, type: :model do
         event.merge_meetup_rsvps
       end
     end
-
     context "with an updated event" do
       it "updates an already stored event" do
         old_rsvp = Registration.new(updated: Time.now - 30000)
@@ -124,7 +113,6 @@ RSpec.describe Event, type: :model do
         event.merge_meetup_rsvps
       end
     end
-
     context "with an old unchanged event" do
       it "does nothing for an old unchanged event" do
         stored_rsvp = Registration.new(updated: Time.now)
@@ -138,30 +126,24 @@ RSpec.describe Event, type: :model do
 
   describe "#apply_update" do
     let(:event) {Event.new(name: 'walking')}
-
     context "with updated event" do
       let(:other_event) {Event.new(name: 'sitting')}
-
       it "computes the updated key value pairs and updates self" do
         expect(event).to receive(:update_attributes).with('name' => 'sitting')
         event.apply_update(other_event)
       end
     end
-
     context "with unchanged event" do
       let(:other_event) {Event.new(name: 'walking')}
-
       it "finds no updated key value pairs and it does not update self" do
         expect(event).to receive(:update_attributes).with({})
         event.apply_update(other_event)
       end
     end
-
   end
 
   describe '#location' do
     let(:location) {[]}
-
     it 'returns a complete location string' do
       location_data = {'st_number' => '145', 'st_name' => 'peep st', 'city' => 'New York',
                             'zip' => '90210', 'state' => 'NY', 'country' => 'US'}
@@ -169,14 +151,12 @@ RSpec.describe Event, type: :model do
       location_data.each {|k, v| location << v}
       expect(event.location).to eq("145 peep st, New York, NY 90210, US")
     end
-
     it 'handles nil state fields' do
       location_data = {'st_number' => '145', 'st_name' => 'peep st', 'city' => 'New York',
                        'zip' => '90210', 'state' => nil, 'country' => 'US'}
       event = Event.new(location_data)
       expect(event.location).to eq("145 peep st, New York, 90210, US")
     end
-
   end
 
   describe '.remove_remotely_deleted_events' do
@@ -185,39 +165,31 @@ RSpec.describe Event, type: :model do
       @event_2 = Event.create!(meetup_id: '678910', start: DateTime.now)
       @local_events = [@event_1, @event_2]
     end
-
     context 'with no remote deletions' do
       let(:remote_events) {@local_events}
-
       it 'does nothing' do
         Event.remove_remotely_deleted_events(remote_events)
         expect(Event.all.size).to eq(@local_events.size)
       end
     end
-
     context 'with one remote deletion (@event_2)' do
       let(:remote_events) {[@event_1]}
-
       it 'deletes the local copy of @event_2' do
         Event.remove_remotely_deleted_events(remote_events)
         expect(Event.find_by_meetup_id('678910')).to be_nil
       end
     end
-
     context 'with one remote addition' do
       let(:new_event) {Event.create!(meetup_id: '55555555')}
       let(:remote_events) {[@event_1, new_event]}
-
       it 'does nothing' do
         Event.remove_remotely_deleted_events(remote_events)
         expect(Event.all.size).to eq(@local_events.size)
       end
     end
-
     context 'with one remote addition' do
       let(:new_event) {Event.create!(meetup_id: '55555555')}
       let(:remote_events) {[@event_1, new_event]}
-
       it 'does nothing' do
         Event.remove_remotely_deleted_events(remote_events)
         expect(Event.all.size).to eq(@local_events.size)
@@ -231,59 +203,46 @@ RSpec.describe Event, type: :model do
       @event_2 = Event.create!(meetup_id: '678910', start: DateTime.now)
       @local_events = [@event_1, @event_2]
     end
-
     context 'with no remote deletions' do
       let(:remote_events) {@local_events}
-
       it 'returns empty id list' do
         ids = Event.get_remotely_deleted_ids(remote_events)
         expect(ids).to eq([])
       end
     end
-
     context 'with one remote deletion (@event_2)' do
       let(:remote_events) {[@event_1]}
-
       it 'returns the id of @event_2' do
         ids = Event.get_remotely_deleted_ids(remote_events)
         expect(ids).to eq(['678910'])
       end
     end
-
     context 'with equal events but one remote addition' do
       let(:new_event) {Event.create!(meetup_id: '55555555')}
       let(:remote_events) {@local_events.concat [new_event]}
-
       it 'returns empty id list' do
         ids = Event.get_remotely_deleted_ids(remote_events)
         expect(ids).to eq([])
       end
     end
-
     context 'with all remote events deleted' do
       let(:remote_events) {[]}
-
       it 'returns full local id list' do
         ids = Event.get_remotely_deleted_ids(remote_events)
         expect(ids).to eq(["12345", "678910"])
       end
     end
-
     context 'with no local events' do
       let(:remote_events) {@local_events}
-
       before(:each) do
         @local_events.each {|event| event.destroy!}
       end
-
       it 'return empty id list' do
         ids = Event.get_remotely_deleted_ids(remote_events)
         expect(ids).to eq([])
       end
     end
   end
-
-
 
   describe ".get_requested_ids" do
     let(:data) {{event123: "1", e123vent: "2", evenABC: "3", event: "4", event12abc: "5"}}
@@ -310,49 +269,41 @@ RSpec.describe Event, type: :model do
     let(:upcoming_events) {[event1]}
     let(:past_events) {[event2, event3]}
 
-
     context 'with both past and upcoming events' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(past_events)
         allow(Event).to receive(:get_upcoming_events).and_return(upcoming_events)
       end
-
       it 'returns sum of events' do
         result = Event.initialize_calendar_db
         expect(result).to eq(upcoming_events + past_events)
       end
     end
-
     context 'with only past events' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(past_events)
         allow(Event).to receive(:get_upcoming_events).and_return(nil)
       end
-
       it 'returns nothing' do
         result = Event.initialize_calendar_db
         expect(result).to be_nil
       end
     end
-
     context 'with only upcoming events' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(nil)
         allow(Event).to receive(:get_upcoming_events).and_return(upcoming_events)
       end
-
       it 'returns sum of events' do
         result = Event.initialize_calendar_db
         expect(result).to be_nil
       end
     end
-
     context 'with no events at all' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(nil)
         allow(Event).to receive(:get_upcoming_events).and_return(nil)
       end
-
       it 'returns sum of events' do
         result = Event.initialize_calendar_db
         expect(result).to be_nil
@@ -365,7 +316,6 @@ RSpec.describe Event, type: :model do
     before(:each) do
       allow(Event).to receive(:get_remote_events).and_return(events)
     end
-
     it 'calls get_remote_events with the right params' do
       expect(Event).to receive(:get_remote_events).with({status: 'past', time: '-1,'})
       Event.get_past_events(-1)
@@ -378,26 +328,22 @@ RSpec.describe Event, type: :model do
     let(:third2) {Event.new(meetup_id: '5654334', organization: 'Flower')}
     let(:past_events) {[event1]}
     let(:third_events) {[third1, third2]}
-
-
+    
     context 'with both past and upcoming events' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(past_events)
         allow(Event).to receive(:get_past_third_party_events).and_return(third_events)
       end
-
       it 'returns sum of events' do
         result = Event.synchronize_past_events
         expect(result).to eq(past_events + third_events)
       end
     end
-
     context 'with only past events' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(past_events)
         allow(Event).to receive(:get_past_third_party_events).and_return(nil)
       end
-
       it 'returns nothing' do
         result = Event.synchronize_past_events
         expect(result).to be_nil
@@ -409,19 +355,16 @@ RSpec.describe Event, type: :model do
         allow(Event).to receive(:get_past_events).and_return(nil)
         allow(Event).to receive(:get_past_third_party_events).and_return(third_events)
       end
-
       it 'returns nothing' do
         result = Event.synchronize_past_events
         expect(result).to be_nil
       end
     end
-
     context 'with no events at all' do
       before(:each) do
         allow(Event).to receive(:get_past_events).and_return(nil)
         allow(Event).to receive(:get_past_third_party_events).and_return(nil)
       end
-
       it 'returns sum of events' do
         result = Event.synchronize_past_events
         expect(result).to be_nil
@@ -435,14 +378,12 @@ RSpec.describe Event, type: :model do
       @pending_event = Event.create!(name: "Pending Event", start: DateTime.now + 1, end: DateTime.now + 1.5, status: "pending")
       @upcoming_event = Event.create!(name: "Upcoming Event", start: DateTime.now + 2, end: DateTime.now + 2.5, status: "approved")
     end
-    
     after(:all) do
       to_destroy = [@past_event, @pending_event, @upcoming_event]
       to_destroy.each do |event|
         Event.where(:name => event.name).destroy_all
       end
     end
-    
     context "when everything is up to date" do
       it "should not change any statuses" do
         expect{Event.update_statuses}.to_not change{@upcoming_event.reload.status}
@@ -450,7 +391,6 @@ RSpec.describe Event, type: :model do
         expect{Event.update_statuses}.to_not change{@pending_event.reload.status}
       end
     end
-    
     context "when some statuses are incorrect" do
       it "should change incorrect statuses" do
         @upcoming_event.update(start: DateTime.now - 1)
@@ -458,7 +398,6 @@ RSpec.describe Event, type: :model do
         @pending_event.update(start: DateTime.now - 1)
         expect{Event.update_statuses}.to change{@pending_event.reload.status}.from("pending").to("past")
       end
-      
       it "should not change correct statuses" do
         expect(@past_event.reload.status).to eql("past")
         expect{Event.update_statuses}.to_not change{@past_event.reload.status}
@@ -471,51 +410,50 @@ RSpec.describe Event, type: :model do
       @with_tags = Event.new(name: "Event with tags", family_friendly: true, hike: true, free: true, start: DateTime.now + 1)
       @without_tags = Event.new(name: "Event without tags", start: DateTime.now + 1)
     end
-    
     context "when an event has no tags" do
       it "should not error" do
         expect{@without_tags.tag_string}.not_to raise_error
       end
-      
       it "should return 'None'" do
-        expect{@without_tags.tag_string}.to eql("None")
+        value = @without_tags.tag_string
+        expect(value).to eql("None")
       end
     end
-    
     context "when an event does have tags" do
       it "should not raise an error" do
         expect{@with_tags.tag_string}.not_to raise_error
       end
-      
       it "should return the names of true tag values" do
-        expect{@with_tags.tag_string}.to eql("Family-Freindly, Free, Hike")
+        value = @with_tags.tag_string
+        expect(value).to eql("Family-Friendly, Free, Hike")
       end
     end
   end
   
   describe ".format_tag" do
     it "should correct capitalization" do
-      expect{Event.format_tag "BaNaNAs"}.to eql{"Bananas"}
+      capitalization = Event.format_tag "BaNaNAs"
+      expect(capitalization).to eql("Bananas")
     end
-    
     context "when there is a hyphen" do
       it "should not error" do
         expect{Event.format_tag "hello_there"}.not_to raise_error
       end
-      
       it "should replace hyphen with dash" do
-        expect{Event.format_tag "hElLo_there_weirdo"}.to eql("Hello-There-Weirdo")
+        replace_hyphen = Event.format_tag "hElLo_there_weirdo"
+        expect(replace_hyphen).to eql("Hello-There-Weirdo")
       end
-      
       it "should not add dashes to the front or end" do
-        expect{Event.format_tag "_HeLlO_WiScOnSiN_"}.to eql("Hello-Wisconsin")
-        expect{Event.format_tag "_HeLlO_"}.to eql("Hello")
+        two_words = Event.format_tag "_HeLlO_WiScOnSiN__"
+        one_word = Event.format_tag "_HeLlO_"
+        expect(two_words).to eql("Hello-Wisconsin")
+        expect(one_word).to eql("Hello")
       end
     end
-    
     context "when there is not a hyphen" do
       it "should not add a hyphen" do
-        expect{Event.format_tag "Hello there friend"}.to eql("Hellow there friend")
+        no_hyphen = Event.format_tag "Hello there friend"
+        expect(no_hyphen).to eql("Hello there friend")
       end
     end
   end
@@ -532,7 +470,6 @@ RSpec.describe Event, type: :model do
         expect(@less_than_one_day.at_least_1_day_long?).to be_falsey
       end
     end
-    
     context "when an event is at least a day long" do
       it "should return true" do
         expect(@greater_than_one_day.at_least_1_day_long?).to be_truthy
@@ -548,29 +485,39 @@ RSpec.describe Event, type: :model do
       @start_and_end_unique = Event.new(name: "start != end", start: DateTime.now, end: DateTime.now + 1)
       @just_start = Event.new(name: "!end", start: DateTime.now)
     end
-    
     context "when formatted correctly" do
       it "should not error" do
         expect{@start_and_end_unique.format_time}.not_to raise_error
       end
-      
       it "should return the correct time" do
         expect(@start_and_end_unique.format_time).to eql("#{@start_and_end_unique.format_start_date} to #{@start_and_end_unique.pick_end_time_type}")
       end
     end
-    
     context "when incorrectly formatted" do
       it "should not error" do
         expect{@start_eqls_end.format_time}.not_to raise_error
         expect{@just_start.format_time}.not_to raise_error
       end
-      
       it "should return the start time" do
         expect(@start_eqls_end.format_time).to eql("#{@start_eqls_end.format_start_date}")
         expect(@just_start.format_time).to eql("#{@just_start.format_start_date}")
       end
     end
-    
+  end
+  
+  describe "#is_past?" do
+    context "when event is past" do
+      it "should return true" do
+        past_event = Event.new(name: "Past Event", start: 1.day.ago, end: 1.day.ago + 0.5)
+        expect(past_event.is_past?).to be_truthy
+      end
+    end
+    context "when event is in the future" do
+      it "should return false" do
+        future_event = Event.new(name: "Future Event", start: 2.days.from_now, end: 2.days.from_now + 0.5)
+        expect(future_event.is_past?).to be_falsey
+      end
+    end
   end
 end
 

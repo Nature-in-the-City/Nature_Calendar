@@ -55,8 +55,9 @@ class Event < ActiveRecord::Base
   end
   
   def self.format_tag a_tag
-    i = a_tag.split("_").map &:capitalize
-    return i.join("-")
+    split_capitalize = a_tag.split("_").map &:capitalize
+    to_join = split_capitalize.reject{ |s| s.empty? }
+    return to_join.join("-")
   end
 
   def self.get_remote_events(options={})
