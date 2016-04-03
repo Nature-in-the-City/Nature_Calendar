@@ -84,6 +84,10 @@ Given /^I am( not | )logged in as the( root | | non-root )admin$/ do |negative, 
   end
 end
 
+Given /^I log in as admin$/ do
+  sign_in(0)
+end
+
 Given /^I create (a|an)( invalid | duplicate | )admin account$/ do |an, param|
   if param == ' duplicate '
     create_account(true)

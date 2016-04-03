@@ -13,7 +13,7 @@ Feature: Guests can suggest Events for approval by an admin
   
   Scenario: Submit an Event
     When I fill in the required event form details for event "Garden Party" on "3/22/2016" and submit
-    When I go to the calendar page
+    Then I log in as admin
     And I press the "Pending" tab
     Then I should see "Garden Party"
   
