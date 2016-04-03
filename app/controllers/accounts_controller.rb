@@ -3,6 +3,7 @@ class AccountsController < ApplicationController
   before_action :is_root
 
   def create
+    puts params
     @user = User.new email: params[:user][:email], password: params[:user][:password], reset_password_token: params[:user][:reset_password_token]
     if @user.save
       flash[:notice] = "Account successfully created"
@@ -22,9 +23,13 @@ class AccountsController < ApplicationController
 
   def destroy
     user = User.find_by_id(params[:id])
-    email = user.email
-    user.destroy!
-    flash[:notice] = "#{email} deleted"
+    if user
+      email = user.email
+      user.destroy!
+      flash[:notice] = "#{email} deleted"
+    else
+      flash[:notice] = "Account does not exist"
+    end
     redirect_to calendar_path
   end
 

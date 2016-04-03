@@ -5,11 +5,11 @@ describe GuestsController do
         @test_event = Event.create!( name: "hike", start: "Aug 25, 2016 2:00 PM", end: "Aug 25, 2016 8:00 PM", description: "a hike", contact_email: "abc@123.com" )
         @test_event_id = @test_event.id
     end
-    describe "GET new" do
+    describe "GET #new" do
         it "calls #respond_js"
     end
     
-    describe "POST create" do
+    describe "POST #create" do
         context "invalid guest params" do
             it "calls #respond_js"
             it "displays a message"
