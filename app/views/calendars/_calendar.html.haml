@@ -96,7 +96,7 @@
 
     .clear
     
-#admin
+#admin_panel
   - if user_signed_in?
     %div{ class: 'container' }
       %br
@@ -119,17 +119,34 @@
                     %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
                   - else
                     %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-      
+        
         %div.tab-content.clearfix.container
           %br
           - @tabs.each do |tab|
             - if tab.eql? "Upcoming"
-              %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: {tab: tab}
+              %li{class: 'active', id: "#{tab}"}
+                %a{ href: "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
             - else
-              %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: { tab: tab }
-          %br
+              %li{id: "#{tab}"}
+                - if tab.eql? "Pending"
+                  %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
+                - else
+                  %li{id: "#{tab}"}
+                    - if tab.eql? "Pending"
+                      %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
+                    - else
+                      %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
+        
+          %div.tab-content.clearfix.container
+            %br
+            - @tabs.each do |tab|
+              - if tab.eql? "Upcoming"
+                %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
+                  = render partial: 'admin_panel', locals: {tab: tab}
+              - else
+                %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
+                  = render partial: 'admin_panel', locals: { tab: tab }
+            %br
 %br
 
 #sync_status

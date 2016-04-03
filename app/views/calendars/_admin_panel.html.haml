@@ -1,13 +1,30 @@
 -# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
+%link{:href => "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css", :rel => "stylesheet"}
+%script{:src => "http://code.jquery.com/jquery-2.0.3.min.js"}
+%script{:src => "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"}
+%link{:href => "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css", :rel => "stylesheet"}/
+%script{:src => "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"}
+:javascript
+  // $.fn.editable.defaults.mode = 'inline';
+  $(document).ready(function() {
+      $('#start').editable();
+      $('#start2').editable();
+      $('#cost').editable();
+      $('#tags').editable();
+      $('#start').editable();
+      $('#end').editable();
+      $('#street').editable();
+      $('#city').editable();
+  });
 
 %br
 %br
 - if @event_relations[tab].count > 0
   - @event_relations[tab].each do |event|
     .container{ id: "#{event.id}_title" }
-      .col-sm-8
+      .col-sm-6
         %h3= "#{event.name}"
-      .col-sm-4
+      .col-sm-2
         %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
           Show More
           %i.fa.fa-angle-down
@@ -17,14 +34,18 @@
         #date.col-sm-2
           Date
           .container
-            = event.start.strftime("%b %-d, %Y")
+          %a#start{"data-title" => "Enter date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %-d, %Y")
+          DateEnd
+          .container
+          %a#start2{"data-title" => "Enter date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %-d, %Y")
         #cost.col-sm-2
           Cost
-          .container= "$#{event.cost}"
+          .container
+            %a#cost{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
         #tags.col-sm-3.container
           Tags
-          .containers
-            %p="#{event.tag_string}"
+          .container
+            %a#tags{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}="#{event.tag_string}"
         #contact_1.col-sm-3.container
           Contact Info
           - if event.contact_first
@@ -37,13 +58,15 @@
         #time{ id: "_Time", class: "container col-sm-2" }
           Time
           .container
-            #start="Start: #{event.start.strftime("%r")}"
-            #end= "End: #{event.end.strftime("%r")}"
+            #start{"data-title" => "Enter start", "data-type" => "text", "data-url" => "/post", :href => "#"}="Start: #{event.start.strftime("%r")}"
+          .container
+            #end{"data-title" => "Enter end", "data-type" => "text", "data-url" => "/post", :href => "#"}= "End: #{event.end.strftime("%r")}"
         #location.col-sm-2.container{ id: "_Location" }
           Location
           .container
-            #street= "#{event.st_number} #{event.st_name}"
-            #city= "#{event.city}, CA #{event.zip}"
+            %a#street{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}"
+          .container
+            %a#city{"data-title" => "Enter city", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.city}, CA #{event.zip}"
         #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid
