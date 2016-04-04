@@ -81,7 +81,7 @@ class Event < ActiveRecord::Base
   def self.remove_remotely_deleted_events(remote_events)
     return if remote_events.nil?
     remotely_deleted_ids = Event.get_remotely_deleted_ids(remote_events)
-    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy }
+    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy_all }
   end
 
   # This only applies to present and upcoming events. Past events cannot be deleted
@@ -93,18 +93,18 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_upcoming_events
-    Event.get_remote_events({status: 'upcoming'})
+    Event.get_remote_events({ status: 'upcoming' })
   end
 
   def self.get_past_events(from=nil, to=nil)
-    Event.get_remote_events({status: 'past'}.merge Event.date_range(from, to))
+    Event.get_remote_events({ status: 'past' }.merge Event.date_range(from, to))
   end
 
   def self.get_upcoming_third_party_events
     ids = Event.get_stored_upcoming_third_party_ids
     if ids.size > 0
       options = { event_id: ids.join(',') }
-      events = Event.get_remote_events({status: 'upcoming'}.merge options)
+      events = Event.get_remote_events({ status: 'upcoming' }.merge options)
       return events if events
     end
     []
@@ -236,28 +236,27 @@ class Event < ActiveRecord::Base
   def self.get_event_ids(args)
     Event.cleanup_ids(Event.get_requested_ids(args))
   end
-
-  def location
-    location = []
-    street = "#{st_number} #{st_name}"
-    append_to_list(location, street)
-    append_to_list(location, city)
-
-    state_zip_list = []
-    append_to_list(state_zip_list, state)
-    append_to_list(state_zip_list, zip)
-    state_zip = state_zip_list.join(' ').strip
-
-    append_to_list(location, state_zip)
-    append_to_list(location, country)
-    location.join(', ')
+  
+  def street_address
+    street_name = (st_name ? (st_name.split(" ").map &:capitalize) : nil)
+    self.st_name = street_name.reject{ |str| str.empty? }.join(" ") if street_name
+    return "#{self.st_number} #{self.st_name}" if st_number && street_name
+    return nil
   end
-
-  # Appends field to lst if field is neither nil nor whitespace
-  def append_to_list(lst, field)
-    if (field != nil) and (field.strip != '')
-      lst << field
-    end
+    
+  def city_state_zip
+    city_name = (self.city ? (self.city.split(" ").map &:capitalize) : nil)
+    self.city = city_name.reject{ |str| str.empty? }.join(" ") if city_name
+    return "#{self.city}, #{self.state} #{self.zip}" if city && zip
+    return "#{self.city}, #{self.state}" if city
+    return "#{self.zip}" if zip
+    return nil
+  end
+  
+  def location
+      return "#{self.street_address}, #{self.city_state_zip}" if self.street_address && self.city_state_zip
+      return "#{self.city_state_zip}, #{self.country}" if self.city_state_zip
+      return "Unavailable"
   end
 
   ##

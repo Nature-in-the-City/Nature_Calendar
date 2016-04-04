@@ -6,7 +6,7 @@ RSpec.describe Event, type: :model do
   describe "#is_new?" do
     context "with a new event" do
       it "returns positive" do
-        event = Event.new
+        event = Event.new(name: "new event", start: 1.day.from_now)
         result = event.is_new?
         expect(result).to be_truthy
       end
@@ -14,7 +14,7 @@ RSpec.describe Event, type: :model do
     context "with an already pulled event" do
       it "returns negative" do
         id = '1000'
-        event = Event.create!(meetup_id: id)
+        event = Event.create!(name: "new event", start: 1.day.from_now, meetup_id: id)
         result = event.is_new?
         expect(result).to be_falsey
       end
@@ -71,7 +71,7 @@ RSpec.describe Event, type: :model do
         event[0][:meetup_id] = '123'
         event[0][:updated] = Time.now + 200000
         old_event = Event.new(updated: Time.now, meetup_id: '123')
-        allow(Event).to receive(:find_by_meetup_id).with('123').and_return(old_event)
+        allow(Event).to receive(:find_by_meetup_id).with(123).and_return(old_event)
         expect(old_event).to receive(:apply_update)
         Event.process_remote_events(event)
       end
@@ -81,7 +81,7 @@ RSpec.describe Event, type: :model do
         event[0][:meetup_id] = '123'
         event[0][:updated] = Time.now
         stored_event = Event.new(updated: Time.now, meetup_id: '123')
-        allow(Event).to receive(:find_by_meetup_id).with('123').and_return(stored_event)
+        allow(Event).to receive(:find_by_meetup_id).with(123).and_return(stored_event)
         expect(stored_event).not_to receive(:apply_update)
         Event.process_remote_events(event)
       end
@@ -141,46 +141,91 @@ RSpec.describe Event, type: :model do
       end
     end
   end
-
-  describe '#location' do
-    let(:location) {[]}
-    it 'returns a complete location string' do
-      location_data = {'st_number' => '145', 'st_name' => 'peep st', 'city' => 'New York',
-                            'zip' => '90210', 'state' => 'NY', 'country' => 'US'}
-      event = Event.new(location_data)
-      location_data.each {|k, v| location << v}
-      expect(event.location).to eq("145 peep st, New York, NY 90210, US")
+  
+  describe '#street_address' do
+    context 'when st_number' do
+      let(:number_only) { Event.new(st_number: 1212) }
+      it { expect{number_only.street_address}.not_to raise_error }
+      it { expect(number_only.street_address).to be_nil }
     end
-    it 'handles nil state fields' do
-      location_data = {'st_number' => '145', 'st_name' => 'peep st', 'city' => 'New York',
-                       'zip' => '90210', 'state' => nil, 'country' => 'US'}
-      event = Event.new(location_data)
-      expect(event.location).to eq("145 peep st, New York, 90210, US")
+    context 'when st_address' do
+      let(:street_only) { Event.new(st_name: "street") }
+      it { expect{street_only.street_address}.not_to raise_error }
+      it { expect(street_only.street_address).to be_nil }
+    end
+    context 'when st_number and st_address' do
+      let(:number_street) { Event.new(st_number: 1212, st_name: "street  road  ") }
+      it { expect{number_street.street_address}.not_to raise_error }
+      it { expect(number_street.street_address).to eql("1212 Street Road") }
     end
   end
-
+  
+  describe '#city_state_zip' do
+    context 'when none' do
+      let(:no_fields) { Event.new }
+      it { expect{no_fields.city_state_zip}.not_to raise_error }
+      it { expect(no_fields.city_state_zip).to be_nil }
+    end
+    context 'when city' do
+      let(:city_only) { Event.new(city: "san  diego") }
+      it { expect{city_only.city_state_zip}.not_to raise_error }
+      it { expect(city_only.city_state_zip).to eql("San Diego, CA") }
+    end
+    context 'when zip' do
+      let(:zip_only) { Event.new(zip: 92101) }
+      it { expect{zip_only.city_state_zip}.not_to raise_error }
+      it { expect(zip_only.city_state_zip).to eql("92101") }
+    end
+    context 'when city, state, and zip' do
+      let(:all_fields) { Event.new(city: "highland park", state: "TX", zip: 75205) }
+      it { expect{all_fields.city_state_zip}.not_to raise_error }
+      it { expect(all_fields.city_state_zip).to eql("Highland Park, TX 75205") }
+    end
+  end
+  
+  describe '#location' do
+    context "when neither" do
+      let(:neither) { Event.new }
+      it { expect{neither.location}.not_to raise_error }
+      it { expect(neither.location).to eql("Unavailable")}
+    end
+    context "when #street_address" do
+      let(:st_only) { Event.new(st_number: 1212, st_name: "BerKelEy  road") }
+      it { expect{st_only.location}.not_to raise_error }
+      it { expect(st_only.location).to eql("Unavailable")}
+    end
+    context "when #city_state_zip" do
+      let(:city_fields) { Event.new(city: "highland  park ", state: "TX", zip: 75205) }
+      it { expect(city_fields.location).to eql("Highland Park, TX 75205, USA") }
+    end
+    context "when both" do
+      let(:all_location_fields) { Event.new(st_number: 1212, st_name: "BerKelEy  road",
+                                  city: "highland  park ", state: "TX", zip: 75205) }
+      it { expect(all_location_fields.location).to eql("1212 Berkeley Road, Highland Park, TX 75205") }
+    end
+  end
+  
   describe '.remove_remotely_deleted_events' do
     before(:each) do
-      @event_1 = Event.create!(meetup_id: '12345', start: DateTime.now)
-      @event_2 = Event.create!(meetup_id: '678910', start: DateTime.now)
+      @event_1 = Event.create!(name: "event 1", meetup_id: '12345', start: DateTime.now)
+      @event_2 = Event.create!(name: "event 2", meetup_id: '678910', start: DateTime.now)
       @local_events = [@event_1, @event_2]
     end
     context 'with no remote deletions' do
-      let(:remote_events) {@local_events}
+      let(:remote_events) { @local_events }
       it 'does nothing' do
-        Event.remove_remotely_deleted_events(remote_events)
-        expect(Event.all.size).to eq(@local_events.size)
+        expect{ Event.remove_remotely_deleted_events(remote_events) }.not_to change{ Event.count }
       end
     end
     context 'with one remote deletion (@event_2)' do
-      let(:remote_events) {[@event_1]}
+      let(:remote_events) { [@event_2] }
       it 'deletes the local copy of @event_2' do
         Event.remove_remotely_deleted_events(remote_events)
         expect(Event.find_by_meetup_id('678910')).to be_nil
       end
     end
     context 'with one remote addition' do
-      let(:new_event) {Event.create!(meetup_id: '55555555')}
+      let(:new_event) {Event.create!(name: "new_event", start: DateTime.now, meetup_id: '55555555')}
       let(:remote_events) {[@event_1, new_event]}
       it 'does nothing' do
         Event.remove_remotely_deleted_events(remote_events)
@@ -188,7 +233,7 @@ RSpec.describe Event, type: :model do
       end
     end
     context 'with one remote addition' do
-      let(:new_event) {Event.create!(meetup_id: '55555555')}
+      let(:new_event) {Event.create!(name: "new_event", start: DateTime.now, meetup_id: '55555555')}
       let(:remote_events) {[@event_1, new_event]}
       it 'does nothing' do
         Event.remove_remotely_deleted_events(remote_events)
@@ -520,4 +565,3 @@ RSpec.describe Event, type: :model do
     end
   end
 end
-
