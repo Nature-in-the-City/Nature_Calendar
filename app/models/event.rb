@@ -170,7 +170,7 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_stored_upcoming_third_party_ids
-    ids = Event.where("start >= '?'", DateTime.now).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
+    ids = Event.where("start >= ?", DateTime.now).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
     ids[0...200]    # Meetup limits the number of ids you can send to them to 200
   end
 

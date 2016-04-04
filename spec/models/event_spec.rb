@@ -306,6 +306,19 @@ RSpec.describe Event, type: :model do
       expect(result).to eq(clean_ids)
     end
   end
+  
+  describe ".get_upcoming_third_party_events" do
+    context "when there are none" do
+      it { expect(Event.get_upcoming_third_party_events).to eq([]) }
+    end
+    context "when there are some" do
+      before(:each) do
+        @return_ids = [656555556, 656555558]
+        allow(Event).to receive(:get_stored_upcoming_third_party_ids).and_return(@return_ids)
+      end
+      it { expect(Event.get_upcoming_third_party_events).not_to be_nil }
+    end
+  end
 
   describe '.initialize_calendar_db' do
     let(:event1) {Event.new(meetup_id: '123565')}
