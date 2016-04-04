@@ -319,6 +319,55 @@ RSpec.describe Event, type: :model do
       it { expect(Event.get_upcoming_third_party_events).not_to be_nil }
     end
   end
+  
+  describe ".get_past_third_party_events" do
+    context "when there are none" do
+      before(:each) do
+        allow(Event).to receive(:get_stored_past_third_party_ids).and_return([])
+      end
+      it { expect(Event.get_past_third_party_events).to eq([]) }
+    end
+    context "when there are some" do
+      before(:each) do
+        @return_ids = [656555556, 656555558]
+        allow(Event).to receive(:get_stored_past_third_party_ids).and_return(@return_ids)
+      end
+      it { expect(Event.get_past_third_party_events).not_to be_nil }
+    end
+  end
+  
+  describe ".get_pending_events" do
+    it { expect{ Event.get_pending_events }.not_to raise_error }
+  end
+  
+  describe ".get_rejected_events" do
+    it { expect{ Event.get_rejected_events }.not_to raise_error }
+  end
+  
+  describe ".get_default_group_name" do
+    it { expect{ Event.get_default_group_name }.not_to raise_error }
+  end
+  
+  describe ".internal_third_party_group_name" do
+    it { expect{ Event.internal_third_party_group_name }.not_to raise_error }
+  end
+  
+  describe "#is_third_party?" do
+    let(:is_third) { Event.new }
+    it { expect(is_third.is_third_party?).to be_truthy }
+  end
+  
+  describe ".synchronize_upcoming_events" do
+    context "without group or third party events" do
+      before(:each) do
+        allow(Event).to receive(:get_upcoming_events).and_return([])
+        allow(Event).to receive(:get_upcoming_third_party_events).and_return([])
+        allow(Event).to receive(:remove_remotely_deleted_events)
+        allow(Event).to receive(:process_remote_events)
+      end
+      it { expect{Event.synchronize_upcoming_events}.not_to raise_error }
+    end
+  end
 
   describe '.initialize_calendar_db' do
     let(:event1) {Event.new(meetup_id: '123565')}
@@ -367,6 +416,13 @@ RSpec.describe Event, type: :model do
         expect(result).to be_nil
       end
     end
+  end
+  
+  describe '.get_upcoming_events' do
+    before(:each) do
+      allow(Event).to receive(:get_remote_events).and_return([])
+    end
+    it { expect(Event.get_upcoming_events).to eq([]) }
   end
 
   describe '.get_past_events' do
