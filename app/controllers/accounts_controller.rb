@@ -3,7 +3,6 @@ class AccountsController < ApplicationController
   before_action :is_root
 
   def create
-    puts params
     @user = User.new email: params[:user][:email], password: params[:user][:password], reset_password_token: params[:user][:reset_password_token]
     if @user.save
       flash[:notice] = "Account successfully created"
@@ -35,7 +34,8 @@ class AccountsController < ApplicationController
 
   private
   def is_root
-    if not current_user.root?
+    #if current_user.respond_to?('root?'); puts current_user.root?; end
+    if not current_user.respond_to?('root?') or not current_user.root?
       flash[:notice] = "You must be root admin to access this action"
       redirect_to calendar_path
     end

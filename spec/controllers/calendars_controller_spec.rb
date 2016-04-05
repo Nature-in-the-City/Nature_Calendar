@@ -14,6 +14,26 @@ describe CalendarsController do
       expect(response).to render_template(:show)
     end
   end
+  
+  describe 'in production mode' do
+    before(:each) do
+      Rails.env.stub(production: true)
+      request.stub(ssl: true)
+    end
+    it 'should redirect to http protocol'
+  end
+  
+  describe 'show filter' do
+    
+    context 'when there is a filter' do
+      before(:each) do
+        get :show, event: {filter: 'free'}
+      end
+      it { expect(assigns(:filter)).to eql('free') }
+    end
+    context 'when there is not a filter' do
+    end
+  end
 
 =begin
   describe 'synchronizing in #show' do
