@@ -7,7 +7,6 @@ class CalendarsController < ApplicationController
   end
 
   def show
-    puts params
     if params[:event] then
       @filter = params[:event][:filter]
     end

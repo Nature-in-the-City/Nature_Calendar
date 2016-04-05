@@ -140,5 +140,33 @@ describe EventsController do
     let(:create_new_event) { post :create, event: {name: "Voldemort", start: 10.days.from_now} }
     it { expect{ create_new_event }.not_to raise_error }
   end
-
+  
+  describe "PATCH #update" do
+    before(:each) do
+      @event_patch = Event.create(name: 'patch', contact_email: '1a2v3@abc.com', start: DateTime.now)
+      allow_any_instance_of(ApplicationController).to receive(:render) 
+      allow(Event).to receive(:find).and_return(Event.find(@event_patch.id))
+    end
+    let(:update_event) { patch :update, id: 1, 
+                        event: {name: 'patch', contact_email: '1a2v3@abc.com',
+                        start: DateTime.now} }
+    it { expect{ update_event }.not_to raise_error }
+  end
+  
+  describe "DELETE #destroy" do
+    let(:destroy_event) { delete :destroy, id: 1, event: {} }
+    before(:each) do
+      @event_destroy = Event.create!(name: 'destroy', contact_email: 'foxa2v3@abc.com', start: DateTime.now)
+      allow_any_instance_of(ApplicationController).to receive(:render) 
+      allow(Event).to receive(:find).and_return(Event.find(@event_destroy.id))
+    end
+    context 'without errors' do
+      it { expect{ destroy_event }.not_to raise_error }
+    end
+    context 'when error' do
+      let(:destroy_second_event) { delete :destroy, id: 2, event: {} }
+      before(:each) { allow(Meetup).to receive_message_chain(:new, :delete_event).and_raise("oops") }
+      it { expect{ destroy_second_event }.not_to raise_error }
+    end
+  end
 end
