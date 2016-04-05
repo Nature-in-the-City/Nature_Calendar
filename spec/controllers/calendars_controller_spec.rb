@@ -28,14 +28,11 @@ describe CalendarsController do
   end
   
   describe 'show filter' do
-    
     context 'when there is a filter' do
       let(:filter_by_free) { get :show, event: {filter: 'free'} }
       it 'should assign filter variable' do
         expect{ filter_by_free }.to change{ assigns(:filter) }.to('free')
       end
-    end
-    context 'when there is not a filter' do
     end
   end
 
