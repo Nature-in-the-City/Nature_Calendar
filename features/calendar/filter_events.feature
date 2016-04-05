@@ -15,7 +15,7 @@ Background:
   
 Scenario: Filter by family friendly
   And I select "Family Friendly" from "event_filter"
-  And I press the "Pending" tab
+  And I press the "Upcoming" tab
   And the month is March 2016
   Then I should see "Market Street"
   Given the month is April 2016
@@ -23,9 +23,9 @@ Scenario: Filter by family friendly
   
 Scenario: Filter by free
   Given I select "Free" from "event_filter"
-  And I press the "Pending" tab
+  And I press the "Upcoming" tab
   And the month is March 2016
   Then I should see "Market Street"
   Given the month is April 2016
-  Then I should not see "Nerds on Safari"
+  Then I should see "Nerds on Safari"
  

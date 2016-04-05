@@ -2,7 +2,7 @@ class GuestsController < ActionController::Base
   helper_method :respond_js, :handle_guest_registration
   
   def new
-    puts params
+    #puts params
     @event = Event.find(params[:event_id])
     respond_js
   end

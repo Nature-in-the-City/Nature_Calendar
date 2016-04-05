@@ -8,6 +8,7 @@ describe AdminMailer, type: :mailer do
         let(:test_guest) { create(:guest) }
         let(:default_email) { "info@natureinthecity.org" }
         let(:mail) { AdminMailer.admin_email(test_guest, test_event) }
+        it { expect{ AdminMailer.admin_email(test_guest, test_event) }.not_to raise_error }
         it "should send mail to 'info@natureinthecity.org'" do
             expect(mail.to).to eql([default_email])
         end

@@ -9,7 +9,7 @@ class EventsController < ApplicationController
   end
 
   def index
-    #puts params
+    
     start_date = params[:start]
     end_date = params[:end]
     @events = (start_date && end_date) ? Event.approved.where(start: start_date.to_datetime..end_date.to_datetime) : Event.approved
@@ -89,7 +89,7 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
-    puts params
+    #puts params
     perform_create_transaction
     @success ? handle_response : (render 'errors', format: :js)
   end
