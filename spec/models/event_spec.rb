@@ -336,12 +336,13 @@ RSpec.describe Event, type: :model do
     end
   end
   
-  describe ".get_pending_events" do
-    it { expect{ Event.get_pending_events }.not_to raise_error }
-  end
-  
-  describe ".get_rejected_events" do
-    it { expect{ Event.get_rejected_events }.not_to raise_error }
+  describe ".get_events_by_status" do
+    let(:each_status) { %w(past pending approved rejected) }
+    it 'does not raise errors for any status' do
+      each_status.each do |status|
+        expect { Event.get_events_by_status(status) }.not_to raise_error
+      end
+    end
   end
   
   describe ".get_default_group_name" do
@@ -437,9 +438,9 @@ RSpec.describe Event, type: :model do
   end
 
   describe '.synchronize_past_events' do
-    let(:event1) {Event.new(meetup_id: '123565', organization: 'Nature in the City')}
-    let(:third1) {Event.new(meetup_id: '653434', organization: 'Nature')}
-    let(:third2) {Event.new(meetup_id: '5654334', organization: 'Flower')}
+    let(:event1) {Event.new(name: 'sync_past test event', meetup_id: '123565', organization: 'Nature in the City')}
+    let(:third1) {Event.new(name: 'synchronize test event', meetup_id: '653434', organization: 'Nature')}
+    let(:third2) {Event.new(name: 'synchronize_past test event', meetup_id: '5654334', organization: 'Flower')}
     let(:past_events) {[event1]}
     let(:third_events) {[third1, third2]}
     
@@ -632,5 +633,28 @@ RSpec.describe Event, type: :model do
         expect(future_event.is_past?).to be_falsey
       end
     end
+  end
+  
+  describe ".get_event_ids" do
+    before(:each) do
+      allow(Event).to receive(:cleanup_ids)
+      allow(Event).to receive(:get_requested_ids)
+    end
+    it 'should not error with nil params' do
+      expect{ Event.get_event_ids(nil) }.not_to raise_error
+    end
+    it 'should not error with non-nil params' do
+      expect{ Event.get_event_ids(10) }.not_to raise_error
+    end
+  end
+  
+  describe "#update_meetup_fields" do
+    let(:event_to_update) { Event.create!(name: "original event", start: 1.day.from_now) }
+    let(:updated_event) { Event.new(meetup_id: 11111, status: 'approved', url: 'google.com/some_page') }
+    let(:action) { event_to_update.update_meetup_fields(updated_event) }
+    it { expect{ action }.to change{ event_to_update.meetup_id }.from(nil).to(updated_event.meetup_id) }
+    it { expect{ action }.to change{ event_to_update.status }.from('pending').to(updated_event.status) }
+    it { expect{ action }.to change{ event_to_update.url }.from(nil).to(updated_event.url) }
+    it { expect{ action }.not_to change{ event_to_update.updated } }
   end
 end

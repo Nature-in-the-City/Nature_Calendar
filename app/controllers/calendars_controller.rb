@@ -10,14 +10,19 @@ class CalendarsController < ApplicationController
     if params[:event] then
       @filter = params[:event][:filter]
     end
-    @tabs = %w(Upcoming Pending Rejected Past)
-    @pending_count = Event.get_pending_events.count
-    @pending = Event.get_pending_events.order(:start)
-    @upcoming = Event.where(status: 'approved').order(:start)
-    @past = Event.where(status: 'past', status: 'upcoming').order(start: :desc)
-    @rejected = Event.get_rejected_events.order(:start)
+    Event.update_statuses
+    
+    @pending = Event.get_events_by_status('pending').order(:start)
+    @upcoming = Event.get_events_by_status('approved').order(:start)
+    @past = Event.get_events_by_status('past').order(start: :desc)
+    @rejected = Event.get_events_by_status('rejected').order(:start)
+    
     @event_relations = {"Upcoming" => @upcoming, "Pending" => @pending,
                         "Rejected" => @rejected, "Past" => @past}
+    
+    @tabs = %w(Upcoming Pending Rejected Past)
+    @pending_count = @pending.count
+    
     @head, @body = WebScraper.instance.page_data
     @calendars = Sync.all
   end

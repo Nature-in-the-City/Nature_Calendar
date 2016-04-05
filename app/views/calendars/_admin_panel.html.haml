@@ -42,8 +42,8 @@
         #location.col-sm-2.container{ id: "_Location" }
           Location
           .container
-            #street= "#{event.st_number} #{event.st_name}"
-            #city= "#{event.city}, CA #{event.zip}"
+            #street= "#{event.street_address}"
+            #city= "#{event.city_state_zip}"
         #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid

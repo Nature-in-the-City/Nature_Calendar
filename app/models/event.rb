@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
   DEFAULT_DATE_FORMAT = '%b %e, %Y at %l:%M%P'
   DEFAULT_TIME_FORMAT = '%l:%M%P'
   
-  scope :approved, -> { where(status: "approved") }
+  scope :approved, -> { where(status: "approved", status: "past") }
   scope :family_friendly, -> { where(family_friendly: true) }
   scope :free, -> { where(free: true) }
   scope :hike, -> { where(hike: true) }
@@ -110,13 +110,9 @@ class Event < ActiveRecord::Base
     []
   end
   
-  # get all of the pending events
-  def self.get_pending_events
-    return Event.where(status: 'pending')
-  end
-  
-  def self.get_rejected_events
-    return Event.where(status: 'rejected')
+  # get all of the events with specified status
+  def self.get_events_by_status(some_status)
+    return Event.where(status: some_status)
   end
   
   def self.get_past_third_party_events(from=nil, to=nil)
