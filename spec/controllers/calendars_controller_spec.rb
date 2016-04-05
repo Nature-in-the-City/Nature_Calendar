@@ -16,20 +16,24 @@ describe CalendarsController do
   end
   
   describe 'in production mode' do
+    subject { get :show }
     before(:each) do
       Rails.env.stub(production: true)
       request.stub(ssl: true)
     end
-    it 'should redirect to http protocol'
+    it 'should redirect to http protocol' do
+      expect(subject).not_to raise_error
+      expect(response.redirect_url).to eql(request.url.gsub(/^http:/, 'https:'))
+    end
   end
   
   describe 'show filter' do
     
     context 'when there is a filter' do
-      before(:each) do
-        get :show, event: {filter: 'free'}
+      let(:filter_by_free) { get :show, event: {filter: 'free'} }
+      it 'should assign filter variable' do
+        expect{ filter_by_free }.to change{ assigns(:filter) }.to('free')
       end
-      it { expect(assigns(:filter)).to eql('free') }
     end
     context 'when there is not a filter' do
     end
