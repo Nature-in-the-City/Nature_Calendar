@@ -113,7 +113,6 @@ class Event < ActiveRecord::Base
   # get all of the events with specified status
   def self.get_events_by_status(some_status, filter)
     if filter and not filter.empty?
-      puts "! #{filter}"
       return Event.where("status = ? AND #{filter} = ?", some_status, true)
     end
     Event.where(status: some_status)
