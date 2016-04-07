@@ -124,10 +124,10 @@
           %br
           - @tabs.each do |tab|
             - if tab.eql? "Upcoming"
-              %div{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
+              %div{ class: 'tab-pane active scrollable', id: "#{tab.downcase}_events" }
                 = render partial: 'admin_panel', locals: {tab: tab}
             - else
-              %div{ class: 'tab-pane', id: "#{tab.downcase}_events" }
+              %div{ class: 'tab-pane scrollable', id: "#{tab.downcase}_events" }
                 = render partial: 'admin_panel', locals: { tab: tab }
           %br
 %br

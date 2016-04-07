@@ -10,6 +10,9 @@ describe EventsController do
     @user = User.create(email: "example@example.com",
                         password: "changeme")
     sign_in @user
+    allow(Meetup).to receive_message_chain(:new, :push_event).
+                  and_return(create(:event))
+    allow_any_instance_of(ApplicationController).to receive(:render).and_return(200)
   end
 
   let(:event) {Event.create(name: 'coyote appreciation',
@@ -25,7 +28,6 @@ describe EventsController do
                   Event.new(name: 'butterflies', contact_email: '123@abc.com', start: DateTime.now)]}
 
     before(:each) do
-      allow_any_instance_of(ApplicationController).to receive(:render)
       allow(Event).to receive(:get_remote_events).and_return(nil)
       allow(Event).to receive(:process_remote_events).and_return(events)
     end
@@ -54,9 +56,6 @@ describe EventsController do
 
   describe "#third_party" do
     context "GET #third_party" do
-      before(:each) do
-        allow_any_instance_of(ApplicationController).to receive(:render)
-      end
       it "redirects to calendar page" do
         expect(get_third_party).to redirect_to(calendar_path)
       end
@@ -88,7 +87,6 @@ describe EventsController do
     end
     context "when there are errors" do
       before(:each) do
-        allow_any_instance_of(ApplicationController).to receive(:render)
         allow(Event).to receive(:get_remote_events).and_raise(StandardError)
       end
       it { expect{ get :third_party, id: "123" }.not_to raise_error }
@@ -98,14 +96,25 @@ describe EventsController do
   
   describe "GET #index" do
     before(:each) do
-      allow_any_instance_of(ApplicationController).to receive(:render)
+      @family_friendly = create(:event, family_friendly: true, contact_email: "abc@123.com")
+      @free = create(:event, free: true, contact_email: "a1b2c3@123.com")
+      @both = create(:event, family_friendly: true, free: true, contact_email: "abc@123.com")
+    end
+    it 'should work' do
+      expect{ get :index }.not_to raise_error
     end
     context 'when there is a family-friendly filter' do
-      let(:get_index_filter_family_friendly) { get :index, start: DateTime.now, filter: 'family_friendly' }
-      it { expect{ get_index_filter_family_friendly }.not_to raise_error }
+      let(:get_index_filter_family_friendly) { get :index, filter: 'family_friendly' }
+      let!(:family_friendly_relation) { Array.new([@family_friendly, @both]) }
+      it 'should not raise an error when filtering by family-friendly' do
+        expect{ get_index_filter_family_friendly }.not_to raise_error
+      end
+      it 'should not return non-family friendly events' do
+        expect{ get_index_filter_family_friendly }.to change{ assigns(:events) }
+      end
     end
     context 'when there is a free filter' do
-      let(:get_index_filter_free) { get :index, start: DateTime.now, filter: 'free' }
+      let(:get_index_filter_free) { get :index, filter: 'free' }
       
       it { expect{ get_index_filter_free }.not_to raise_error }
     end
@@ -116,12 +125,9 @@ describe EventsController do
   end
   
   describe "GET #show" do
-    before(:each) do
-      allow_any_instance_of(ApplicationController).to receive(:render)
-    end
     context 'when event with provided id exists' do
       before(:each) do
-        @valid_event = Event.create!(name: "a sample event", start: DateTime.now)
+        @valid_event = create(:event, name: "a sample event")
         @event_id = @valid_event.id
         get :show, { id: @event_id }
       end
@@ -139,25 +145,34 @@ describe EventsController do
   describe "POST #create" do
     let(:create_new_event) { post :create, event: {name: "Voldemort", start: 10.days.from_now} }
     it { expect{ create_new_event }.not_to raise_error }
+    context 'when error occurs' do
+      before(:each) do
+        allow(Meetup).to receive_message_chain(:new, :push_event).and_raise(StandardError)
+      end
+      it 'should catch the error' do
+        expect{ create_new_event }.not_to raise_error
+        expect(assigns(:success)).to be_nil
+      end
+    end
   end
   
   describe "PATCH #update" do
+    let(:event_patch) { create(:event, name: 'patch') }
     before(:each) do
-      @event_patch = Event.create(name: 'patch', contact_email: '1a2v3@abc.com', start: DateTime.now)
-      allow_any_instance_of(ApplicationController).to receive(:render) 
-      allow(Event).to receive(:find).and_return(Event.find(@event_patch.id))
+      allow(Event).to receive(:find).and_return(event_patch)
+      allow(Meetup).to receive_message_chain(:new, :edit_event).and_return(event_patch)
     end
     let(:update_event) { patch :update, id: 1, 
-                        event: {name: 'patch', contact_email: '1a2v3@abc.com',
-                        start: DateTime.now} }
-    it { expect{ update_event }.not_to raise_error }
+                        event: { name: 'patchy', start: 1.day.from_now } }
+    it 'should not throw an error' do
+      expect{ update_event }.not_to raise_error
+    end
   end
   
   describe "DELETE #destroy" do
     let(:destroy_event) { delete :destroy, id: 1, event: {} }
     before(:each) do
       @event_destroy = Event.create!(name: 'destroy', contact_email: 'foxa2v3@abc.com', start: DateTime.now)
-      allow_any_instance_of(ApplicationController).to receive(:render) 
       allow(Event).to receive(:find).and_return(Event.find(@event_destroy.id))
     end
     context 'without errors' do
@@ -165,8 +180,21 @@ describe EventsController do
     end
     context 'when error' do
       let(:destroy_second_event) { delete :destroy, id: 2, event: {} }
-      before(:each) { allow(Meetup).to receive_message_chain(:new, :delete_event).and_raise("oops") }
+      before(:each) do
+        allow_any_instance_of(Event).to receive(:destroy).and_raise(StandardError)
+      end
       it { expect{ destroy_second_event }.not_to raise_error }
+    end
+  end
+  
+  describe "GET #edit" do
+    let(:edit_action) { get :edit, id: 1, event: {} }
+    let(:item_to_edit) { create(:event, name: "item to edit", hike: true) }
+    before(:each) do
+      allow(Event).to receive(:find).and_return(item_to_edit)
+    end
+    it 'should not throw an error' do
+      expect{ edit_action }.not_to raise_error
     end
   end
 end

@@ -21,10 +21,13 @@ FactoryGirl.define do
         city 'La Jolla'
         zip 92037
         country 'USA'
-        free true
-        family_friendly true
-        learn true
-        plant true
+        free false
+        family_friendly false
+        learn false
+        plant false
+        hike false
+        play false
+        volunteer false
     end
 end
 

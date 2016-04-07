@@ -7,15 +7,16 @@ class CalendarsController < ApplicationController
   end
 
   def show
+    @filter = nil
     if params[:event] then
       @filter = params[:event][:filter]
     end
     Event.update_statuses
     
-    @pending = Event.get_events_by_status('pending').order(:start)
-    @upcoming = Event.get_events_by_status('approved').order(:start)
-    @past = Event.get_events_by_status('past').order(start: :desc)
-    @rejected = Event.get_events_by_status('rejected').order(:start)
+    @pending = Event.get_events_by_status('pending', @filter).order(:start)
+    @upcoming = Event.get_events_by_status('approved', @filter).order(:start)
+    @past = Event.get_events_by_status('past', @filter).order(start: :desc)
+    @rejected = Event.get_events_by_status('rejected', @filter).order(:start)
     
     @event_relations = {"Upcoming" => @upcoming, "Pending" => @pending,
                         "Rejected" => @rejected, "Past" => @past}
