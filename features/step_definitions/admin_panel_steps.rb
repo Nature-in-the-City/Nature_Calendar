@@ -129,10 +129,6 @@ Given /^that I see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given /^I am( not)? logged in as an admin$/ do |negated|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
 Then /^I should( not)? see the admin panel$/ do |negated|
   pending # Write code here that turns the phrase above into concrete actions
 end
@@ -145,51 +141,32 @@ Then /^I should( not)? see the add users button$/ do |negated|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^the following events exist:$/) do |table|
+Given /^the following events exist:$/ do |table|
   # table is a Cucumber::Core::Ast::DataTable
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I am logged in as the admin$/) do
+Given /^I click "([^"]*)" for "([^"]*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I see the "([^"]*)" panel$/) do |arg1|
+Then /^The "([^"]*)" event should be deleted$/ do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I am displaying the "([^"]*)" events$/) do |arg1|
+Given /^"([^"]*)" for "([^"]*)" is "([^"]*)"$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I "([^"]*)" details on "([^"]*)"$/) do |arg1, arg2|
+When /^I change "([^"]*)" for "([^"]*)" to "([^"]*)"$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^I click "([^"]*)" for "([^"]*)"$/) do |arg1, arg2|
+
+Then /^"([^"]*)" for "([^"]*)" should be "([^"]*)"$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Then(/^The "([^"]*)" event should be deleted$/) do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given(/^"([^"]*)" for "([^"]*)" is "([^"]*)"$/) do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-When(/^I change "([^"]*)" for "([^"]*)" to "([^"]*)"$/) do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-When(/^I click "([^"]*)" for "([^"]*)"$/) do |arg1, arg2|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^"([^"]*)" for "([^"]*)" should be "([^"]*)"$/) do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-When(/^"([^"]*)" for "([^"]*)" should be "([^"]*)"$/) do |arg1, arg2, arg3|
+Given /^I am( not)? logged in as an admin$/ do |negated|
   pending # Write code here that turns the phrase above into concrete actions
 end

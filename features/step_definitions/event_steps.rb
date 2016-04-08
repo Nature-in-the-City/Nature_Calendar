@@ -1,4 +1,4 @@
-Given /^the following events (?:exist:|exist on the calendar:)$/ do |events_table|
+Given /^the following events exist on the calendar:$/ do |events_table|
   events_table.hashes.each do |event|
     Event.create!(event)
   end
