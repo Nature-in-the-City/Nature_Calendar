@@ -116,3 +116,15 @@ Then /^I should see a link to "(.*)" details for "(.*)"$/  do |link_text, event|
     link_id = "showbtn_#{event_id}"
     expect(find_by_id(div_id)).to have_link(link_text)
 end
+
+When(/^I follow "([^"]*)"'s "([^"]*)" button$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I should see the "([^"]*)" event "([^"]*)"$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^that I see the "([^"]*)" event "([^"]*)"$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end

@@ -188,13 +188,41 @@ describe EventsController do
   end
   
   describe "GET #edit" do
-    let(:edit_action) { get :edit, id: 1, event: {} }
-    let(:item_to_edit) { create(:event, name: "item to edit", hike: true) }
-    before(:each) do
-      allow(Event).to receive(:find).and_return(item_to_edit)
+    before(:all) do
+      @edit_item = create(:event, name: "edit event", status: 'pending', start: 2.days.from_now, end: 2.days.from_now)
+      @past_item = create(:event, name: "past event", status: 'pending', start: DateTime.now - 1, end: DateTime.now - 1)
     end
-    it 'should not throw an error' do
-      expect{ edit_action }.not_to raise_error
+    let(:edit_item_id) { @edit_item.id }
+    let(:past_item_id) { @past_item.id }
+    let(:blank_edit_future) { get :edit, { id: edit_item_id, commit: "" } }
+    let(:blank_edit_past) { get :edit, { id: past_item_id, commit: "" } }
+    let(:accept_edit_future) { get :edit, { id: edit_item_id, commit: 'accept' } }
+    let(:reject_edit_future) { get :edit, { id: edit_item_id, commit: 'reject' } }
+    let(:accept_edit_past) { get :edit, { id: past_item_id, commit: 'accept' } }
+    let(:item_to_edit) { Event.find(edit_item_id) }
+    
+    
+    it 'should not throw an error when no change is specified' do
+      expect{ blank_edit_future }.not_to raise_error
+      expect{ blank_edit_past }.not_to raise_error
+    end
+    it 'should update the status of future events' do
+      expect(item_to_edit.status).to eq('pending')
+      
+      expect{ reject_edit_future }.not_to raise_error
+      expect(item_to_edit.status).to eq('rejected')
+      
+      expect{ accept_edit_future }.not_to raise_error
+      expect(item_to_edit.status).to eq('approved')
+    end
+    it 'should should not update status of past events' do
+      expect{ accept_edit_past }.not_to change{ Event.where(status: 'accepted').count }
+    end
+    context 'when save! errors' do
+      before(:each) { allow_any_instance_of(Event).to receive(:save).and_raise(StandardError) }
+      it 'should catch error and exit gracefully' do
+        expect{ accept_edit_future }.not_to raise_error
+      end
     end
   end
 end

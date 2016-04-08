@@ -109,11 +109,23 @@ class EventsController < ApplicationController
 
   def edit
     @event = Event.find params[:id]
-    if @event.is_external_third_party? || @event.is_past?
-      @msg = "Sorry but not-owned third-party events or past events cannot be edited. You may only delete them."
+    if @event.is_past?
+      @msg = "Sorry, past events cannot be edited. You may only delete them."
       return render 'errors', format: :js
     end
-    handle_response
+    begin
+      @new_status = params[:commit]
+      if @new_status
+        statuses = {'accept' => 'approved', 'reject' => 'rejected'}
+        statuses.default = 'pending'
+        @event.status = statuses[@new_status]
+        @event.save
+      end
+      handle_response
+    rescue Exception => e
+      @msg = "Undable to update '#{@event.name}'s status:" + '\n' + e.to_s
+      return render 'errors', format: :js
+    end
   end
 
   # does panel update event

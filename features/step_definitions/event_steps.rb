@@ -145,3 +145,11 @@ end
 Given(/^I click on the event "([^"]*)"$/) do |arg1|
   puts 'features/step_definitions/event_steps.rb'
 end
+
+Given(/^the event "([^"]*)" should be colored "([^"]*)"$/) do |arg1, arg2|
+  puts 'features/step_definitions/event_steps.rb'
+end
+
+Given /^the following events with category (?:exist:|exist on the calendar:)$/ do |events_table|
+  puts 'features/step_definitions/event_steps.rb'
+end
