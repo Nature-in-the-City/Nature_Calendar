@@ -33,8 +33,8 @@ Feature:
     
     And I am on the Calendars Page
     When I click "Sign In"
-    And fill in email with "mike@admin.com"
-    And fill in password with "greenman"
-    And click "Log In"
+    And I fill in email with "mike@admin.com"
+    And I fill in password with "greenman"
+    And I click "Log In"
     Then I should see the Admin panel
     And I should see "Add New Users"
