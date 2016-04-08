@@ -9,10 +9,10 @@ Feature:
     And I see the "Sync Status" panel
   
   Scenario: I should be able to add a meetup calendar to sync with by URL
-    When I fill in the "URL" field with "http://meetup.com/123456789"
+    When I fill in the "URL" field with "http://meetup.com/Nature-in-the-City"
     And I press the "Add" button
     Then I should be on the "Admin" page
-    And I should see "Successfully synced 'http://meetup.com/123456789'!"
+    And I should see "Successfully synced 'http://meetup.com/Nature-in-the-City'!"
     
   Scenario: Incorrect Meetup URLs should redirect with a message
     When I fill in the "URL" field with "http://meetup.com/0000000"
