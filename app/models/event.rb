@@ -254,7 +254,7 @@ class Event < ActiveRecord::Base
 
   # Appends field to lst if field is neither nil nor whitespace
   def append_to_list(lst, field)
-    if (field != nil) and (field.strip != '')
+    if (field != nil) or (field.strip != '')
       lst << field
     end
   end

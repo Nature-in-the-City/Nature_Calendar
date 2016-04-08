@@ -23,9 +23,9 @@
               %li
                 = link_to "Create new account", new_account_path, :method => :get
               %li
-                = link_to "Delete existing accounts", edit_account_path("root"), :method => :get
+                = link_to "Edit existing accounts", edit_account_path("root"), :method => :get
     - else
-      = link_to('Sign In', new_user_session_path)
+      = link_to 'Sign In', new_user_session_path, :method => :get
     
     #event_creation_box
       - if user_signed_in?
