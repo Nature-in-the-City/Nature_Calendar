@@ -17,7 +17,7 @@ Background:
 
 Scenario: Accept an event
   Given that I press the "Pending" tab
-  Then I should see "Imagination rafing"
+  Then I should see the "Pending" event "Imagination rafing"
   When I "Show More" details on "Imagination rafting"
   And I follow "Imagination rafting"'s "accept" button
   Then I should see the "Upcoming" event "Imagination rafting"
