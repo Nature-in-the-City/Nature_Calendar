@@ -11,11 +11,12 @@ Background:
     | Imagination rafting   | Imagine the outdoors  | 145       | Jackson st    | Riverside     | 90210 | March 19, 2017 16:30  | March 19 2017, 20:30  | pending   |
     | Real life running     | Runner's World        | 45        | Seneca st     | Phoenix       | 91210 | April 20, 2017 8:30   | April 21 2017, 8:30   | pending   |
     | Sleep walking         | Insomniac             | 12345     | Union St      | San Francisco | 94123 | Aug-30-2016 1:00      | Aug-30-2016 3:00      | approved  |
+    | WORDS                 | ORG                   | 567       | Hearst Ave    | Berkeley      | 94707 | Apr-10-2021 1:00      | Apr-10-2021 4:00      | rejected  |
   And I am logged in as the admin
   And I see the Admin panel
   And I see the following status tabs: "Upcoming", "Pending", "Rejected", "Past"
 
-Scenario: Accept an event
+Scenario: Accept a pending event
   Given that I press the "Pending" tab
   Then I should see the "Pending" event "Imagination rafing"
   When I "Show More" details on "Imagination rafting"
@@ -30,3 +31,10 @@ Scenario: Reject an accepted event
   And I follow "Sleep walking"'s "reject" button
   When I press the "Rejected" tab
   Then I should see "Insomniac"
+
+Scenario: Accept a rejected event
+  Given that I see the "Rejected" event "WORDS"
+  When I "Show More" details on "WORDS"
+  And I follow "Sleep walking"'s "accept" button
+  When I press the "Upcoming" tab
+  Then I should see "WORDS"

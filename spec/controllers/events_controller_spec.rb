@@ -188,17 +188,20 @@ describe EventsController do
   end
   
   describe "GET #edit" do
-    let(:blank_edit_future) { get :edit, { id: 8, commit: "" } }
-    let(:blank_edit_past) { get :edit, { id: 9, commit: "" } }
-    let(:accept_edit_future) { get :edit, { id: 8, commit: 'accept' } }
-    let(:reject_edit_future) { get :edit, { id: 8, commit: 'reject' } }
-    let(:accept_edit_past) { get :edit, { id: 9, commit: 'accept' } }
-    let(:item_to_edit) { Event.find(8) }
-    
-    before(:each) do
+    before(:all) do
       @edit_item = create(:event, name: "edit event", status: 'pending', start: 2.days.from_now, end: 2.days.from_now)
       @past_item = create(:event, name: "past event", status: 'pending', start: DateTime.now - 1, end: DateTime.now - 1)
     end
+    let(:edit_item_id) { @edit_item.id }
+    let(:past_item_id) { @past_item.id }
+    let(:blank_edit_future) { get :edit, { id: edit_item_id, commit: "" } }
+    let(:blank_edit_past) { get :edit, { id: past_item_id, commit: "" } }
+    let(:accept_edit_future) { get :edit, { id: edit_item_id, commit: 'accept' } }
+    let(:reject_edit_future) { get :edit, { id: edit_item_id, commit: 'reject' } }
+    let(:accept_edit_past) { get :edit, { id: past_item_id, commit: 'accept' } }
+    let(:item_to_edit) { Event.find(edit_item_id) }
+    
+    
     it 'should not throw an error when no change is specified' do
       expect{ blank_edit_future }.not_to raise_error
       expect{ blank_edit_past }.not_to raise_error
