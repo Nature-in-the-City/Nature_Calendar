@@ -143,17 +143,3 @@
           = label :sync, :url, "URL"
           = text_field :sync, :url
           = submit_tag 'Add Calendar'
-
-:javascript
-  $(document).ready(function(){
-    var show_btns = $("a:contains('Show')");
-    
-    show_btns.each(function(index){
-    
-      $(this).on("click", function() {
-      
-        $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
-      });
-    });
-  });
-  

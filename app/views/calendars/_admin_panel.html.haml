@@ -1,4 +1,94 @@
 -# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
+
+%br
+- @event_relations[tab].each do |event|
+  .container{ id: "#{event.id}_title" }
+    .col-sm-6
+      %h3= "#{event.name}"
+    .col-sm-2
+      %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
+        Show More
+        %i.fa.fa-angle-down
+  .container{ id: "#{event.id}_details", class: "collapse" }
+    .row
+      .col-sm-4
+        %table.table.table-striped.table-bordered.table-hover.table-condensed
+          %tbody
+            %tr
+              %td Start
+              %td
+                %a#startdate{"data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %0d, %Y, %r")
+            %tr
+              %td End
+              %td
+                %a#enddate{"data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %0d, %Y, %r")
+            %tr
+              %td Location
+              %td
+                %a#street{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
+            %tr
+              %td Cost
+              %td
+                %a#cost{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
+            %tr
+              %td Tags
+              %td
+                %a#tags{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.tag_string}"
+      .col-sm-4
+        Description
+        .container-fluid
+          %p=event.description
+      .col-sm-4.container#contact
+        Contact Info
+        #name="Name: #{event.contact_last}, #{event.contact_first}"
+        #phone="Phone: #{event.contact_phone}"
+        #email= "Email: #{event.contact_email}"
+        #org= "Org: #{event.organization}"
+    .row
+      .col-sm-6.container
+      .col-sm-6.container
+        - if !tab.eql? "Past" 
+          .container.col-sm-2
+            = form_tag  do
+              -# this will call editing
+              - if tab.eql? "Upcoming"
+                .button_right
+                  Accept
+                  %i.fa.fa-check
+                  = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
+              - else
+                .button_right
+                  Accept
+                  %i.fa.fa-check
+                  = submit_tag 'accept'
+          .container.col-sm-2
+            = form_tag  do
+              -# this will call editing
+              .button_right
+                Edit
+                %i.fa.fa-edit
+                = submit_tag 'edit'
+          - if tab.eql? "Rejected"
+            .container.col-sm-2
+              = form_tag do
+                -# this will permanently delete an event
+                .button_right
+                  Trash
+                  %i.fa.fa-trash
+                  = submit_tag 'delete'
+          - else
+            .container.col-sm-1
+              = form_tag do
+                .button_right
+                  Reject
+                  %i.fa.fa-trash
+                  -# this will move an event to the rejected area
+                  = submit_tag 'reject'
+%br
+
+- if @event_relations[tab].empty?
+  = "There are no #{tab} events"
+
 %link{:href => "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css", :rel => "stylesheet"}
 %script{:src => "http://code.jquery.com/jquery-2.0.3.min.js"}
 %script{:src => "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"}
@@ -7,97 +97,19 @@
 :javascript
   // $.fn.editable.defaults.mode = 'inline';
   $(document).ready(function() {
-      $('#start').editable();
-      $('#start2').editable();
-      $('#cost').editable();
-      $('#tags').editable();
-      $('#start').editable();
-      $('#end').editable();
-      $('#street').editable();
-      $('#city').editable();
-  });
-
-%br
-%br
-- if @event_relations[tab].count > 0
-  - @event_relations[tab].each do |event|
-    .container{ id: "#{event.id}_title" }
-      .col-sm-6
-        %h3= "#{event.name}"
-      .col-sm-2
-        %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
-          Show More
-          %i.fa.fa-angle-down
+    $('#startdate').editable();
+    $('#starttime').editable();
+    $('#endtime').editable();
+    $('#enddate').editable();
+    $('#street').editable();
+    $('#city').editable();
+    $('#cost').editable();
+    $('#tags').editable();
     
-    .container{ id: "#{event.id}_details", class: "collapse" }
-      #top{ class: "row" }
-        #date.col-sm-2
-          Date
-          .container
-          %a#start{"data-title" => "Enter date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %-d, %Y")
-          DateEnd
-          .container
-          %a#start2{"data-title" => "Enter date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %-d, %Y")
-        #cost.col-sm-2
-          Cost
-          .container
-            %a#cost{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
-        #tags.col-sm-3.container
-          Tags
-          .container
-            %a#tags{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}="#{event.tag_string}"
-        #contact_1.col-sm-3.container
-          Contact Info
-          - if event.contact_first
-            .container="Name: #{event.contact_last}, #{event.contact_first}"
-          - else
-            .container="Name:"
-          .container= "Phone: #{event.contact_phone}"
-
-      #bottom{ class: "row container" }
-        #time{ id: "_Time", class: "container col-sm-2" }
-          Time
-          .container
-            #start{"data-title" => "Enter start", "data-type" => "text", "data-url" => "/post", :href => "#"}="Start: #{event.start.strftime("%r")}"
-          .container
-            #end{"data-title" => "Enter end", "data-type" => "text", "data-url" => "/post", :href => "#"}= "End: #{event.end.strftime("%r")}"
-        #location.col-sm-2.container{ id: "_Location" }
-          Location
-          .container
-            %a#street{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}"
-          .container
-            %a#city{"data-title" => "Enter city", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.city}, CA #{event.zip}"
-        #description.col-sm-3.container{ id: "_Description" }
-          Description
-          .container-fluid
-            %p=event.description
-        #contact_2.col-sm-3.container{ id: "val_Email" }
-          .container
-            #email= "Email: #{event.contact_email}"
-            #org= "Org: #{event.organization}"
-          - if !tab.eql? "Past" 
-            .container.col-sm-4
-              = form_tag  do
-                -# this will call editing
-                - if tab.eql? "Upcoming"
-                  = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
-                - else
-                  = submit_tag 'accept'
-            .container.col-sm-4
-              = form_tag  do
-                -# this will call editing
-                = submit_tag 'edit'
-            - if tab.eql? "Rejected"
-              .container.col-sm-4
-                = form_tag do
-                  -# this will permanently delete an event
-                  = submit_tag 'delete'
-            - else
-              .container.col-sm-4
-                = form_tag do
-                  -# this will move an event to the rejected area
-                  = submit_tag 'reject'
-    %br
-- else
-  %ul
-    %li= "There are no #{tab} events"
+    var show_btns = $("a:contains('Show')");
+    show_btns.each(function(index){
+      $(this).on("click", function() {
+        $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
+      });
+    });
+  });
