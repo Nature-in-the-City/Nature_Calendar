@@ -168,5 +168,5 @@ Then /^"([^"]*)" for "([^"]*)" should be "([^"]*)"$/ do |arg1, arg2, arg3|
 end
 
 Given /^I am( not)? logged in as an admin$/ do |negated|
-  pending # Write code here that turns the phrase above into concrete actions
+  pending
 end
