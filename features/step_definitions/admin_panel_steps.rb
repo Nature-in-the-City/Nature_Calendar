@@ -117,14 +117,30 @@ Then /^I should see a link to "(.*)" details for "(.*)"$/  do |link_text, event|
     expect(find_by_id(div_id)).to have_link(link_text)
 end
 
-When(/^I follow "([^"]*)"'s "([^"]*)" button$/) do |arg1, arg2|
+When /^I follow "([^"]*)"'s "([^"]*)" button$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Then(/^I should see the "([^"]*)" event "([^"]*)"$/) do |arg1, arg2|
+Then /^I should see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^that I see the "([^"]*)" event "([^"]*)"$/) do |arg1, arg2|
+Given /^that I see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given /^I am( not)? logged in as an admin$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should( not)? see the admin panel$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should( not)? see the sync panel$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should( not)? see the add users button$/ do |negated|
   pending # Write code here that turns the phrase above into concrete actions
 end
