@@ -1,4 +1,4 @@
-@javascript @inprogress
+@javascript @admin_panel
 
 Feature: Approve and reject events
     As an admin
