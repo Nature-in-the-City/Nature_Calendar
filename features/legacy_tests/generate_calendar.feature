@@ -1,4 +1,4 @@
-@javascript
+@javascript @legacy
 Feature: Display a calendar
 
   As a user,

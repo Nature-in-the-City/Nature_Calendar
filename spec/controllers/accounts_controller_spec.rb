@@ -14,36 +14,98 @@ describe AccountsController do
     sign_out(@root)
   end
 
-  describe '#new' do
+  describe 'GET #new' do
+    let(:action) { get :new }
     it 'can be accessed by root' do
       sign_in @root
-      get :new
-      expect(response).to render_template(:new)
+      expect(action).to render_template(:new)
     end
-    it 'cannot be accessed by non-root admin' do
+    it 'can be accessed by non-root admin' do
       sign_in @admin
-      get :new
-      expect(response).to redirect_to(calendar_path)
+      expect(action).not_to redirect_to(calendar_path)
     end
     it 'cannot be accessed by guest' do
-      get :new
-      expect(response).to redirect_to(new_user_session_path)
+      expect(action).to redirect_to(calendar_path)
+      expect(flash[:notice]).to match(/^You must be root admin to access this action/)
     end
   end
-  describe '#edit' do
-    it 'can be accessed by root' do
+  
+  describe 'POST #create' do
+    before(:each) do
       sign_in @root
-      get :edit, id: 'root'
-      expect(response).to render_template(:edit)
     end
-    it 'cannot be accessed by non-root admin' do
-      sign_in @admin
-      get :edit, id: 'root'
-      expect(response).to redirect_to(calendar_path)
+    context 'when given valid params' do
+      let(:valid_creation) { post :create, user: { email: "jon@doe.edu", password: "password", reset_password_token: "token" } }
+      it 'should redirect to calendar_path with success message' do
+        expect(valid_creation).to redirect_to calendar_path
+        expect(flash[:notice]).to eql("Account successfully created")
+      end
     end
-    it 'cannot be accessed by guest' do
-      get :edit, id: 'root'
-      expect(response).to redirect_to(new_user_session_path)
+    context 'when given invalid params' do
+      let(:invalid_user) { User.new }
+      let(:invalid_creation) { post :create, user: { email: nil, password: "password" } }
+      before(:each) do
+        allow(User).to receive(:new).and_return(invalid_user)
+        allow(invalid_user).to receive(:save).and_return(false)
+      end
+      it 'should redirect to new_account_path with failure message' do
+        expect(invalid_creation).to redirect_to new_account_path
+        expect(flash[:notice]).not_to be_nil
+      end
+    end
+  end
+  
+  describe 'GET #edit' do
+    let(:edit_action) { get :edit, id: 'root' }
+    
+    before(:each) do
+      sign_in @root
+    end
+    context "when no non-admin users exist" do
+      it 'should render edit page with flash' do
+        expect(edit_action).to render_template(:edit)
+        expect(flash[:notice]).not_to be_nil
+      end
+    end
+    context "when one non-admin exists" do
+      before do
+        User.create!(email: "user@user.com", password: "password", level: "1", reset_password_token: "token")
+      end
+      it { expect(edit_action).to render_template(:edit) }
+    end
+  end
+  
+  describe 'DELETE #destroy' do
+    before(:each) do
+      sign_in @root
+    end
+    context 'when the account being destroyed does not exist' do
+      let(:destroy_100) { delete :destroy, { id: 100 } }
+      
+      before do
+        allow(User).to receive(:find_by_id)
+      end
+      it 'should redirect and display failure message' do
+        expect(destroy_100).to redirect_to calendar_path
+        expect(flash[:notice]).to eql("Account does not exist")
+      end
+    end
+
+    context 'when the account being destroyed does exist' do
+      let(:destroy_3) { delete :destroy, { id: 3 } }
+      
+      before(:each) do
+        @test_user = User.create!(email: "destroy@example.com", password: "password")
+        allow(User).to receive(:find_by_id).and_return(@test_user)
+      end
+      it 'should find the right account and delete it' do
+        expect(User).to receive(:find_by_id).with("3").and_return(@test_user)
+        expect{ destroy_3 }.to change{ User.count }.by(-1)
+      end
+      it 'should redirect_to calendar with a success message' do
+        expect(destroy_3).to redirect_to calendar_path
+        expect(flash[:notice]).to match(/^destroy@example.com deleted/)
+      end
     end
   end
 end

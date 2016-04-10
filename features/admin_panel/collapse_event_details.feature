@@ -16,7 +16,6 @@ Background:
 
   And I am logged in as the admin
   And I see the "Admin" panel
-  And the date is "12/25/2016 06:00:00 AM"
   And I am displaying the "Upcoming" events
 
 Scenario: Event details should be collapsed when you first visit the page

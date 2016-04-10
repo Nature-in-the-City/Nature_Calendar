@@ -116,3 +116,57 @@ Then /^I should see a link to "(.*)" details for "(.*)"$/  do |link_text, event|
     link_id = "showbtn_#{event_id}"
     expect(find_by_id(div_id)).to have_link(link_text)
 end
+
+When /^I follow "([^"]*)"'s "([^"]*)" button$/ do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given /^that I see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should( not)? see the admin panel$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should( not)? see the sync panel$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^I should( not)? see the add users button$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given /^the following events exist:$/ do |table|
+  # table is a Cucumber::Core::Ast::DataTable
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given /^I click "([^"]*)" for "([^"]*)"$/ do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then /^The "([^"]*)" event should be deleted$/ do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given /^"([^"]*)" for "([^"]*)" is "([^"]*)"$/ do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When /^I change "([^"]*)" for "([^"]*)" to "([^"]*)"$/ do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+
+Then /^"([^"]*)" for "([^"]*)" should be "([^"]*)"$/ do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given /^I am( not)? logged in as an admin$/ do |negated|
+  pending # Write code here that turns the phrase above into concrete actions
+end

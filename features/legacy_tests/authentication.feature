@@ -1,3 +1,4 @@
+@legacy
 Feature: authentication for our application
 
   As an admin,

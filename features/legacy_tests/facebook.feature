@@ -1,3 +1,4 @@
+@javascript @legacy
 Feature: push new calendar events to Facebook
 
   As an admin of the website
