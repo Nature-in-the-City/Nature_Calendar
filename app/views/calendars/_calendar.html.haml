@@ -113,7 +113,7 @@
             %li{id: "#{tab}"}
               %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' }
                 #{tab}
-                %span.badge 5
+                %span.badge #{@pending_count}
           - else
             %li{id: "#{tab}"}
               %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
