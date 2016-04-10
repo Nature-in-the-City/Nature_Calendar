@@ -65,7 +65,7 @@
       .col-sm-6.container
         - if !tab.eql? "Past" 
           .container.col-sm-2
-            = form_tag  do
+            = form_tag calendar_path, :method => 'get' do
               -# this will call editing
               - if tab.eql? "Upcoming"
                 .button_right
@@ -78,7 +78,7 @@
                   %i.fa.fa-check
                   = submit_tag 'accept'
           .container.col-sm-2
-            = form_tag  do
+            = form_tag edit_event_path(event.id), :method => 'get'  do
               -# this will call editing
               .button_right
                 Edit
@@ -86,15 +86,15 @@
                 = submit_tag 'edit'
           - if tab.eql? "Rejected"
             .container.col-sm-2
-              = form_tag do
+              = form_tag calendar_path, :method => 'get' do
                 -# this will permanently delete an event
                 .button_right
                   Trash
                   %i.fa.fa-trash
-                  = submit_tag 'delete'
+                  = submit_tag 'delete', data: { confirm: "This button is under construction" }
           - else
             .container.col-sm-2
-              = form_tag do
+              = form_tag edit_event_path(event.id), :method => 'get' do
                 .button_right
                   Reject
                   %i.fa.fa-trash

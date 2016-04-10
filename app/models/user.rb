@@ -6,9 +6,9 @@ class User < ActiveRecord::Base
   #:omniauthable, omniauth_providers: [:meetup]
 
   def self.create_non_root(params)
-    puts "User.rb"
+    #puts "User.rb"
     ret = create do |user|
-      puts params
+      #puts params
       user.email = params["user"]["email"]
       user.password = params["user"]["password"]
     end

@@ -10,7 +10,7 @@ before_install:
 script:
   - bundle install
   - bundle exec rake db:migrate db:seed db:test:prepare
-  - xvfb-run -a bundle exec cucumber --tags @admin_panel,@sync,@calendar
+  - xvfb-run -a bundle exec cucumber --tags @admin_panel,@sync,@calendar,@legacy
 notifications:
   email: false
 addons:

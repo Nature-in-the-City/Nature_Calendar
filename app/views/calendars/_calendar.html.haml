@@ -119,10 +119,10 @@
     .tab-content.nopadding.nomargin.container
       - @tabs.each do |tab|
         - if tab.eql? "Upcoming"
-          .container{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
+          .container{ class: 'tab-pane active scrollable', id: "#{tab.downcase}_events" }
             = render partial: 'admin_panel', locals: { tab: tab }
         - else
-          .container{ class: 'tab-pane',        id: "#{tab.downcase}_events" }
+          .container{ class: 'tab-pane scrollable',        id: "#{tab.downcase}_events" }
             = render partial: 'admin_panel', locals: { tab: tab }
     %br
 
