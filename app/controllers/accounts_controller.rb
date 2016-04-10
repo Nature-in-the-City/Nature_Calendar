@@ -33,16 +33,16 @@ class AccountsController < ApplicationController
       @user.update_attribute(:level, 1)
     end
     @user.save!
-    flash[:notice] = "#{@user.name} updated"
+    flash[:notice] = "#{@user.email} updated"
     redirect_to edit_account_path
   end
 
   def destroy
     user = User.find_by_id(params[:id])
     if user
-      name = user.name
+      email = user.email
       user.destroy!
-      flash[:notice] = "#{name} deleted"
+      flash[:notice] = "#{email} deleted"
     else
       flash[:notice] = "Account does not exist"
     end

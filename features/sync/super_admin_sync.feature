@@ -16,7 +16,7 @@ Feature:
     | Hike6 | Dec-30-2016 | Dec-30-2016 | 1210      | street rd | SF    | Approved hike   | approved  | joe@cnn.com   |
     | Hike7 | Dec-26-2016 | Dec-26-2016 | 1210      | street rd | SF    | Approved hike   | approved  | joe@cnn.com   |
     
-    And I am logged in as a Super Admin
+    And I log in as Super Admin
     And I see the Admin panel
 
   Scenario: Approve Pending Events

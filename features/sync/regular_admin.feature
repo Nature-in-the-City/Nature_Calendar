@@ -5,7 +5,7 @@ Feature:
   I can be a regular admin
   
   Background:
-    Given I am a logged in as a Regular Admin
+    Given I log in as Regular Admin
     And I see the Admin panel
     
   Scenario: Regular admin can't add or edit users

@@ -5,11 +5,11 @@ Feature:
   As new Super Admins or Regular Admins
   
   Background:
-    Given I am logged in as a Super Admin
+    Given I log in as Super Admin
     And I see the Admin panel
     
   Scenario: Create new Super Admins
-    Given I follow "Create New Account"
+    Given I follow "Create new account"
     And I fill in email with "sup@admin.com"
     And I fill in password with "green"
     And I check "Super Admin"
@@ -18,7 +18,7 @@ Feature:
     And I should see "User successfully created!"
     
   Scenario: Create new Regular Admins
-    Given I follow "Create New Account"
+    Given I follow "Create new account"
     And I fill in email with "reg@admin.com"
     And I fill in password with "yellow"
     And I click "Create User"

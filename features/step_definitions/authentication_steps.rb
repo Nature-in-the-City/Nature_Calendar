@@ -10,7 +10,8 @@ def create_user
   delete_user
   @user = User.create(email: "example@example.com",
                       password: "changeme",
-                      reset_password_token: "token")
+                      reset_password_token: "token",
+                      level: 0)
 end
 
 def create_root
@@ -86,6 +87,14 @@ end
 
 Given /^I log in as admin$/ do
   sign_in(0)
+end
+
+Given /^I log in as Super Admin$/ do
+  sign_in(0)
+end
+
+Given /^I log in as Regular Admin$/ do 
+  sign_in(1)
 end
 
 Given /^I create (a|an)( invalid | duplicate | )admin account$/ do |an, param|

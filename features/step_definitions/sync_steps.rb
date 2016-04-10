@@ -32,14 +32,6 @@ Then /^I should see "(.*)" in the "(.*)" panel$/ do |event, panel_name|
   with_scope(panel_name) { step %{I should see "#{event}"}}
 end
 
-Given(/^I am a logged in as a Regular Admin$/) do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given(/^I am logged in as a Super Admin$/) do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
 Given(/^I fill in email with "([^"]*)"$/) do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
