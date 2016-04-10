@@ -46,11 +46,7 @@ Then /^the details of "(.*)" should( not)? be hidden$/ do |event, negated|
     end
 end
 
-Given /^I display the details of "(.*)"$/ do |arg1|
-   pending
-end
-
-Given /^I am displaying the "(.*)" events$/ do |tab_name|
+Given /^I(?: am)? display(?:ing)? the "(.*)" events$/ do |tab_name|
   step %{I follow "#{tab_name}"}
   name = tab_name.downcase
   expect(page).to have_css("##{name}_events.tab-pane.active")
@@ -99,8 +95,11 @@ Then /^I "(.*)" details on "(.*)"$/ do |link, event|
     div_id = "#{event_id}_title"
     link_id = "showbtn_#{event_id}"
     find_by_id(div_id).find_link(link_id).click
-    #puts find_by_id(div_id).text()
     expect(find_by_id(div_id)).to have_content(link_options[link])
+end
+
+Given /^I display the details of "(.*)"$/ do |event_name|
+   step %{I display the details for "#{event_name}"}
 end
 
 Given /^I see the "(.*)" event "(.*)"$/ do |status, event|
@@ -117,16 +116,21 @@ Then /^I should see a link to "(.*)" details for "(.*)"$/  do |link_text, event|
     expect(find_by_id(div_id)).to have_link(link_text)
 end
 
-When /^I follow "([^"]*)"'s "([^"]*)" button$/ do |arg1, arg2|
-  pending # Write code here that turns the phrase above into concrete actions
+When /^I click the "(.*)" button on "(.*)"$/ do |button, event_name|
+  event_id = "div##{button}_#{Event.where(name: event_name).first.id}"
+  within(:css, event_id) do
+    find_button(button).click
+  end
+  step %{I wait 5 seconds}
 end
 
-Then /^I should see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
-  pending # Write code here that turns the phrase above into concrete actions
+Then /^I should see the "(.*)" event "(.*)"$/ do |tab_name, event_name|
+  step %{I am displaying the "#{tab_name}" events}
+  step %{I should see "#{event_name}"}
 end
 
-Given /^that I see the "([^"]*)" event "([^"]*)"$/ do |arg1, arg2|
-  pending # Write code here that turns the phrase above into concrete actions
+Given /^that I see the "(.*)" event "(.*)"$/ do |tab_name, event_name|
+  step %Q{I should see the "#{tab_name}" event "#{event_name}"}
 end
 
 Then /^I should( not)? see the admin panel$/ do |negated|
@@ -141,32 +145,45 @@ Then /^I should( not)? see the add users button$/ do |negated|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given /^the following events exist:$/ do |table|
-  # table is a Cucumber::Core::Ast::DataTable
+Given /^I click "(.*)" for "(.*)"$/ do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given /^I click "([^"]*)" for "([^"]*)"$/ do |arg1, arg2|
+Then /^the "(.*)" event should be deleted$/ do |event_name|
+  expect(Event.exists?(:name => event_name)).to be_falsey
+end
+
+Given /^"(.*)" for "(.*)" is "(.*)"$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Then /^The "([^"]*)" event should be deleted$/ do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given /^"([^"]*)" for "([^"]*)" is "([^"]*)"$/ do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-When /^I change "([^"]*)" for "([^"]*)" to "([^"]*)"$/ do |arg1, arg2, arg3|
+When /^I change "(.*)" for "(.*)" to "(.*)"$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
 
-Then /^"([^"]*)" for "([^"]*)" should be "([^"]*)"$/ do |arg1, arg2, arg3|
+Then /^"(.*)" for "(.*)" should be "(.*)"$/ do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given /^I am( not)? logged in as an admin$/ do |negated|
-  pending
+Then /^the "(.*)" event status should be "(.*)"$/ do |event_name, status|
+  expect(Event.where(name: event_name).first.status).to eq(status)
+end
+
+Given /^I have rejected the "(.*)" event$/ do |name|
+  event_id = Event.where("name = ?", name).first.id
+  Event.update(event_id, status: 'rejected')
+  expect(Event.find_by_id(event_id).status).to eq('rejected')
+  visit current_path
+end
+
+Then /^I should see the event "(.*)"$/ do |event_name|
+  found = find("div.tab-pane.scrollable.active")
+  within(:css, "div.tab-pane.scrollable.active") do
+    assert_text(event_name)
+  end
+end
+
+When /^I wait (\d+) seconds?$/ do |seconds|
+  sleep seconds.to_i
 end
