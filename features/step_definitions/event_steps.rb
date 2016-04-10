@@ -1,4 +1,4 @@
-Given /^the following events exist on the calendar:$/ do |events_table|
+Given /^the following events exist(?: on the calendar)*:$/ do |events_table|
   events_table.hashes.each do |event|
     Event.create!(event)
   end
@@ -16,8 +16,12 @@ When /^I add new events:$/ do |events_table|
   end
 end
 
-Then /I should see the "(.*)" button$/ do |button_name|
-  expect(page).to have_button(button_name)
+Then /I should( not)? see the "(.*)" button$/ do |negated, button_name|
+  if negated
+    expect(page).not_to have_button(button_name)
+  else
+    expect(page).to have_button(button_name)
+  end
 end
 
 Then /I should see(?:| the) "(.*)" on the page$/ do |content|

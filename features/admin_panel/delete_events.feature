@@ -12,18 +12,32 @@ Background:
   | Nature Walk | Dec-30-2016 01:00pm | Dec-30-2016 03:00pm  | 1214      | Cherry St. | San Francisco | 94103 | A nature walk | past     | joe@cnn.com   |
 
   And I am logged in as the admin
-  And I see the "Admin" panel
+  And I see the Admin panel
 
-Scenario: Admin can delete upcoming events
-  
+Scenario: Admin can reject upcoming events
+  Given the month is December 2016
+  Then I should see "Nature Hike"
   Given I am displaying the "Upcoming" events
-  And I "Show More" details on "Nature Hike"
-  And I click "Trash" for "Nature Hike"
-  Then The "Nature Hike" event should be deleted
+  And I display the details for "Nature Hike"
+  When I click the "reject" button on "Nature Hike"
+  Then the "Nature Hike" event status should be "rejected"
+  Given the month is Decemeber 2016
+  Then I should not see "Nature Hike"
+  When I press the "Rejected" tab
+  Then I should see "Nature Hike"
 
 Scenario: Admin can delete past events
-  
   Given I am displaying the "Past" events
-  And I "Show More" details on "Nature Walk"
-  And I click "Trash" for "Nature Walk"
-  Then The "Nature Walk" event should be deleted
+  When I display the details for "Nature Walk"
+  And I click the "delete" button on "Nature Walk"
+  Then the "Nature Walk" event should be deleted
+  Given I am displaying the "Past" events
+  Then I should not see "Nature Walk"
+
+Scenario: Admin can delete rejected events
+  Given I have rejected the "Nature Hike" event
+  And I am displaying the "Rejected" events
+  Then I should see "Nature Hike"
+  When I display the details for "Nature Hike"
+  And I click the "delete" button on "Nature Hike"
+  Then the "Nature Hike" event should be deleted

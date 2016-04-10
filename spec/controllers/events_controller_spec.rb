@@ -201,7 +201,6 @@ describe EventsController do
     let(:accept_edit_past) { get :edit, { id: past_item_id, commit: 'accept' } }
     let(:item_to_edit) { Event.find(edit_item_id) }
     
-    
     it 'should not throw an error when no change is specified' do
       expect{ blank_edit_future }.not_to raise_error
       expect{ blank_edit_past }.not_to raise_error
