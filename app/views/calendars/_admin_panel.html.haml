@@ -37,13 +37,30 @@
       .col-sm-4
         Description
         .container-fluid
-          %p=event.description
-      .col-sm-4.container#contact
-        Contact Info
-        #name="Name: #{event.contact_last}, #{event.contact_first}"
-        #phone="Phone: #{event.contact_phone}"
-        #email= "Email: #{event.contact_email}"
-        #org= "Org: #{event.organization}"
+          %a#description{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.description
+      .col-sm-4
+        %table.table.table-striped.table-bordered.table-hover.table-condensed
+          %tbody
+            %tr
+              %td Organization
+              %td
+                %a#organization{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.organization
+            %tr
+              %td Contact
+              %td
+                %a#contact{"data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.contact_first} #{event.contact_last}"
+            %tr
+              %td Phone
+              %td
+                %a#phone{"data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_phone
+            %tr
+              %td Email
+              %td
+                %a#email{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_email
+            %tr
+              %td Website
+              %td
+                %a#website{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.url
     .row
       .col-sm-6.container
       .col-sm-6.container
@@ -105,6 +122,12 @@
     $('#city').editable();
     $('#cost').editable();
     $('#tags').editable();
+    $('#description').editable();
+    $('#organization').editable();
+    $('#contact').editable();
+    $('#phone').editable();
+    $('#email').editable();
+    $('#website').editable();
     
     var show_btns = $("a:contains('Show')");
     show_btns.each(function(index){
