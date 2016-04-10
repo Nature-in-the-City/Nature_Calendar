@@ -1,8 +1,11 @@
 %div
+  = text_field :user, 'name', label: 'name', class: 'edit_text_field', placeholder: "Name", style: 'width:20em;'
+<br/>
+%div
   = text_field :user, 'email', label: 'email', class: 'edit_text_field', placeholder: "Email", style: 'width:20em;'
 <br/>
 %div
   = password_field :user, 'password', label: 'password', class: 'edit_text_field', placeholder: "Password", style: 'width:20em;'
 <br/>
 %div
-  = text_field :user, 'level', label: 'level', class: 'edit_text_field', placeholder: '0 (super admin) or 1 (admin)', style: 'width:20em;'
+  = check_box :user, 'level', label: 'level', class: 'check_box_tag', checked: false

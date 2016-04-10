@@ -3,17 +3,17 @@ class AccountsController < ApplicationController
   before_action :is_root
   
   def create
-    if params[:user][:level].to_i >= 0
-      @user = User.new email: params[:user][:email], password: params[:user][:password], level: params[:user][:level].to_i, reset_password_token: params[:user][:reset_password_token]
-      if @user.save
-        flash[:notice] = "Account successfully created"
-        redirect_to calendar_path
-      else
-        flash[:notice] = @user.errors.full_messages.join(", ").html_safe
-        redirect_to new_account_path
-      end
+    if params[:user][:level]
+      @level = 0
     else
-      flash[:notice] = "Level must be greater than or equal to zero."
+      @level = 1
+    end
+    @user = User.new email: params[:user][:email], password: params[:user][:password], level: @level, reset_password_token: params[:user][:reset_password_token]
+    if @user.save
+      flash[:notice] = "Account successfully created"
+      redirect_to calendar_path
+    else
+      flash[:notice] = @user.errors.full_messages.join(", ").html_safe
       redirect_to new_account_path
     end
   end
@@ -28,21 +28,21 @@ class AccountsController < ApplicationController
   def update
     @user = User.find_by_id(params[:id])
     if @user.level == 1
-      @user.update_attribute(level: 0)
+      @user.update_attribute(:level, 0)
     else
-      @user.update_attribute(level: 1)
+      @user.update_attribute(:level, 1)
     end
     @user.save!
-    flash[:notice] = "#{@user.email} updated"
+    flash[:notice] = "#{@user.name} updated"
     redirect_to edit_account_path
   end
 
   def destroy
     user = User.find_by_id(params[:id])
     if user
-      email = user.email
+      name = user.name
       user.destroy!
-      flash[:notice] = "#{email} deleted"
+      flash[:notice] = "#{name} deleted"
     else
       flash[:notice] = "Account does not exist"
     end

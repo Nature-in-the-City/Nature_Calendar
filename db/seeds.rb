@@ -89,6 +89,7 @@ guests = [{ first_name: 'Bob',
 registrations = [{ event_id: 1, guest_id: 1 }]
 
 users = [{ email: 'admin123@admin.com',
+           name: 'Admin',
            password: 'password',
            level: 0,
            reset_password_token: 'token' }

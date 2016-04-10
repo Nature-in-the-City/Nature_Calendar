@@ -9,6 +9,8 @@
     %table#users
       %thead
         %tr
+          %th Name
+          %td &nbsp;&nbsp;
           %th Email
           %td &nbsp;&nbsp;
           %th Level
@@ -17,12 +19,14 @@
       %tbody
         - @users.each do |user|
           %tr{style: 'border-top: 1px solid #ccc; border-bottom: 1px solid #ccc;'}
+            %td= user.name
+            %td &nbsp;&nbsp;
             %td= user.email
             %td &nbsp;&nbsp;
-            %td= link_to "#{user.level}", "/accounts/#{user.id}", :method => :put
+            %td= link_to (user.level == 0 ? "Super" : "Regular"), "/accounts/#{user.id}", :method => :put, data: (user.level == 0 ? {confirm: "Are you sure you want to change #{user.name}'s level to Regular Admin?"} : {confirm: "Are you sure you want to change #{user.name}'s level to Super Admin?"})
             %td &nbsp;&nbsp;
-            %td= link_to "Delete Account", "/accounts/#{user.id}", :method => :delete, data: {:confirm => "Are you sure? Accounts are deleted permanently"}
-    
+            %td= link_to "Delete Account", "/accounts/#{user.id}", :method => :delete, data: {:confirm => "Are you sure you want to delete #{user.name}? Accounts are deleted permanently."}
     </br>
-    = link_to 'Back to calendar', calendar_path, style: 'font-weight:200;'
+    
+    =link_to 'Back to calendar', calendar_path, style: 'font-weight:200;'
   %h1{class: 'title', style: "border-bottom: 4px solid #A6C55F; border-top: 0px;"}
