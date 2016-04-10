@@ -39,15 +39,27 @@ class AccountsController < ApplicationController
 
   def destroy
     user = User.find_by_id(params[:id])
+<<<<<<< HEAD
     email = user.email
     user.destroy!
     flash[:notice] = "#{email} deleted"
     redirect_to edit_account_path
+=======
+    if user
+      email = user.email
+      user.destroy!
+      flash[:notice] = "#{email} deleted"
+    else
+      flash[:notice] = "Account does not exist"
+    end
+    redirect_to calendar_path
+>>>>>>> master
   end
 
   private
   def is_root
-    if not current_user.root?
+    #if current_user.respond_to?('root?'); puts current_user.root?; end
+    if not current_user.respond_to?('root?') or not current_user.root?
       flash[:notice] = "You must be root admin to access this action"
       redirect_to calendar_path
     end

@@ -610,3 +610,10 @@ a.button {
   outline: none;
   overflow: auto;
 }
+
+// Scroll container
+.scrollable {
+  height: 350px;
+  width: 90%;
+  overflow-y: scroll;
+}

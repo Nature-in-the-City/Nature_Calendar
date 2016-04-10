@@ -1,3 +1,4 @@
+@legacy
 Feature:
   As a user or admin
   to interact with the events

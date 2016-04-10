@@ -7,11 +7,5 @@ Infomation about the attendee:
 = "Email: #{@guest.email}"
 - if @guest.phone != nil and @guest.phone != ''
   = "Phone: #{@guest.phone}"
-- if @guest.address != nil and @guest.address != ''
+- if @guest.address != nil and not @guest.address.empty?
   = "Street: #{@guest.address}"
-- if @guest.city != nil and @guest.city != ''
-  = "City: #{@guest.city}"
-- if @guest.state != nil and @guest.state != ''
-  = "State: #{@guest.state}"
-- if @guest.zip != nil and @guest.zip != ''
-  = "Zip: #{@guest.zip}"
