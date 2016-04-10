@@ -39,12 +39,6 @@ class AccountsController < ApplicationController
 
   def destroy
     user = User.find_by_id(params[:id])
-<<<<<<< HEAD
-    email = user.email
-    user.destroy!
-    flash[:notice] = "#{email} deleted"
-    redirect_to edit_account_path
-=======
     if user
       email = user.email
       user.destroy!
@@ -53,7 +47,6 @@ class AccountsController < ApplicationController
       flash[:notice] = "Account does not exist"
     end
     redirect_to calendar_path
->>>>>>> master
   end
 
   private

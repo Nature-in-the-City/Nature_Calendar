@@ -251,20 +251,11 @@ class Event < ActiveRecord::Base
     return "#{self.zip}" if zip
     return nil
   end
-<<<<<<< HEAD
-
-  # Appends field to lst if field is neither nil nor whitespace
-  def append_to_list(lst, field)
-    if (field != nil) or (field.strip != '')
-      lst << field
-    end
-=======
   
   def location
       return "#{self.street_address}, #{self.city_state_zip}" if self.street_address && self.city_state_zip
       return "#{self.city_state_zip}, #{self.country}" if self.city_state_zip
       return "Unavailable"
->>>>>>> master
   end
 
   ##
