@@ -1,67 +1,66 @@
 -# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
 
-%br
 - @event_relations[tab].each do |event|
-  .container{ id: "#{event.id}_title" }
-    .col-sm-6
+  .row{ id: "#{event.id}_title" }
+    .col-sm-6.nopadding
       %h3= "#{event.name}"
-    .col-sm-2
+    .col-sm-2.nopadding
       %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
         Show More
         %i.fa.fa-angle-down
-  .container{ id: "#{event.id}_details", class: "collapse" }
-    .row
-      .col-sm-4
-        %table.table.table-striped.table-bordered.table-hover.table-condensed
-          %tbody
-            %tr
-              %td Start
-              %td
-                %a#startdate{"data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %0d, %Y, %r")
-            %tr
-              %td End
-              %td
-                %a#enddate{"data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %0d, %Y, %r")
-            %tr
-              %td Location
-              %td
-                %a#street{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
-            %tr
-              %td Cost
-              %td
-                %a#cost{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
-            %tr
-              %td Tags
-              %td
-                %a#tags{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.tag_string}"
-      .col-sm-4
-        Description
-        .container-fluid
-          %a#description{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.description
-      .col-sm-4
-        %table.table.table-striped.table-bordered.table-hover.table-condensed
-          %tbody
-            %tr
-              %td Organization
-              %td
-                %a#organization{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.organization
-            %tr
-              %td Contact
-              %td
-                %a#contact{"data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.contact_first} #{event.contact_last}"
-            %tr
-              %td Phone
-              %td
-                %a#phone{"data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_phone
-            %tr
-              %td Email
-              %td
-                %a#email{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_email
-            %tr
-              %td Website
-              %td
-                %a#website{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.url
-    .row
+    .col-sm-4.nopadding
+  .row{ id: "#{event.id}_details", class: "collapse" }
+    .col-sm-4
+      %table.table.table-striped.table-bordered.table-hover.table-condensed
+        %tbody
+          %tr
+            %td Start
+            %td
+              %a#startdate{"data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %0d, %Y, %r")
+          %tr
+            %td End
+            %td
+              %a#enddate{"data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %0d, %Y, %r")
+          %tr
+            %td Location
+            %td
+              %a#street{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
+          %tr
+            %td Cost
+            %td
+              %a#cost{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
+          %tr
+            %td Tags
+            %td
+              %a#tags{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.tag_string}"
+    .col-sm-4
+      Description
+      .container-fluid
+        %a#description{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.description
+    .col-sm-4
+      %table.table.table-striped.table-bordered.table-hover.table-condensed
+        %tbody
+          %tr
+            %td Organization
+            %td
+              %a#organization{"data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.organization
+          %tr
+            %td Contact
+            %td
+              %a#contact{"data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.contact_first} #{event.contact_last}"
+          %tr
+            %td Phone
+            %td
+              %a#phone{"data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_phone
+          %tr
+            %td Email
+            %td
+              %a#email{"data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_email
+          %tr
+            %td Website
+            %td
+              %a#website{"data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.url
+    .row-fluid
       .col-sm-6.container
       .col-sm-6.container
         - if !tab.eql? "Past" 
@@ -94,14 +93,13 @@
                   %i.fa.fa-trash
                   = submit_tag 'delete'
           - else
-            .container.col-sm-1
+            .container.col-sm-2
               = form_tag do
                 .button_right
                   Reject
                   %i.fa.fa-trash
                   -# this will move an event to the rejected area
                   = submit_tag 'reject'
-%br
 
 - if @event_relations[tab].empty?
   = "There are no #{tab} events"

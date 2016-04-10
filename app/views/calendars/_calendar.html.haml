@@ -96,36 +96,35 @@
 
     .clear
 
-- if user_signed_in?    
-  #admin_panel
-    .container
-      %br
-      %h2
-        %strong Events
-      %br
-    #upcoming.container
-      %ul.nav.nav-tabs.container.clearfix
-        - @tabs.each do |tab|
-          - if tab.eql? "Upcoming"
-            %li{ class: 'active', id: "#{tab}"}
-              %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-          - elsif tab.eql? "Pending"
-            %li{id: "#{tab}"}
-              %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' }
-                #{tab}
-                %span.badge #{@pending_count}
-          - else
-            %li{id: "#{tab}"}
-              %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-      .tab-content.clearfix.container
-        - @tabs.each do |tab|
-          - if tab.eql? "Upcoming"
-            .container{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
-              = render partial: 'admin_panel', locals: { tab: tab }
-          - else
-            .container{ class: 'tab-pane',        id: "#{tab.downcase}_events" }
-              = render partial: 'admin_panel', locals: { tab: tab }
-%br
+#admin_panel
+  - if user_signed_in?
+    %br
+    %h2
+      %strong Events
+    %br
+    %ul.nav.nav-tabs.clearfix.container
+      - @tabs.each do |tab|
+        - if tab.eql? "Upcoming"
+          %li{ class: 'active', id: "#{tab}"}
+            %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
+        - elsif tab.eql? "Pending"
+          %li{id: "#{tab}"}
+            %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' }
+              #{tab}
+              %span.badge #{@pending_count}
+        - else
+          %li{id: "#{tab}"}
+            %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
+    %br
+    .tab-content.nopadding.nomargin.container
+      - @tabs.each do |tab|
+        - if tab.eql? "Upcoming"
+          .container{ class: 'tab-pane active', id: "#{tab.downcase}_events" }
+            = render partial: 'admin_panel', locals: { tab: tab }
+        - else
+          .container{ class: 'tab-pane',        id: "#{tab.downcase}_events" }
+            = render partial: 'admin_panel', locals: { tab: tab }
+    %br
 
 #sync_status
   - if user_signed_in?
