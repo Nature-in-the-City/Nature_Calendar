@@ -13,6 +13,47 @@
 
 ActiveRecord::Schema.define(version: 20160402023345) do
 
+  create_table "addresses", force: :cascade do |t|
+    t.integer  "use_type_id"
+    t.string   "use_type_type"
+    t.string   "st_name",                                 null: false
+    t.integer  "st_number",                               null: false
+    t.string   "city"
+    t.integer  "apt_suite"
+    t.string   "state",         limit: 2, default: "CA"
+    t.integer  "zip"
+    t.string   "country",                 default: "USA"
+    t.string   "venue_name"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "addresses", ["use_type_type", "use_type_id"], name: "index_addresses_on_use_type_type_and_use_type_id"
+
+  create_table "contacts", force: :cascade do |t|
+    t.integer  "use_type_id"
+    t.string   "use_type_type"
+    t.string   "name_first"
+    t.string   "name_last"
+    t.string   "email",         null: false
+    t.string   "phone"
+    t.string   "website"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "contacts", ["use_type_type", "use_type_id"], name: "index_contacts_on_use_type_type_and_use_type_id"
+
+  create_table "event_date_times", force: :cascade do |t|
+    t.integer  "event_id"
+    t.datetime "start"
+    t.datetime "end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "event_date_times", ["event_id"], name: "index_event_date_times_on_event_id"
+
   create_table "events", force: :cascade do |t|
     t.string   "name",                                                                    null: false
     t.string   "organization"
@@ -74,6 +115,21 @@ ActiveRecord::Schema.define(version: 20160402023345) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer  "event_id"
+    t.boolean  "free",            default: false
+    t.boolean  "family_friendly", default: false
+    t.boolean  "hike",            default: false
+    t.boolean  "play",            default: false
+    t.boolean  "learn",           default: false
+    t.boolean  "volunteer",       default: false
+    t.boolean  "plant",           default: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "tags", ["event_id"], name: "index_tags_on_event_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                               null: false
