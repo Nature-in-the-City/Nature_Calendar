@@ -25,13 +25,40 @@ var setup_event_form = function(button_id) {
     var location_label = $('#location_label');
     var event_state = $('#event_state');
     var event_country = $('#event_country');
+    
+    function disableVenue() {
+        event_venue_name.prop('disabled', true);
+        autocomplete.prop('disabled', true);
+        
+        venue_label.addClass('disabled');
+        location_label.addClass('disabled');
+        hideLocationDivs();
+        $('#map').hide();
+        clearElementsText();
+        autocomplete.val('');
+        event_venue_name.val('');
+    }
+    
+    function enableVenue() {
+        event_venue_name.prop('disabled', false);
+        autocomplete.prop('disabled', false);
+        
+        venue_label.removeClass('disabled');
+        location_label.removeClass('disabled');
+        event_state.val('CA');
+        event_country.val('US');
+    }
 
-    if (event_venue_name.val() != '') {
+    if (venue_check.length === 0) {
+        enableVenue();
+    }
+    else if (event_venue_name.val() != '') {
         venue_check.prop('checked', true);
         event_venue_name.prop('disabled', false);
         autocomplete.prop('disabled', false);
         displayLocationDivs();
-    } else {
+    } 
+    else {
         venue_check.prop('checked', false);
         venue_label.addClass('disabled');
         location_label.addClass('disabled');
@@ -42,21 +69,10 @@ var setup_event_form = function(button_id) {
 
     venue_check.on('click', function () {
         var enabled = this.checked;
-        event_venue_name.prop('disabled', !enabled);
-        autocomplete.prop('disabled', !enabled);
         if (!enabled) {
-            venue_label.addClass('disabled');
-            location_label.addClass('disabled');
-            hideLocationDivs();
-            $('#map').hide();
-            clearElementsText();
-            autocomplete.val('');
-            event_venue_name.val('');
+            disableVenue();
         } else {
-            venue_label.removeClass('disabled');
-            location_label.removeClass('disabled');
-            event_state.val('CA');
-            event_country.val('US');
+            enableVenue();
         }
     });
 

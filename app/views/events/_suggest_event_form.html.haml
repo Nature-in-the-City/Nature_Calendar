@@ -1,15 +1,15 @@
 %h3{:style=>'text-align: center'} Contact Info
 
 #e_contact_first
-  .field First Name*
+  .field First Name
   = text_field :event, 'contact_first', class: 'edit_text_field', required: true
   
 #e_contact_last
-  .field Last Name*
+  .field Last Name
   = text_field :event, 'contact_last', class: 'edit_text_field', required: true
   
 #e_contact_email
-  .field Email*
+  .field Email
   = text_field :event, 'contact_email', placeholder: 'example@gmail.com', class: 'edit_text_field', required: true
   
 #e_contact_phone
@@ -19,7 +19,7 @@
 %h3{:style=>'text-align: center'} Event Info
   
 #e_name
-  .field Name*
+  .field Name
   = text_field :event, 'name', class: 'edit_text_field', required: true
 
 #e_image.colored
@@ -36,7 +36,7 @@
 
 #e_venue_name
   .field Venue Name
-  = text_field :event, :venue_name, class: 'edit_text_field'
+  = text_field :event, :venue_name, class: 'edit_text_field', required: true
 
 #e_location.colored
   .field Location
@@ -57,7 +57,7 @@
 
   #e_zip
     .field Zip
-    = text_field :event, 'zip', size: '6', class: 'short_edit_text_field', placeholder: 'not required'
+    = text_field :event, 'zip', size: '6', class: 'short_edit_text_field'
 
   #e_country
     .field Country
@@ -66,12 +66,12 @@
   #map
 
 #e_how_to_find_us
-  .field How to find us*
+  .field How to find us
   = text_area :event, 'how_to_find_us', :cols =>'40', :rows => '2', class: 'edit_text_field', required: true
 
 #e_description.colored
-  .field Description*
-  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field tinymce', required: true
+  .field Description
+  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field', required: true
 
 = tinymce_assets
 = tinymce
