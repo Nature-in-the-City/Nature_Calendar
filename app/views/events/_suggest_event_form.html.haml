@@ -1,10 +1,26 @@
-#e_name
-  .field Name
-  = text_field :event, 'name', placeholder: 'Name', class: 'edit_text_field'
+%h3{:style=>'text-align: center'} Contact Info
+
+#e_contact_first
+  .field First Name*
+  = text_field :event, 'contact_first', class: 'edit_text_field', required: true
   
-#e_email
-  .field Email
-  = text_field :event, 'contact_email', placeholder: 'example@gmail.com', class: 'edit_text_field'
+#e_contact_last
+  .field Last Name*
+  = text_field :event, 'contact_last', class: 'edit_text_field', required: true
+  
+#e_contact_email
+  .field Email*
+  = text_field :event, 'contact_email', placeholder: 'example@gmail.com', class: 'edit_text_field', required: true
+  
+#e_contact_phone
+  .field Phone Number
+  = text_field :event, 'contact_phone', placeholder: '(xxx)xxx-xxxx', class: 'edit_text_field'
+  
+%h3{:style=>'text-align: center'} Event Info
+  
+#e_name
+  .field Name*
+  = text_field :event, 'name', class: 'edit_text_field', required: true
 
 #e_image.colored
   .field Image Upload
@@ -19,14 +35,12 @@
   = datetime_select :event, :end,  default: default_time, datetime_separator: '', time_separator: '', ampm: true
 
 #e_venue_name
-  = check_box_tag 'venue_check'
-  = label_tag 'venue_check', 'Enable Venue', class: 'field'
-  #venue_label.field Venue Name
+  .field Venue Name
   = text_field :event, :venue_name, class: 'edit_text_field'
 
 #e_location.colored
-  #location_label.field Location
-  = text_field_tag :autocomplete, nil, placeholder: 'Enter your address', onFocus: 'initialize();', class: 'edit_text_field'
+  .field Location
+  = text_field_tag :autocomplete, nil, placeholder: 'Enter your address', onFocus: 'initialize();', class: 'edit_text_field', required: true
 
   #e_address
     .field Street Address
@@ -52,12 +66,12 @@
   #map
 
 #e_how_to_find_us
-  .field How to find us
-  = text_area :event, 'how_to_find_us', :cols =>'40', :rows => '2', class: 'edit_text_field'
+  .field How to find us*
+  = text_area :event, 'how_to_find_us', :cols =>'40', :rows => '2', class: 'edit_text_field', required: true
 
 #e_description.colored
-  .field Description
-  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field tinymce'
+  .field Description*
+  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field tinymce', required: true
 
 = tinymce_assets
 = tinymce
