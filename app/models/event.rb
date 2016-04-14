@@ -20,12 +20,21 @@ class Event < ActiveRecord::Base
   scope :play, -> { where(play: true) }
   scope :learn, -> { where(learn: true) }
   scope :volunteer, -> { where(volunteer: true) }
-  scope :plant, -> { where(plant: true) }
 
   def as_json(options={})
+    if self.hike then
+      @category = "hike"
+    elsif self.volunteer then
+      @category = "volunteer"
+    elsif self.learn then
+      @category = "learn"
+    elsif self.play then
+      @category = "play"
+    end
     {
       id: id,
       third_party: is_third_party?,
+      category: @category,
       title: name,
       start: start.iso8601,
       url: Rails.application.routes.url_helpers.event_path(id)
