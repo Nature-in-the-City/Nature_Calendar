@@ -489,6 +489,10 @@ a.button {
   }
 }
 
+.dropdown-toggle {
+  cursor: pointer;
+}
+
 /* Color for square representing today in calendar*/
 .fc-bg .fc-today {
   background:  #bfdfff !important;
