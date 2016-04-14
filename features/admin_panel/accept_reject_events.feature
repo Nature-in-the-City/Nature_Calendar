@@ -19,7 +19,7 @@ Scenario: Accept a pending event
   Then I should see the event "Imagination rafting"
   When I display the details for "Imagination rafting"
   And I click the "accept" button on "Imagination rafting"
-  Then the "Imagination rafting" event status should be "accepted"
+  Then the "Imagination rafting" event status should be "approved"
   Given the month is March 2017
   Then I should see "Imagination rafting"
   And I should see the "Upcoming" event "Imagination rafting"
@@ -39,7 +39,7 @@ Scenario: Accept a rejected event
   Given that I see the "Rejected" event "WORDS"
   When I display the details for "WORDS"
   And I click the "accept" button on "WORDS"
-  Then the "WORDS" event status should be "accepted"
+  Then the "WORDS" event status should be "approved"
   Given the month is April 2017
   Then I should see the event "WORDS"
   And I should see the "Upcoming" event "WORDS"
