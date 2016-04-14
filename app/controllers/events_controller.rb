@@ -78,9 +78,6 @@ class EventsController < ApplicationController
   def new
     @event = Event.new
     @suggested_event = params[:suggested_event]
-    if @suggested_event == nil then
-      @event.status= "approved"
-    end
     handle_response
   end
 
