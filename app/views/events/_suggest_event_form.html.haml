@@ -21,6 +21,10 @@
 #e_name
   .field Name
   = text_field :event, 'name', class: 'edit_text_field', required: true
+  
+#e_category
+  .field Category
+  = select :event, :category, { :hike => "hike", :volunteer => "volunteer", :learn => "learn", :play => "play" }
 
 #e_image.colored
   .field Image Upload

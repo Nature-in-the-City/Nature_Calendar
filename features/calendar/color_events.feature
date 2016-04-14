@@ -6,7 +6,7 @@ Feature: Color events by category
   I want to color calendar events by their category
   
 Background:
-  Given the following events with category exist:
+  Given the following events exist:
   | name            | start       | end         | st_number | st_name   | city  | description     | status    | contact_email | family_friendly | free  | category |
   | Market Street   | Mar-21-2017 | Mar-21-2017 | 1210      | street rd | SF    | A past hike     | approved  | joe@cnn.com   | true            | true  | learn    |
   | Nerds on Safari | Apr-15-2017 | Apr-15-2017 | 1210      | street rd | SF    | A Nerd Safari   | approved  | joe@cnn.com   | true            | false | hike     |

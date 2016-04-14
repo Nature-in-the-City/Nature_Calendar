@@ -16,25 +16,16 @@ class Event < ActiveRecord::Base
   scope :approved, -> { where(status: "approved") }
   scope :family_friendly, -> { where(family_friendly: true) }
   scope :free, -> { where(free: true) }
-  scope :hike, -> { where(hike: true) }
-  scope :play, -> { where(play: true) }
-  scope :learn, -> { where(learn: true) }
-  scope :volunteer, -> { where(volunteer: true) }
+  scope :hike, -> { where(category: "hike") }
+  scope :play, -> { where(category: "play") }
+  scope :learn, -> { where(category: "learn") }
+  scope :volunteer, -> { where(category: "volunteer") }
 
   def as_json(options={})
-    if self.hike then
-      @category = "hike"
-    elsif self.volunteer then
-      @category = "volunteer"
-    elsif self.learn then
-      @category = "learn"
-    elsif self.play then
-      @category = "play"
-    end
     {
       id: id,
       third_party: is_third_party?,
-      category: @category,
+      category: self.category,
       title: name,
       start: start.iso8601,
       url: Rails.application.routes.url_helpers.event_path(id)
@@ -54,11 +45,12 @@ class Event < ActiveRecord::Base
   end
   
   def tag_string
-    tag_options = %w(family_friendly free play plant hike learn volunteer)
+    tag_options = %w(family_friendly free)
     event_tags = []
     tag_options.each do |tag|
       event_tags.push(Event.format_tag(tag)) if self[tag]
     end
+    event_tags.push(Event.format_tag(self.category))
     formatted = event_tags.join(", ")
     return ((formatted.length > 0)? formatted : "None")
   end
