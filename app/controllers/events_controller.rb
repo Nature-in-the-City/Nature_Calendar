@@ -74,7 +74,13 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @suggested_event = params[:suggested_event]
+    @event.status = "approved"
+    handle_response
+  end
+  
+  def suggest
+    @event = Event.new
+    @event.status = "pending"
     handle_response
   end
 
@@ -85,23 +91,20 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
-    #puts params
-    perform_create_transaction
-    @success ? handle_response : (render 'errors', format: :js)
-  end
-
-  def perform_create_transaction
     begin
       @event = Event.new(event_params)
-      assign_organization
-      remote_event = Meetup.new.push_event(@event)
-      @event.update_meetup_fields(remote_event)
+      if event_params[:status] == "approved" then
+        assign_organization
+        remote_event = Meetup.new.push_event(@event)
+        @event.update_meetup_fields(remote_event)
+      end
       @event.save!
       @success = true
       @msg = "Successfully added '#{@event.name}'!"
     rescue Exception => e
-      @msg = "Could not create '#{@event.name}':" + '\n' + e.to_s
+      @msg = "Could not create '#{event_params[:name]}':" + '\n' + e.to_s
     end
+    @success ? handle_response : (render 'errors', format: :js)
   end
 
   def edit
@@ -112,12 +115,20 @@ class EventsController < ApplicationController
     end
     begin
       @new_status = params[:commit]
-      if @new_status
-        statuses = {'accept' => 'approved', 'reject' => 'rejected'}
-        statuses.default = 'pending'
-        @event.status = statuses[@new_status]
-        @event.save
+      case @new_status
+      # handle accepting or rejecting events
+      when 'accept'
+        assign_organization
+        remote_event = Meetup.new.push_event(@event)
+        @event.update_meetup_fields(remote_event)
+        @event.status = "approved"
+      when 'reject'
+        @event.status = "rejected"
+      else
+        @event.status = "pending"
       end
+      @event.save!
+      
       handle_response
     rescue Exception => e
       @msg = "Undable to update '#{@event.name}'s status:" + '\n' + e.to_s
@@ -181,7 +192,7 @@ class EventsController < ApplicationController
     params.require(:event).permit(:name, :organization, :venue_name, :st_number, :st_name, :city, :zip,
                                   :state, :country, :start, :end, :description, :how_to_find_us, :image,
                                   :street_number,  :cost, :route, :locality, :family_friendly, :free, :hike,
-                                  :volunteer, :play, :learn, :plant, :contact_email, :contact_name_first,
+                                  :volunteer, :play, :learn, :contact_email, :contact_name_first,
                                   :contact_name_last, :contact_phone)
   end
 end

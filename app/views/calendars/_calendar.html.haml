@@ -34,7 +34,7 @@
           = submit_tag '+', class: ['main_organization', 'event_creation_button']
 
       - else
-        = form_tag new_event_path, method: :get, id: 'suggest_event', format: :js, remote: true do
+        = form_tag suggest_new_event_path, method: :get, id: 'suggest_event', format: :js, remote: true do
           -# this path does an ajax GET to the event controller action "new"
           = hidden_field_tag 'suggested_event', 'True'
           = submit_tag 'Suggest Event', class: ['main_organization', 'event_creation_button', 'button_right']
@@ -58,12 +58,6 @@
           %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
             %rect{:width => 15, :height => 15, :fill => "#86B404"}
 
-        %td{:class => "color_category"} Plant
-        
-        %td{:class => "color_cube"}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#FAAC58"}
-
         %td{:class => "color_category"} Volunteer
         
         %td{:class => "color_cube"}
@@ -76,7 +70,7 @@
           %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
             %rect{:width => 15, :height => 15, :fill => "#F781BE"}
 
-        %td{:class => "color_category"} Performance
+        %td{:class => "color_category"} Play
           
           
 

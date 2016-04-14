@@ -44,7 +44,6 @@ ActiveRecord::Schema.define(version: 20160401072230) do
     t.boolean  "play",                                                default: false
     t.boolean  "learn",                                               default: false
     t.boolean  "volunteer",                                           default: false
-    t.boolean  "plant",                                               default: false
   end
 
   create_table "guests", force: :cascade do |t|
