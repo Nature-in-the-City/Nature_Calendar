@@ -1,0 +1,2 @@
+class Google
+    include HTTParty

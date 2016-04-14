@@ -1,16 +1,5 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
-  
-  def setup_calendar
-    url = @sync.url.to_str
-    if url =~ /google/
-        return true
-    elsif url =~ /meetup.com/
-        return true
-    else
-        raise Exception, 'Invalid URL', caller
-    end
-  end
 
   def show
     handle_response
@@ -29,7 +18,8 @@ class SyncsController < ApplicationController
   def perform_create_transaction
     begin
       @sync = Sync.new(sync_params)
-      @success = setup_calendar
+      @group = Event.get_remote_events({url: params[:sync][:url]})
+      @sync.update_attributes(:organization => @group.gsub("-", " "), :last_sync => DateTime.now())
       @sync.save!
       @msg = "Successfully synced '#{@sync.url}'!"
     rescue Exception => e
