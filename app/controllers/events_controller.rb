@@ -77,7 +77,13 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @suggested_event = params[:suggested_event]
+    @event.status = "approved"
+    handle_response
+  end
+  
+  def suggest
+    @event = Event.new
+    @event.status = "pending"
     handle_response
   end
 
@@ -88,23 +94,20 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
-    #puts params
-    perform_create_transaction
-    @success ? handle_response : (render 'errors', format: :js)
-  end
-
-  def perform_create_transaction
     begin
       @event = Event.new(event_params)
-      assign_organization
-      remote_event = Meetup.new.push_event(@event)
-      @event.update_meetup_fields(remote_event)
+      if event_params[:status] == "approved" then
+        assign_organization
+        remote_event = Meetup.new.push_event(@event)
+        @event.update_meetup_fields(remote_event)
+      end
       @event.save!
       @success = true
       @msg = "Successfully added '#{@event.name}'!"
     rescue Exception => e
-      @msg = "Could not create '#{@event.name}':" + '\n' + e.to_s
+      @msg = "Could not create '#{event_params[:name]}':" + '\n' + e.to_s
     end
+    @success ? handle_response : (render 'errors', format: :js)
   end
 
   def edit

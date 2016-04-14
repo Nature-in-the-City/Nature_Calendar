@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :events do
+    get 'suggest', on: :new
     collection do
       get 'third_party'
       post 'third_party'
