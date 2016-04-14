@@ -118,12 +118,20 @@ class EventsController < ApplicationController
     end
     begin
       @new_status = params[:commit]
-      if @new_status
-        statuses = {'accept' => 'approved', 'reject' => 'rejected'}
-        statuses.default = 'pending'
-        @event.status = statuses[@new_status]
-        @event.save
+      case @new_status
+      # handle accepting or rejecting events
+      when 'accept'
+        assign_organization
+        remote_event = Meetup.new.push_event(@event)
+        @event.update_meetup_fields(remote_event)
+        @event.status = "approved"
+      when 'reject'
+        @event.status = "rejected"
+      else
+        @event.status = "pending"
       end
+      @event.save!
+      
       handle_response
     rescue Exception => e
       @msg = "Undable to update '#{@event.name}'s status:" + '\n' + e.to_s
