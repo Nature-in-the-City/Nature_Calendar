@@ -96,10 +96,11 @@ class EventsController < ApplicationController
   def create
     begin
       @event = Event.new(event_params)
-      assign_organization
-      remote_event = Meetup.new.push_event(@event)
-      @event.update_meetup_fields(remote_event)
-      @event.status = "approved"
+      if event_params[:status] == "approved" then
+        assign_organization
+        remote_event = Meetup.new.push_event(@event)
+        @event.update_meetup_fields(remote_event)
+      end
       @event.save!
       @success = true
       @msg = "Successfully added '#{@event.name}'!"
@@ -187,6 +188,6 @@ class EventsController < ApplicationController
                                   :state, :country, :start, :end, :description, :how_to_find_us, :image,
                                   :street_number,  :cost, :route, :locality, :family_friendly, :free, :hike,
                                   :volunteer, :play, :learn, :plant, :contact_email, :contact_first,
-                                  :contact_last, :contact_phone)
+                                  :contact_last, :contact_phone, :status)
   end
 end

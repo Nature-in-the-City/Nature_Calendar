@@ -72,6 +72,8 @@
 #e_description.colored
   .field Description
   = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field', required: true
+  
+= hidden_field :event, :status, :value => 'pending'
 
 //= tinymce_assets
 //= tinymce
