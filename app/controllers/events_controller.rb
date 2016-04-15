@@ -44,7 +44,7 @@ class EventsController < ApplicationController
     begin
       url = params[:url]
       if url.present?
-        @syncs = Sync.get_remote_events({url: url})
+        @event = Event.get_remote_events({url: url})
       end
       handle_response
     rescue Exception => e

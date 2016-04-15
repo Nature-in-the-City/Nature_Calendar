@@ -109,17 +109,6 @@ class Meetup
     Meetup.process_result(data, lambda {|arg| data}, ['201', '409'])
   end
 
-
-
-
-
-
-
-
-
-
-
-
   def self.process_result(result, handler, success_codes)
     success = (success_codes.include?(result.code.to_s))
     return success if handler.nil?
