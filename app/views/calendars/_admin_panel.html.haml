@@ -27,7 +27,7 @@
             %p="#{event.tag_string}"
         #contact_1.col-sm-3.container
           Contact Info
-          - if event.contact_first
+          - if event.contact_first && event.contact_first.length > 0
             .container="Name: #{event.contact_last}, #{event.contact_first}"
           - else
             .container="Name:"
@@ -79,9 +79,7 @@
                 -# this will permanently delete an event
                 = submit_tag 'delete', data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
   
-  
-  
-  
+    %br
     .container-fluid{ id: "#{event.id}_edit", class: "collapse" }
       = form_for(event, url: event_path(event.id), html: { method: 'patch',
                  class: "form-horizontal" }) do |f|
