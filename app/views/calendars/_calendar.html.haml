@@ -15,7 +15,7 @@
             Admin Panel
           %ul.dropdown-menu
             %li
-              = link_to "Sign Out", destroy_user_session_path, :method => :get
+              = link_to "Sign Out", destroy_user_session_path + "#page", :method => :get
             %li
               = link_to "Change your password", edit_user_registration_path
 

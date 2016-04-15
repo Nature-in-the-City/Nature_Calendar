@@ -14,12 +14,12 @@
 ActiveRecord::Schema.define(version: 20160401072230) do
 
   create_table "events", force: :cascade do |t|
-    t.string   "name",                                                                    null: false
+    t.string   "name",                                                                          null: false
     t.string   "organization"
     t.text     "description"
     t.string   "url"
     t.decimal  "cost",                       precision: 15, scale: 2, default: 0.0
-    t.datetime "start",                                                                   null: false
+    t.datetime "start",                                                                         null: false
     t.datetime "end"
     t.text     "how_to_find_us"
     t.integer  "meetup_id"
@@ -40,10 +40,7 @@ ActiveRecord::Schema.define(version: 20160401072230) do
     t.string   "country",                                             default: "USA"
     t.boolean  "free",                                                default: false
     t.boolean  "family_friendly",                                     default: false
-    t.boolean  "hike",                                                default: false
-    t.boolean  "play",                                                default: false
-    t.boolean  "learn",                                               default: false
-    t.boolean  "volunteer",                                           default: false
+    t.string   "category",                                            default: "uncategorized"
   end
 
   create_table "guests", force: :cascade do |t|

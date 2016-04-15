@@ -91,20 +91,24 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
+    @is_approved = event_params[:status] == "approved"
     begin
       @event = Event.new(event_params)
-      if event_params[:status] == "approved" then
+      if @is_approved then
         assign_organization
         remote_event = Meetup.new.push_event(@event)
         @event.update_meetup_fields(remote_event)
+        @event.status = "approved"
+        @msg = "Successfully added '#{@event.name}'!"
+      else
+        @msg = "Thank you for suggesting '#{@event.name}'!"
       end
       @event.save!
-      @success = true
-      @msg = "Successfully added '#{@event.name}'!"
+      success = true
     rescue Exception => e
       @msg = "Could not create '#{event_params[:name]}':" + '\n' + e.to_s
     end
-    @success ? handle_response : (render 'errors', format: :js)
+    success ? handle_response : (render 'errors', format: :js)
   end
 
   def edit
@@ -118,14 +122,16 @@ class EventsController < ApplicationController
       case @new_status
       # handle accepting or rejecting events
       when 'accept'
-        assign_organization
-        remote_event = Meetup.new.push_event(@event)
-        @event.update_meetup_fields(remote_event)
-        @event.status = "approved"
+        if @event.status == "pending" then
+          assign_organization
+          #remote_event = Meetup.new.push_event(@event)
+          #@event.update_meetup_fields(remote_event)
+        end
+        @event.update_attributes(status: "approved")
       when 'reject'
-        @event.status = "rejected"
+        @event.update_attributes(status:"rejected")
       else
-        @event.status = "pending"
+        @event.update_attributes(status:"pending")
       end
       @event.save!
       
@@ -191,8 +197,8 @@ class EventsController < ApplicationController
   def event_params
     params.require(:event).permit(:name, :organization, :venue_name, :st_number, :st_name, :city, :zip,
                                   :state, :country, :start, :end, :description, :how_to_find_us, :image,
-                                  :street_number,  :cost, :route, :locality, :family_friendly, :free, :hike,
-                                  :volunteer, :play, :learn, :contact_email, :contact_name_first,
+                                  :street_number,  :cost, :route, :locality, :family_friendly, :free,
+                                  :category, :contact_email, :contact_name_first,
                                   :contact_name_last, :contact_phone)
   end
 end
