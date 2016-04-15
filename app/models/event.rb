@@ -20,6 +20,8 @@ class Event < ActiveRecord::Base
   scope :play, -> { where(category: "play") }
   scope :learn, -> { where(category: "learn") }
   scope :volunteer, -> { where(category: "volunteer") }
+  scope :past, -> { where("end < ? ", DateTime.now) }
+  scope :upcoming, -> { where("end > ?", DateTime.now) }
 
   def as_json(options={})
     {
@@ -297,13 +299,6 @@ class Event < ActiveRecord::Base
       "#{start_time} to #{end_time}"
     else
       "#{start_time}"
-    end
-  end
-  
-  def self.update_statuses
-    upcoming_or_pending = Event.where.not(status: 'past')
-    upcoming_or_pending.each do |event|
-      event.update(status: 'past') if event.start < DateTime.now
     end
   end
   

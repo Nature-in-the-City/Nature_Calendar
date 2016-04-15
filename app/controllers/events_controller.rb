@@ -94,20 +94,24 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
+    @is_approved = event_params[:status] == "approved"
     begin
       @event = Event.new(event_params)
-      if event_params[:status] == "approved" then
+      if @is_approved then
         assign_organization
         remote_event = Meetup.new.push_event(@event)
         @event.update_meetup_fields(remote_event)
+        @event.status = "approved"
+        @msg = "Successfully added '#{@event.name}'!"
+      else
+        @msg = "Thank you for suggesting '#{@event.name}'!"
       end
       @event.save!
-      @success = true
-      @msg = "Successfully added '#{@event.name}'!"
+      success = true
     rescue Exception => e
       @msg = "Could not create '#{event_params[:name]}':" + '\n' + e.to_s
     end
-    @success ? handle_response : (render 'errors', format: :js)
+    success ? handle_response : (render 'errors', format: :js)
   end
 
   def edit
