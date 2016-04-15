@@ -125,14 +125,16 @@ class EventsController < ApplicationController
       case @new_status
       # handle accepting or rejecting events
       when 'accept'
-        assign_organization
-        remote_event = Meetup.new.push_event(@event)
-        @event.update_meetup_fields(remote_event)
-        @event.status = "approved"
+        if @event.status == "pending" then
+          assign_organization
+          #remote_event = Meetup.new.push_event(@event)
+          #@event.update_meetup_fields(remote_event)
+        end
+        @event.update_attributes(status: "approved")
       when 'reject'
-        @event.status = "rejected"
+        @event.update_attributes(status:"rejected")
       else
-        @event.status = "pending"
+        @event.update_attributes(status:"pending")
       end
       @event.save!
       
