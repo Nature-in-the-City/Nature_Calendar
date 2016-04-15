@@ -156,4 +156,5 @@ end
 
 Given /^the following events with category (?:exist:|exist on the calendar:)$/ do |events_table|
   puts 'features/step_definitions/event_steps.rb'
+  pending
 end

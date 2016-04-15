@@ -176,7 +176,10 @@ describe EventsController do
       allow(Event).to receive(:find).and_return(Event.find(@event_destroy.id))
     end
     context 'without errors' do
-      it { expect{ destroy_event }.not_to raise_error }
+      it 'should not raise errors' do
+        expect{ destroy_event }.not_to raise_error
+      end
+      
     end
     context 'when error' do
       let(:destroy_second_event) { delete :destroy, id: 2, event: {} }
