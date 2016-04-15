@@ -14,7 +14,7 @@ class CalendarsController < ApplicationController
     
     @pending = Event.get_events_by_status('pending', @filter).upcoming.order(:start)
     @upcoming = Event.get_events_by_status('approved', @filter).upcoming.order(:start)
-    @past = Event.past
+    @past = Event.past.order(:start)
     @rejected = Event.get_events_by_status('rejected', @filter).upcoming.order(:start)
     
     @event_relations = {"Upcoming" => @upcoming, "Pending" => @pending,
