@@ -23,8 +23,14 @@
   = text_field :event, 'name', class: 'edit_text_field', required: true
   
 #e_category
-  .field Category
-  = select :event, :category, { :hike => "hike", :volunteer => "volunteer", :learn => "learn", :play => "play" }
+  Category 
+  =select :event, :category, { "Select" => "uncategorized", "Hike" => "hike", "Volunteer" => "volunteer", "Learn" => "learn", "Play" => "play" }, required: true
+  
+#e_tags
+  Free
+  =check_box_tag 'event[free]', 1, true
+  Family friendly
+  =check_box_tag 'event[family_friendly]', 1, true
 
 #e_image.colored
   .field Image Upload
