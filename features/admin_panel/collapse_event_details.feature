@@ -8,7 +8,7 @@ Feature: Hide the details of events displayed in the admin panel
 Background:
   Given the following events exist:
   | name  | start         | end           | st_number | st_name   | city  | description   | status    | contact_email |
-  | HikeA | Dec-21-2016   | Dec-21-2016   | 1210      | street rd | SF    | A hike        | past      | joe@cnn.com   |
+  | HikeA | Dec-21-2015   | Dec-21-2015   | 1210      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
   | Hike1 | Dec-25-2016   | Dec-25-2016   | 1211      | street rd | SF    | A hike        | pending   | joe@cnn.com   |
   | HikeB | Dec-27-2016   | Dec-27-2016   | 1212      | street rd | SF    | A hike        | rejected  | joe@cnn.com   |
   | Hike2 | Dec-30-2016   | Dec-30-2016   | 1213      | street rd | SF    | A hike        | approved  | joe@cnn.com   |

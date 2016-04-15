@@ -7,8 +7,8 @@ Feature: View events by status on the admin page.
 Background: Events have already been added to the database
   Given the following events exist:
   | name  | start       | end         | st_number | st_name   | city  | description     | status    | contact_email |
-  | Hike  | Dec-21-2016 | Dec-21-2016 | 1210      | street rd | SF    | A past hike     | past      | joe@cnn.com   |
-  | Hike1 | Dec-22-2016 | Dec-22-2016 | 1210      | street rd | SF    | A past hike     | past      | joe@cnn.com   |
+  | Hike  | Dec-21-2015 | Dec-21-2015 | 1210      | street rd | SF    | A past hike     | approved  | joe@cnn.com   |
+  | Hike1 | Dec-22-2015 | Dec-22-2015 | 1210      | street rd | SF    | A past hike     | approved  | joe@cnn.com   |
   | Hike2 | Dec-25-2016 | Dec-25-2016 | 1210      | street rd | SF    | A pending hike  | pending   | joe@cnn.com   |
   | Hike3 | Dec-26-2016 | Dec-26-2016 | 1210      | street rd | SF    | A pending hike  | pending   | joe@cnn.com   |
   | Hike4 | Dec-27-2016 | Dec-27-2016 | 1210      | street rd | SF    | A rejected hike | rejected  | joe@cnn.com   |
