@@ -54,7 +54,7 @@
             #org= "Org: #{event.organization}"
           - if !tab.eql? "Past" 
             .container.col-sm-4{ id: "accept_#{event.id}" }
-              = form_tag edit_event_path(event.id), :method => 'get'  do
+              = form_tag edit_event_path(event.id) + "#admin", :method => 'get'  do
                 -# this will call editing
                 - if tab.eql? "Upcoming"
                   = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
@@ -66,17 +66,17 @@
                 = submit_tag 'edit'
             - if tab.eql? "Rejected"
               .container.col-sm-4{ id: "delete_#{event.id}" }
-                = form_tag calendar_path, :method => 'get' do
+                = form_tag calendar_path + "#admin", :method => 'get' do
                   -# this will permanently delete an event
                   = submit_tag 'delete', data: { confirm: "This button is under construction" }
             - else
               .container.col-sm-4{ id: "reject_#{event.id}" }
-                = form_tag edit_event_path(event.id), :method => 'get' do
+                = form_tag edit_event_path(event.id) + "#admin", :method => 'get' do
                   -# this will move an event to the rejected area
                   = submit_tag 'reject'
           - else
             .container.col-sm-4{ id: "delete_#{event.id}" }
-              = form_tag calendar_path, :method => 'get' do
+              = form_tag calendar_path + "#admin", :method => 'get' do
                 -# this will permanently delete an event
                 = submit_tag 'delete', data: { confirm: "This button is under construction" }
     %br
