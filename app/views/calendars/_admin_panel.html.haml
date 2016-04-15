@@ -5,51 +5,51 @@
 - if @event_relations[tab].count > 0
   - @event_relations[tab].each do |event|
     .container-fluid{ id: "#{event.id}_title" }
-      .col-sm-8.container-fluid
+      .col-sm-8
         %h3= "#{event.name}"
-      .col-sm-4.container-fluid
-        %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details",
-            data: { toggle: "collapse" } }
+      .col-sm-4
+        %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
           Show More
           %i.fa.fa-angle-down
-          
-    .container-fluid.collapse{ id: "#{event.id}_details" }
-      #top.row.container-fluid
-        #date.col-sm-2.container-fluid
+    
+    .container{ id: "#{event.id}_details", class: "collapse" }
+      #top{ class: "row" }
+        #date.col-sm-2
           Date
-          .container.container-fluid
+          .container
             = event.start.strftime("%b %-d, %Y")
-        #cost.col-sm-2.container-fluid
+        #cost.col-sm-2
           Cost
-          .container-fluid= "$#{event.cost}"
-        #tags.col-sm-3.container-fluid
+          .container= "$#{event.cost}"
+        #tags.col-sm-3.container
           Tags
-          .container-fluid
+          .containers
             %p="#{event.tag_string}"
-        #contact_1.col-sm-3.container-fluid
+        #contact_1.col-sm-3.container
           Contact Info
           - if event.contact_first
             .container="Name: #{event.contact_last}, #{event.contact_first}"
           - else
             .container="Name:"
           .container= "Phone: #{event.contact_phone}"
-      #bottom.row.container-fluid
-        #time.col-sm-2.container-fluid
+
+      #bottom{ class: "row container" }
+        #time{ id: "_Time", class: "container col-sm-2" }
           Time
-          .container-fluid
+          .container
             #start="Start: #{event.start.strftime("%r")}"
             #end= "End: #{event.end.strftime("%r")}"
-        #location.col-sm-2.container-fluid
+        #location.col-sm-2.container{ id: "_Location" }
           Location
-          .container-fluid
+          .container
             #street= "#{event.street_address}"
             #city= "#{event.city_state_zip}"
-        #description.col-sm-3.container-fluid
+        #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid
             %p=event.description
-        #contact_2.col-sm-3.container-fluid{ id: "val_Email" }
-          .container-fluid
+        #contact_2.col-sm-3.container{ id: "val_Email" }
+          .container
             #email= "Email: #{event.contact_email}"
             #org= "Org: #{event.organization}"
           - if !tab.eql? "Past" 

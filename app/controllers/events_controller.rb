@@ -148,7 +148,7 @@ class EventsController < ApplicationController
 
   def perform_update_transaction
     puts 'inside EventsController#perform_update_transaction'
-    byebug
+    #byebug
     event = Event.new(event_params)
     #assign_organization
     begin
