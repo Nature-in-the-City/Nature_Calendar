@@ -9,7 +9,7 @@ Background:
   Given the following events exist:
   | name        | start               | end                  | st_number | st_name    | city          | zip   | description   | status   | contact_email |
   | Nature Hike | Dec-31-2016 01:00pm | Dec-31-2016 03:00pm  | 1214      | Cherry St. | San Francisco | 94103 | A nature hike | approved | joe@cnn.com   |
-  | Nature Walk | Dec-30-2016 01:00pm | Dec-30-2016 03:00pm  | 1214      | Cherry St. | San Francisco | 94103 | A nature walk | past     | joe@cnn.com   |
+  | Nature Walk | Dec-30-2015 01:00pm | Dec-30-2015 03:00pm  | 1214      | Cherry St. | San Francisco | 94103 | A nature walk | approved | joe@cnn.com   |
 
   And I am logged in as the admin
   And I see the Admin panel
