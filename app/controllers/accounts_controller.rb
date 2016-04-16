@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
     end
     @user = User.new email: params[:user][:email], password: params[:user][:password], level: @level, reset_password_token: params[:user][:reset_password_token]
     if @user.save
-      flash[:notice] = "#{@user[:email]} successfully created"
+      flash[:notice] = "#{@user[:email]} successfully created!"
       redirect_to calendar_path
     else
       flash[:notice] = @user.errors.full_messages.join(", ").html_safe

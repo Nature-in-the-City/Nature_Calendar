@@ -70,8 +70,8 @@ class Event < ActiveRecord::Base
     end
   end
 
-  def self.get_remote_meetup_events(options={}, url)
-    meetup_events = Meetup.new.pull_events({group_urlname: options[:name]})
+  def self.get_remote_meetup_events(options={})
+    meetup_events = Meetup.new.pull_events({group_urlname: options[:group_urlname]})
     if meetup_events.respond_to?(:each)
       meetup_events.each do |event| 
         e = Event.create(event)

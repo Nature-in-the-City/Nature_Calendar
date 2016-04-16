@@ -1,8 +1,7 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
   
-  def calendar_type
-    url = @sync.url.to_str
+  def calendar_type(url)
     name = url.split("/")[-1]
     if url =~ /meetup.com/
       Event.get_remote_meetup_events({group_urlname: name, url: url})
@@ -31,7 +30,7 @@ class SyncsController < ApplicationController
   def perform_create_transaction
     begin
       @sync = Sync.new(sync_params)
-      @group = calendar_type
+      @group = calendar_type(params[:sync][:url])
       @sync.update_attributes(:organization => @group.gsub("-", " "), :last_sync => DateTime.now())
       @sync.save!
       @msg = "Successfully synced '#{@sync.url}'!"
