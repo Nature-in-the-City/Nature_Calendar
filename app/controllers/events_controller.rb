@@ -94,6 +94,7 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
+    #byebug
     @is_approved = event_params[:status] == "approved"
     begin
       @event = Event.new(event_params)
