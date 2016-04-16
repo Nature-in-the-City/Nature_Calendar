@@ -1,5 +1,5 @@
 
-Given /^I(?: should)? (not )?see the Admin panel$/ do |negated|
+Given /^I(?: should)? (not )?see the (?:Admin|admin) panel$/ do |negated|
   if negated
     expect(page).to have_selector('#admin', visible: false)
   else
@@ -137,12 +137,12 @@ Given /^that I see the "(.*)" event "(.*)"$/ do |tab_name, event_name|
   step %Q{I should see the "#{tab_name}" event "#{event_name}"}
 end
 
-Then /^I should( not)? see the admin panel$/ do |negated|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
 Then /^I should( not)? see the sync panel$/ do |negated|
-  pending # Write code here that turns the phrase above into concrete actions
+  if negated
+    expect(page).to have_selector("#sync_status", visible: false)
+  else
+    expect(page).to have_selector("#sync_status", visible: true)
+  end
 end
 
 Then /^I should( not)? see the add users button$/ do |negated|
@@ -262,4 +262,8 @@ end
 Then /^the "(.*)" date for "(.*)" should be "(.*)"$/ do |start_end, event_name, value|
   within(:css, "#edit_event_#{Event.where(name: event_name).first.id}") do
   end
+end
+
+Then /^I should see the (Sign Out|Sign In) button$/ do |direction|
+  
 end
