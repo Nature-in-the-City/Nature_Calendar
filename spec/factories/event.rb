@@ -23,11 +23,7 @@ FactoryGirl.define do
         country 'USA'
         free false
         family_friendly false
-        learn false
-        plant false
-        hike false
-        play false
-        volunteer false
+        category 'Hike'
     end
 end
 
