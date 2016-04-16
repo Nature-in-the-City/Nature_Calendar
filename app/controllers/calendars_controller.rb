@@ -12,9 +12,9 @@ class CalendarsController < ApplicationController
       @filter = params[:event][:filter]
     end
     
+    @past = Event.past.order(:start)
     @pending = Event.get_events_by_status('pending', @filter).upcoming.order(:start)
     @upcoming = Event.get_events_by_status('approved', @filter).upcoming.order(:start)
-    @past = Event.past.order(:start)
     @rejected = Event.get_events_by_status('rejected', @filter).upcoming.order(:start)
     
     @tags = ["Free", "Family-friendly", "Play", "Volunteer", "Hike", "Learn"]
