@@ -10,12 +10,12 @@ Feature:
   
   Scenario: I should be able to add a meetup calendar to sync with by URL
     When I fill in the "sync_url" field with "http://www.meetup.com/Truve-Oakland-Exercise-Meetup/"
-    And I press the "Add" button
+    And I press "Add Calendar"
     Then I should be on the "Admin" page
     And I should see "Successfully synced 'http://www.meetup.com/Truve-Oakland-Exercise-Meetup/'!"
     
   Scenario: I should be able to add a meetup calendar to sync with by URL
     When I fill in the "sync_url" field with "http://www.meetup.com/codeselfstudy/"
-    And I press the "Add" button
+    And I press "Add Calendar"
     Then I should be on the "Admin" page
     And I should see "Successfully synced 'http://www.meetup.com/codeselfstudy/'!"

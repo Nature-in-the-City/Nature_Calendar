@@ -11,10 +11,6 @@ Given /^the following users exist:$/ do |users|
   end
 end
 
-When /^I press the "(.*)" button$/  do |btn|
-  click_button("#{btn}")
-end
-
 Given /^the following calendars have been linked:$/  do |calendar_list|
   calendar_list.hashes.each do |calendar|
       Sync.create!(calendar)
