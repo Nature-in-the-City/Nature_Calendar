@@ -22,7 +22,7 @@ class CalendarsController < ApplicationController
                         "Rejected" => @rejected, "Past" => @past}
     
     @tabs = %w(Upcoming Pending Rejected Past)
-    @pending_count = @pending.count
+    @pending_count = Event.where(status: 'pending').count
     
     @head, @body = WebScraper.instance.page_data
     @calendars = Sync.all
