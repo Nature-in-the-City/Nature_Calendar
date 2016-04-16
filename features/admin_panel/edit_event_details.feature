@@ -1,5 +1,5 @@
 # in features/admin_panel/edit_event_details.feature
-@admin_panel @javascript
+@admin_panel @javascript @inprogress
 Feature: Edit the details of events displayed in the admin panel
   As an admin user
   So I can update the information for an event
@@ -16,23 +16,29 @@ Background:
   And I "Show More" details on "Nature Hike"
 
 Scenario: Admin can edit and save the start and end times
-  Given "Start" for "Nature Hike" is "Dec-31-2016 01:00pm"
-  And "End" for "Nature Hike" is "Dec-31-2016 03:00pm"
-  When I change "End" for "Nature Hike" to "Dec-31-2016 04:00pm"
-  And I change "Start" for "Nature Hike" to "Dec-31-2016 02:00pm"
-  And I change "End" for "Nature Hike" to "Dec-31-2016 04:00pm"
-  And I click "Save Changes" for "Nature Hike"
-  Then "Start" for "Nature Hike" should be "Dec-31-2016 02:00pm"
-  And "End" for "Nature Hike" should be "Dec-31-2016 04:00pm"
+  When I click the edit button on "Nature Hike"
+  Then the "edit" window for "Nature Hike" should be open
+  When I fill in "Start" date for "Nature Hike" with "December 31 2016 02:00:PM"
+  And I fill in "End" date for "Nature Hike" with "December 31 2016 04:00:PM"
+  And I click "Update Event" for "Nature Hike"
+  When I "Show More" details on "Nature Hike"
+  And I have opened the edit window for "Nature Hike"
+  Then the "Start" date for "Nature Hike" should be "December 31 2016 02:00:PM"
+  And the "End" date for "Nature Hike" should be "December 31 2016 04:00:PM"
   
 Scenario: Admin can edit and save the location
-  Given "Location" for "Nature Hike" is "1214 Cherry St., San Francisco, CA 94103"
-  When I change "Location" for "Nature Hike" to "3126 Market St., San Francisco, CA 94103"
-  And I click "Save Changes" for "Nature Hike"
-  And "Location" for "Nature Hike" should be "3126 Market St., San Francisco, CA 94103"
+  Given I have opened the edit window for "Nature Hike"
+  When I fill in "event[contact_first]" for "Nature Hike" with "Elmo"
+  And I click "Update Event" for "Nature Hike"
+  When I "Show More" details on "Nature Hike"
+  And I have opened the edit window for "Nature Hike"
+  Then "event_contact_first" for "Nature Hike" should be "Elmo"
 
 Scenario: Admin can edit and save the description
-  Given "Description" for "Nature Hike" is "A nature hike"
-  When I change "Description" for "Nature Hike" to "The best nature hike ever!"
-  And I click "Save Changes" for "Nature Hike"
-  And "Description" for "Nature Hike" should be "The best nature hike ever!"
+  Given I have opened the edit window for "Nature Hike"
+  And "event_description" for "Nature Hike" is "A nature hike"
+  When I fill in "event[description]" for "Nature Hike" with "The best nature hike ever!"
+  And I click "Update Event" for "Nature Hike"
+  When I "Show More" details on "Nature Hike"
+  And I have opened the edit window for "Nature Hike"
+  Then "event_description" for "Nature Hike" should be "The best nature hike ever!"

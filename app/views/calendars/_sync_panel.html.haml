@@ -1,19 +1,27 @@
 
 %table
   %thead
-    %td Select
-    %td Calendar
-    %td Status
-    %td Last Sync
+    %td.text-center Select
+    %td.text-center Calendar
+    %td.text-center
+      Status
+      (
+      %i.fa.fa-check.isa_success
+      or
+      %i.fa.fa-times.isa_error
+      )
+    %td.text-center Last Sync
   %tbody
     %tr
-      %td= check_box_tag  "calendar"
-      %td Calendar Organization
-      %td Status icon (√) + color
-      %td mm/dd/yyy hh:mm:ss
+      %td.text-center= check_box_tag  "calendar"
+      %td.text-center Calendar Organization
+      %td.text-center
+        %i.fa.fa-check.isa_success
+      %td.text-center= 1.day.since.strftime("%c")
     - @calendars.each do |calendar|
       %tr
-        %td= check_box_tag  calendar.url
-        %td= calendar.organization
-        %td Status icon (√) + color
-        %td= calendar.last_sync
+        %td.text-center= check_box_tag  calendar.url
+        %td.text-center= calendar.organization
+        %td.text-center
+          %i.fa.fa-check.isa_success
+        %td.text-center= calendar.last_sync.strftime("%c")

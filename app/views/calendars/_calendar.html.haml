@@ -31,7 +31,7 @@
       - if user_signed_in?
         = form_tag new_event_path, method: :get, id: 'new_event', format: :js, remote: true do
           -# this path does an ajax GET to the event controller action "new"
-          = submit_tag '+', class: ['main_organization', 'event_creation_button']
+          = submit_tag 'Add Event', class: ['main_organization', 'event_creation_button']
 
       - else
         = form_tag suggest_new_event_path, method: :get, id: 'suggest_event', format: :js, remote: true do
@@ -115,10 +115,10 @@
           - @tabs.each do |tab|
             - if tab.eql? "Upcoming"
               %div{ class: 'tab-pane active scrollable', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: {tab: tab}
+                = render partial: 'admin_panel', locals: { tab: tab, tags: @tags }
             - else
               %div{ class: 'tab-pane scrollable', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: { tab: tab }
+                = render partial: 'admin_panel', locals: { tab: tab, tags: @tags }
           %br
 %br
 
@@ -141,13 +141,27 @@
 :javascript
   $(document).ready(function(){
     var show_btns = $("a:contains('Show')");
-    
     show_btns.each(function(index){
-    
       $(this).on("click", function() {
-      
         $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
       });
     });
+    
+    var edit_btns = $("a[id*='editButton']");
+    edit_btns.each(function(index) {
+      var show_id = "#showbtn_" + edit_btns[index].id.split("_")[0]
+      $(this).on("click", function() {
+        $(show_id).trigger("click");
+      });
+    });
+    
+    var cancel_btns = $("a[id*='_CancelEdit']");
+    cancel_btns.each(function(index) {
+      var show_id = "#showbtn_" + cancel_btns[index].id.split("_")[0]
+      $(this).on("click", function() {
+        $(show_id).trigger("click");
+      });
+    });
   });
+
   

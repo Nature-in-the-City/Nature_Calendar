@@ -58,7 +58,7 @@ class EventsController < ApplicationController
       ids = Event.get_event_ids(params)
       raise 'You must select at least one event. \nPlease retry.' if ids.blank?
       events = Event.store_third_party_events(ids)
-      @msg = 'Successfully added:' + '<br/>' + events.map {|event| event.name}.join('<br/>')
+      @msg = 'Successfully added:' + '<br/>' + events.map { |event| event.name }.join('<br/>')
       handle_response
     rescue Exception => e
       @msg = 'Could not pull events:' + '\n' + e.to_s
@@ -112,6 +112,7 @@ class EventsController < ApplicationController
   end
 
   def edit
+    #puts 'inside EventsController#edit'
     @event = Event.find params[:id]
     if @event.is_past?
       @msg = "Sorry, past events cannot be edited. You may only delete them."
@@ -119,19 +120,11 @@ class EventsController < ApplicationController
     end
     begin
       @new_status = params[:commit]
-      case @new_status
-      # handle accepting or rejecting events
-      when 'accept'
-        if @event.status == "pending" then
-          assign_organization
-          #remote_event = Meetup.new.push_event(@event)
-          #@event.update_meetup_fields(remote_event)
-        end
-        @event.update_attributes(status: "approved")
-      when 'reject'
-        @event.update_attributes(status:"rejected")
-      else
-        @event.update_attributes(status:"pending")
+      if @new_status
+        statuses = {'accept' => 'approved', 'reject' => 'rejected'}
+        statuses.default = 'pending'
+        @event.update(:status => statuses[@new_status]) 
+        @event.save
       end
       @event.save!
       
@@ -144,18 +137,21 @@ class EventsController < ApplicationController
 
   # does panel update event
   def update
+    #puts 'inside EventsController#update'
     @event = Event.find params[:id]
     perform_update_transaction
     @success ? handle_response : (render 'errors', format: :js)
   end
 
   def perform_update_transaction
+    #puts 'inside EventsController#perform_update_transaction'
+    #byebug
     event = Event.new(event_params)
-    assign_organization
+    #assign_organization
     begin
-      remote_event = Meetup.new.edit_event({event: event, id: @event.meetup_id})
+      #remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
       @event.update_attributes(event_params)
-      @event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
+      #@event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
       @success = true
       @msg = "#{@event.name} successfully updated!"
     rescue Exception => e
@@ -195,10 +191,9 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:name, :organization, :venue_name, :st_number, :st_name, :city, :zip,
+    params.require(:event).permit(:name, :status, :organization, :venue_name, :st_number, :st_name, :city,
                                   :state, :country, :start, :end, :description, :how_to_find_us, :image,
                                   :street_number,  :cost, :route, :locality, :family_friendly, :free,
-                                  :category, :contact_email, :contact_name_first,
-                                  :contact_name_last, :contact_phone)
+                                  :contact_email, :contact_first, :contact_last, :contact_phone, :zip, :url)
   end
 end
