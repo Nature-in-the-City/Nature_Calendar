@@ -31,11 +31,11 @@
       - if user_signed_in?
         = form_tag new_event_path, method: :get, id: 'new_event', format: :js, remote: true do
           -# this path does an ajax GET to the event controller action "new"
-          = submit_tag '+', class: ['main_organization', 'event_creation_button']
+          = submit_tag 'Add Event', class: ['main_organization', 'event_creation_button']
 
-        = form_tag third_party_events_path, method: :get, id: 'third_party', format: :js, remote: true  do
-          -# this path does an ajax GET to the event controller action "third_party"
-          = submit_tag '+ 3rd Party', class: ['event_creation_button','third_party_organization']
+        -# = form_tag third_party_events_path, method: :get, id: 'third_party', format: :js, remote: true  do
+        -#  -# this path does an ajax GET to the event controller action "third_party"
+        -#  = submit_tag '+ 3rd Party', class: ['event_creation_button','third_party_organization']
           
       - else
         = form_tag suggest_new_event_path, method: :get, id: 'suggest_event', format: :js, remote: true do
