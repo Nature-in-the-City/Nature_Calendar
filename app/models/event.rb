@@ -62,11 +62,33 @@ class Event < ActiveRecord::Base
     to_join = split_capitalize.reject{ |s| s.empty? }
     return to_join.join("-")
   end
-
+  
   def self.get_remote_events(options={})
     meetup_events = Meetup.new.pull_events(options)
     if meetup_events.respond_to?(:each)
-      meetup_events.each_with_object([]) { |event, candidate_events| candidate_events << Event.new(event) }
+      meetup_events.each_with_object([]) {|event, candidate_events| candidate_events << Event.new(event)}
+    end
+  end
+
+  def self.get_remote_meetup_events(options={})
+    meetup_events = Meetup.new.pull_events({group_urlname: options[:group_urlname]})
+    if meetup_events.respond_to?(:each)
+      meetup_events.each do |event| 
+        e = Event.create(event)
+        e.update_attributes(:status => 'pending', :url => options[:url])
+        e.save!
+        end
+    end
+  end
+  
+  def self.get_remote_google_events(options={})
+    google_events = Google.new.pull_events(options)
+    if google_events.respond_to?(:each)
+      google_events.each do |event| 
+        e = Event.create(event)
+        e.update_attributes(:status => 'pending', :url => options[:url])
+        e.save!
+      end
     end
   end
 

@@ -42,12 +42,9 @@ class EventsController < ApplicationController
 
   def third_party
     begin
-      id = params[:id]
-      group_urlname = params[:group_urlname]
-      if id.present?
-        @events = Event.get_remote_events({ event_id: id })
-      elsif group_urlname.present?
-        @events = Event.get_remote_events({ group_urlname: group_urlname })
+      url = params[:url]
+      if url.present?
+        @event = Event.get_remote_events({url: url})
       end
       handle_response
     rescue Exception => e

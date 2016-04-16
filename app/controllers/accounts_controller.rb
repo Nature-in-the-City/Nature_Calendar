@@ -1,11 +1,16 @@
 class AccountsController < ApplicationController
   #before_action :authenticate_user!
   before_action :is_root
-
+  
   def create
-    @user = User.new email: params[:user][:email], password: params[:user][:password], reset_password_token: params[:user][:reset_password_token]
+    if params[:user][:level]
+      @level = 0
+    else
+      @level = 1
+    end
+    @user = User.new email: params[:user][:email], password: params[:user][:password], level: @level, reset_password_token: params[:user][:reset_password_token]
     if @user.save
-      flash[:notice] = "Account successfully created"
+      flash[:notice] = "#{@user[:email]} successfully created!"
       redirect_to calendar_path
     else
       flash[:notice] = @user.errors.full_messages.join(", ").html_safe
@@ -14,10 +19,22 @@ class AccountsController < ApplicationController
   end
 
   def edit
-    @users = User.where(level: 1)
+    @users = User.all
     if @users.length == 0
       flash.now[:notice] = "No existing accounts to destroy"
     end
+  end
+  
+  def update
+    @user = User.find_by_id(params[:id])
+    if @user.level == 1
+      @user.update_attribute(:level, 0)
+    else
+      @user.update_attribute(:level, 1)
+    end
+    @user.save!
+    flash[:notice] = "#{@user.email} updated"
+    redirect_to edit_account_path
   end
 
   def destroy

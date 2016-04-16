@@ -9,20 +9,13 @@ Feature:
     And I see the "Sync Status" panel
   
   Scenario: I should be able to add a meetup calendar to sync with by URL
-    When I fill in the "URL" field with "http://meetup.com/Nature-in-the-City"
-    And I press the "Add" button
+    When I fill in the "sync_url" field with "http://www.meetup.com/Truve-Oakland-Exercise-Meetup/"
+    And I press "Add Calendar"
     Then I should be on the "Admin" page
-    And I should see "Successfully synced 'http://meetup.com/Nature-in-the-City'!"
+    And I should see "Successfully synced 'http://www.meetup.com/Truve-Oakland-Exercise-Meetup/'!"
     
-  Scenario: Incorrect Meetup URLs should redirect with a message
-    When I fill in the "URL" field with "http://meetup.com/0000000"
-    And I press the "Add" button
+  Scenario: I should be able to add a meetup calendar to sync with by URL
+    When I fill in the "sync_url" field with "http://www.meetup.com/codeselfstudy/"
+    And I press "Add Calendar"
     Then I should be on the "Admin" page
-    And I should see "Successfully synced 'http://meetup.com/0000000'!"
-    
-  Scenario: Exsiting synced Meetup groups should be linked when I refresh the page
-    Given the following calendars have been linked:
-      | organization      | url                         | calendar_id |
-      | Outdoors          | http://meetup.com/18264738  | 12786890    |
-    When I visit the "Admin" page
-    Then I should see "Outdoors" in the "Sync Status" panel
+    And I should see "Successfully synced 'http://www.meetup.com/codeselfstudy/'!"

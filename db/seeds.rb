@@ -90,9 +90,15 @@ guests = [{ first_name: 'Bob',
 registrations = [{ event_id: 1, guest_id: 1 }]
 
 users = [{ email: 'admin123@admin.com',
+           name: 'Admin',
            password: 'password',
            level: 0,
-           reset_password_token: 'token' }
+           reset_password_token: 'token' },
+         { email: 'regular@admin.com',
+           name: 'Regular',
+           password: 'password',
+           level: 1,
+           reset_password_token: 'token' },
   ]
   
 syncs = [{ organization: 'Nature in the City',
