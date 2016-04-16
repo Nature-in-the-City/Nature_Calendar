@@ -106,7 +106,7 @@ class Event < ActiveRecord::Base
   def self.remove_remotely_deleted_events(remote_events)
     return if remote_events.nil?
     remotely_deleted_ids = Event.get_remotely_deleted_ids(remote_events)
-    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy_all }
+    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy }
   end
 
   # This only applies to present and upcoming events. Past events cannot be deleted
