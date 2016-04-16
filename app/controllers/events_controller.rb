@@ -115,7 +115,7 @@ class EventsController < ApplicationController
   end
 
   def edit
-    puts 'inside EventsController#edit'
+    #puts 'inside EventsController#edit'
     @event = Event.find params[:id]
     if @event.is_past?
       @msg = "Sorry, past events cannot be edited. You may only delete them."
@@ -140,7 +140,7 @@ class EventsController < ApplicationController
 
   # does panel update event
   def update
-    puts 'inside EventsController#update'
+    #puts 'inside EventsController#update'
     @event = Event.find params[:id]
     perform_update_transaction
     @success ? handle_response : (render 'errors', format: :js)

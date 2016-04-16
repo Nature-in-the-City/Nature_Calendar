@@ -90,7 +90,7 @@
               = f.label :event_name, :class => "control-label"
               = f.text_field :name, :class => "span5"
             .field.form-group
-              = f.label :description, :class => "control-label"
+              = f.label :description, :class => "control-label", :for => "event_description"
               = f.text_area :description, :rows => 3, :class => "span5"
           .container-fluid.col-sm-5.form-group
             = f.label :location
@@ -99,21 +99,21 @@
               = f.text_field :st_name, :class => "span3"
             %br
             .field
-              = f.text_field :city, :class => "span3"
-              = f.text_field :state, :class => "span3"
-              = f.number_field :zip, :class => "span3"
+              = f.text_field :city, :class => "span3", :label => "event_city"
+              = f.text_field :state, :class => "span3", :label => "event_state"
+              = f.number_field :zip, :class => "span3", :label => "event_zip"
           
         .row.container-fluid
           .col-sm-5.container-fluid.form-group
             = f.label :Time
             .field
-              %p{ class: 'help-block'} Start
+              = f.label :start, :class => "control-label", :for => "event_start"
               = f.datetime_select(:start, :datetime_separator => ", ", :ampm => true,
                                   :order => [:month, :day, :year, :hour, :minute],
                                   :label => "start") 
             %br
             .field
-              %p{ class: 'help-block'} End
+              = f.label :end, :for => "event_end", :class => "control-label"
               = f.datetime_select(:end, :datetime_separator => ', ', :ampm => true,
                                   :order => [:month, :day, :year, :hour, :minute],
                                   :label => "end")
@@ -135,7 +135,7 @@
         .row.container-fluid
           .col-sm-4.container-fluid
             .field.form-group
-              = f.label(:first_name, :class => "control-label")
+              = f.label(:first_name, :for => "event_contact_first",  :class => "control-label")
               = f.text_field :contact_first
             %br
             .field.form-group

@@ -1,6 +1,10 @@
 
-Given /^I see the Admin panel$/ do
-    expect(page).to have_css('#admin')
+Given /^I(?: should)? (not )?see the Admin panel$/ do |negated|
+  if negated
+    expect(page).to have_selector('#admin', visible: false)
+  else
+    expect(page).to have_selector('#admin', visible: true)
+  end
 end
 
 Given /^I see the "(.*?)" status tab$/ do |tab|
@@ -145,25 +149,14 @@ Then /^I should( not)? see the add users button$/ do |negated|
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given /^I click "(.*)" for "(.*)"$/ do |arg1, arg2|
-  pending # Write code here that turns the phrase above into concrete actions
+Given /^I click "Update Event" for "(.*)"$/ do |event|
+  within(:css, "#edit_event_#{Event.where(name: event).first.id}") do
+    find_button("Update Event").click
+  end
 end
 
 Then /^the "(.*)" event should be deleted$/ do |event_name|
   expect(Event.exists?(:name => event_name)).to be_falsey
-end
-
-Given /^"(.*)" for "(.*)" is "(.*)"$/ do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-When /^I change "(.*)" for "(.*)" to "(.*)"$/ do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-
-Then /^"(.*)" for "(.*)" should be "(.*)"$/ do |arg1, arg2, arg3|
-  pending # Write code here that turns the phrase above into concrete actions
 end
 
 Then /^the "(.*)" event status should be "(.*)"$/ do |event_name, status|
@@ -177,13 +170,96 @@ Given /^I have rejected the "(.*)" event$/ do |name|
   visit current_path
 end
 
-Then /^I should see the event "(.*)"$/ do |event_name|
+Then /^I should (not )?see the event "(.*)"$/ do |negated, event_name|
   found = find("div.tab-pane.scrollable.active")
   within(:css, "div.tab-pane.scrollable.active") do
-    assert_text(event_name)
+    if negated
+      assert_no_text(event_name)
+    else
+      assert_text(event_name)
+    end
   end
 end
 
 When /^I wait (\d+) seconds?$/ do |seconds|
   sleep seconds.to_i
+end
+
+Given /^that the event "(.*)" is past$/ do |name|
+  expect(Event.where("name = ?", name).first.is_past?).to be_truthy
+end
+
+Then /^I should( not)? see the edit window for "(.*)"$/ do |negated, event_name|
+  event_locator = "form#edit_event_" + Event.where("name = ?", event_name).first
+  if negated
+    expect(page).to have_selector(event_locator, visible: false)
+  else
+    expect(page).to have_selector(event_locator, visible: true)
+  end
+end
+
+When /^I click the edit button on "(.*)"$/ do |event_name|
+  event_id = "div#edit_#{Event.where(name: event_name).first.id}"
+  within(:css, event_id) do
+    find_link('Edit').click
+  end
+  #step %{I wait 5 seconds}
+end
+
+Then /^the "(.*)" window for "(.*)" should( not)? be open$/ do |panel, event_name, negated|
+  event_id = Event.where("name = ?", event_name).first.id
+  result = nil
+  case panel
+  when "edit"
+    result = find("#edit_event_#{event_id}").visible?
+  when "details"
+    event_locator = "#{event_id}_details"
+    result = page.has_selector?(event_locator, visible: true)
+  end
+  return expect(result).to be_falsey if negated
+  expect(result).to be_truthy
+end
+
+Given /^I have opened the edit window for "(.*)"$/ do |event|
+  step %{I click the edit button on "#{event}"}
+  step %{the "edit" window for "#{event}" should be open}
+end
+
+When /^I fill in "(.*)" date for "(.*)" with "(.*)"$/ do |field_name, event_name, value|
+  field_values = value.split(" ")
+  time_values = field_values[3].split(":")
+  hour_value = "#{time_values[0]} #{time_values[2]}"
+  
+  values = { :year => ["1i", field_values[2]], :month => ["2i", field_values[0]], 
+            :day => ["3i", field_values[1]], :hour => ["4i", hour_value],
+            :min => ["5i", time_values[1]] }
+            
+  within(:css, "#edit_event_#{Event.where(name: event_name).first.id}") do
+    values.each do |key, val|
+      #puts val[1]
+      box_name = "event_#{field_name.downcase}_#{val[0]}"
+      select(val[1], from: box_name)
+      if key.eql? :hour
+        select(val[1], from: box_name)
+      end
+      #puts find_field(box_name).find('option[selected]').text
+    end
+  end
+end
+
+Then /^"(.*)" for "(.*)" (?:should be|is) "(.*)"$/ do |field, event_name, value|
+  within(:css, "#edit_event_#{Event.where(name: event_name).first.id}") do
+    expect(find_field(field).value).to eq(value)
+  end
+end
+
+When(/^I fill in "([^"]*)" for "([^"]*)" with "([^"]*)"$/) do |field, event_name, value|
+  within(:css, "#edit_event_#{Event.where(name: event_name).first.id}") do
+    fill_in(field, with: value)
+  end
+end
+
+Then /^the "(.*)" date for "(.*)" should be "(.*)"$/ do |start_end, event_name, value|
+  within(:css, "#edit_event_#{Event.where(name: event_name).first.id}") do
+  end
 end
