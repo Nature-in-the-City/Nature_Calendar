@@ -64,24 +64,18 @@ class Event < ActiveRecord::Base
   end
   
   def self.get_remote_events(options={})
-    url = options[:url].to_str
-    name = options[:url].split("/")[-1]
-    if url =~ /meetup.com/
-      get_remote_meetup_events({group_urlname: name})
-    elsif url =~ /google/
-      get_remote_google_events({calendar_id: name})
-    else
-        raise Exception, 'Invalid URL', caller
-    end
-    name
-  end
-
-  def self.get_remote_meetup_events(options={})
     meetup_events = Meetup.new.pull_events(options)
     if meetup_events.respond_to?(:each)
+      meetup_events.each_with_object([]) {|event, candidate_events| candidate_events << Event.new(event)}
+    end
+  end
+
+  def self.get_remote_meetup_events(options={}, url)
+    meetup_events = Meetup.new.pull_events({group_urlname: options[:name]})
+    if meetup_events.respond_to?(:each)
       meetup_events.each do |event| 
-        e = Event.new(event)
-        e.update_attributes(:status => 'Pending')
+        e = Event.create(event)
+        e.update_attributes(:status => 'pending', :url => options[:url])
         e.save!
         end
     end
@@ -92,7 +86,7 @@ class Event < ActiveRecord::Base
     if google_events.respond_to?(:each)
       google_events.each do |event| 
         e = Event.create(event)
-        e.update_attributes(:status => 'Pending')
+        e.update_attributes(:status => 'pending', :url => options[:url])
         e.save!
       end
     end
