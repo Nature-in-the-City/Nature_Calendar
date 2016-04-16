@@ -1,6 +1,14 @@
+Capybara.javascript_driver = :webkit
+
 Given /^I see the "(.*)" panel$/ do |panel_name|
   str = panel_name.downcase.split(" ").join("_")
   expect(page).to have_css("div##{str}")
+end
+
+Given /^the following users exist:$/ do |users|
+  users.hashes.each do |user|
+    User.create!(user)
+  end
 end
 
 When /^I press the "(.*)" button$/  do |btn|
@@ -32,31 +40,19 @@ Then /^I should see "(.*)" in the "(.*)" panel$/ do |event, panel_name|
   with_scope(panel_name) { step %{I should see "#{event}"}}
 end
 
-Given(/^I fill in email with "([^"]*)"$/) do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
+Given /^I create( super | regular )admin "(.*)" with password "(.*)"$/ do |root, email, password|
+  visit '/accounts/new'
+  find_field("user_email").set email
+  find_field("user_password").set password
+  if root == ' super '
+    check("user_level")
+  end
+  click_button "Create Admin"
 end
 
-Given(/^I fill in password with "([^"]*)"$/) do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given(/^I click "([^"]*)"$/) do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^I should be on the Calendars Page$/) do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given(/^the following users exist:$/) do |table|
-  # table is a Cucumber::Core::Ast::DataTable
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given(/^I am on the Calendars Page$/) do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^I should see the Admin panel$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+When /^I sign in as "(.*)" with password "(.*)"$/ do |email, password|
+  visit '/users/sign_in'
+  find_field("user_email").set email
+  find_field("user_password").set password
+  click_button "Log in"
 end

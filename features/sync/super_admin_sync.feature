@@ -20,21 +20,25 @@ Feature:
     And I see the Admin panel
 
   Scenario: Approve Pending Events
-    Given I press the "Pending" tab
-    Then I see the "Pending" event "Hike3"
-    When I click "accept"
-    And I press the "Accepted" tab
-    Then I should see the "Accepted" event "Hike3"
+    Given I am displaying the "Pending" events
+    Then I should see the event "Hike3"
+    When I display the details for "Hike3"
+    And I click the "accept" button on "Hike3"
+    Then the "Hike3" event status should be "approved"
+    And I press the "Upcoming" tab
+    Then I should see the "Upcoming" event "Hike3"
     
   Scenario: Regect Pending Events
-    Given I press the "Pending" tab
-    Then I see the "Pending" event "Hike2"
-    When I click "regect"
+    Given I am displaying the "Pending" events
+    Then I should see the event "Hike2"
+    When I display the details for "Hike2"
+    And I click the "reject" button on "Hike2"
+    Then the "Hike2" event status should be "rejected"
     And I press the "Rejected" tab
     Then I see the "Rejected" event "Hike2"
     
   Scenario: Delete Rejected Events
     Given I press the "Rejected" tab
-    Then I see the "Rejected" event "Hike5"
-    When I click "delete"
+    And I see the "Rejected" event "Hike5"
+    And I click the "delete" button on "Hike5"
     Then I should not see "Hike5"

@@ -113,6 +113,10 @@ When /^I delete an existing account$/ do
   delete_account
 end
 
+When /^I follow Sign In$/ do
+  get '/users/sign_in'
+end
+
 When /^I sign in with valid credentials( as root|)$/ do |root|
   if root == ' as root'
     sign_in(0)

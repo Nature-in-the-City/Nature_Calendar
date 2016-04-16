@@ -1,11 +1,12 @@
 %div
-  = text_field :user, 'name', label: 'name', class: 'edit_text_field', placeholder: "Name", style: 'width:20em;'
+  = text_field :user, 'name', label: 'name', class: 'edit_text_field', id: 'user_name', placeholder: "Name", style: 'width:20em;'
 <br/>
 %div
-  = text_field :user, 'email', label: 'email', class: 'edit_text_field', placeholder: "Email", style: 'width:20em;'
+  = text_field :user, 'email', label: 'email', class: 'edit_text_field', id: 'user_email', placeholder: "Email", style: 'width:20em;'
 <br/>
 %div
-  = password_field :user, 'password', label: 'password', class: 'edit_text_field', placeholder: "Password", style: 'width:20em;'
+  = password_field :user, 'password', label: 'password', class: 'edit_text_field', id: 'user_password', placeholder: "Password", style: 'width:20em;'
 <br/>
 %div
-  = check_box :user, 'level', label: 'level', class: 'check_box_tag', checked: false
+  = check_box :user, 'level', label: 'level', class: 'check_box_tag', id: 'user_level', checked: false
+  Super Admin?
