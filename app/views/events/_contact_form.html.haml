@@ -1,0 +1,15 @@
+#e_contact_first
+  .field First Name
+  = text_field :event, 'contact_first', class: 'edit_text_field', required: true
+  
+#e_contact_last
+  .field Last Name
+  = text_field :event, 'contact_last', class: 'edit_text_field', required: true
+  
+#e_contact_email
+  .field Email
+  = text_field :event, 'contact_email', placeholder: 'example@gmail.com', class: 'edit_text_field', required: true
+  
+#e_contact_phone
+  .field Phone Number
+  = text_field :event, 'contact_phone', placeholder: '(xxx)xxx-xxxx', class: 'edit_text_field'

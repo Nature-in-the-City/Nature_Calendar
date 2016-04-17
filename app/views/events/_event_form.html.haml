@@ -1,10 +1,16 @@
-#e_type.colored
-  = check_box_tag 'event_type_check', 'third_party', (@event.is_third_party? ? true : false)
-  = label_tag 'event_type_check', 'Third Party', class: 'field'
-
 #e_name
   .field Name
-  = text_field :event, 'name', placeholder: 'Name', class: 'edit_text_field'
+  = text_field :event, 'name', class: 'edit_text_field', required: true
+  
+#e_category
+  Category 
+  =select :event, :category, { "Select" => "uncategorized", "Hike" => "hike", "Volunteer" => "volunteer", "Learn" => "learn", "Play" => "play" }, required: true
+  
+#e_tags
+  Free
+  =check_box_tag 'event[free]', 1, true
+  Family friendly
+  =check_box_tag 'event[family_friendly]', 1, true
 
 #e_image.colored
   .field Image Upload
@@ -19,19 +25,17 @@
   = datetime_select :event, :end,  default: default_time, datetime_separator: '', time_separator: '', ampm: true
 
 #e_venue_name
-  = check_box_tag 'venue_check'
-  = label_tag 'venue_check', 'Enable Venue', class: 'field'
-  #venue_label.field Venue Name
-  = text_field :event, :venue_name, class: 'edit_text_field'
+  .field Venue Name
+  = text_field :event, :venue_name, class: 'edit_text_field', required: true
 
 #e_location.colored
-  #location_label.field Location
-  = text_field_tag :autocomplete, nil, placeholder: 'Enter your address', onFocus: 'initialize();', class: 'edit_text_field'
+  .field Location
+  = text_field_tag :autocomplete, nil, placeholder: 'Enter your address', onFocus: 'initialize();', class: 'edit_text_field', required: true
 
   #e_address
     .field Street Address
-    = text_field :event, 'st_number', placeholder: 'not required'
-    = text_field :event, 'st_name'
+    = text_field :event, 'st_number', placeholder: 'number'
+    = text_field :event, 'st_name', placeholder: 'street'
 
   #e_city
     .field City
@@ -43,7 +47,7 @@
 
   #e_zip
     .field Zip
-    = text_field :event, 'zip', size: '6', class: 'short_edit_text_field', placeholder: 'not required'
+    = text_field :event, 'zip', size: '6', class: 'short_edit_text_field'
 
   #e_country
     .field Country
@@ -53,13 +57,11 @@
 
 #e_how_to_find_us
   .field How to find us
-  = text_area :event, 'how_to_find_us', :cols =>'40', :rows => '2', class: 'edit_text_field'
+  = text_area :event, 'how_to_find_us', :cols =>'40', :rows => '2', class: 'edit_text_field', required: true
 
 #e_description.colored
   .field Description
-  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field tinymce'
-  
-= hidden_field :event, :status, :value => 'approved'
+  = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field', required: true
 
-= tinymce_assets
-= tinymce
+//= tinymce_assets
+//= tinymce

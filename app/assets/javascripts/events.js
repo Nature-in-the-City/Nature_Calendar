@@ -17,7 +17,7 @@ var setup_event_form = function(button_id) {
         }
     };
     setTimeListeners();
-
+    /*
     var event_venue_name = $('#event_venue_name');
     var venue_check = $('#venue_check');
     var venue_label = $('#venue_label');
@@ -89,6 +89,7 @@ var setup_event_form = function(button_id) {
             }
         }
     });
+    */
 
 };
 
