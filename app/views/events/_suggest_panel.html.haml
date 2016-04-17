@@ -6,5 +6,6 @@
   = render 'contact_form'
   %h3{:style=>'text-align: center'} Event Info
   = render 'event_form'
+  = hidden_field :event, :status, :value => 'pending'
   = submit_tag "Suggest Event", class:'button_right', id: 'submit_suggest_event'
   = submit_tag "Cancel",  name: 'cancel', id: 'cancel', class: 'button_left'
