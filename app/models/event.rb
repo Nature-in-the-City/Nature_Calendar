@@ -194,7 +194,7 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_stored_upcoming_third_party_ids
-    ids = Event.where("start >= ?", DateTime.now).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
+    ids = Event.where("start >= ?", DateTime.now).each_with_object([]) { |event, id| id << event.meetup_id if event.is_third_party? }
     ids[0...200]    # Meetup limits the number of ids you can send to them to 200
   end
 
@@ -262,20 +262,36 @@ class Event < ActiveRecord::Base
   end
   
   def street_address
-    street_name = (st_name ? (st_name.split(" ").map &:capitalize) : nil)
-    self.st_name = street_name.reject{ |str| str.empty? }.join(" ") if street_name
-    return "#{self.st_number} #{self.st_name}" if st_number && street_name
+    format_street
+    return "#{self.st_number} #{self.st_name}" if st_number && st_name
     return nil
+  end
+  
+  def format_street
+    if self.st_name
+      street_name = st_name.split(" ")
+      street = street_name.map{ |word| word.capitalize }
+      self.st_name = street.reject{ |str| str.empty? }.join(" ")
+    end
+    self.st_name
   end
     
   def city_state_zip
-    city_name = (self.city ? (self.city.split(" ").map &:capitalize) : nil)
-    self.city = city_name.reject{ |str| str.empty? }.join(" ") if city_name
+    format_city
     return "#{self.city}, #{self.state} #{self.zip}" if city && zip
     return "#{self.city}, #{self.state}" if city
     return "#{self.zip}" if zip
-    return nil
+    nil
   end
+  
+  def format_city
+    if self.city
+      city_name = self.city.split(" ")
+      city_name[0] = city_name[0].capitalize
+      self.city = city_name.join(" ")
+    end
+  end
+    
   
   def location
       return "#{self.street_address}, #{self.city_state_zip}" if self.street_address && self.city_state_zip

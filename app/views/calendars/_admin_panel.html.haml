@@ -2,7 +2,7 @@
 
 %br
 %br
-- if @event_relations[tab] && @event_relations[tab]
+- if @event_relations[tab] && @event_relations[tab].count > 0
   - @event_relations[tab].each do |event|
     .container{ id: "#{event.id}_title" }
       .col-sm-8
@@ -13,7 +13,7 @@
           %i.fa.fa-angle-down
     
     .container{ id: "#{event.id}_details", class: "collapse" }
-      #top{ class: "row" }
+      #top{ class: "row container" }
         #date.col-sm-2
           Date
           .container
@@ -27,7 +27,7 @@
             %p="#{event.tag_string}"
         #contact_1.col-sm-3.container
           Contact Info
-          - if event.contact_first && event.contact_first.length > 0
+          - if event.contact_first
             .container="Name: #{event.contact_last}, #{event.contact_first}"
           - else
             .container="Name:"
@@ -47,12 +47,11 @@
         #description.col-sm-3.container{ id: "_Description" }
           Description
           .container-fluid
-            %p=event.description
+            %p= event.description
         #contact_2.col-sm-3.container{ id: "val_Email" }
           .container
             #email= "Email: #{event.contact_email}"
-            #org= "Org: #{event.organization}"
-          - if !tab.eql? "Past" 
+          - if not tab.eql? "Past" 
             .container-fluid.col-sm-4{ id: "accept_#{event.id}" }
               = form_tag edit_event_path(event.id) + '#admin', :method => 'get'  do
                 -# this will call editing
