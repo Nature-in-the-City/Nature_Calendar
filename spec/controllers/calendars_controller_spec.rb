@@ -32,4 +32,3 @@ describe CalendarsController do
     end
   end
 end
-

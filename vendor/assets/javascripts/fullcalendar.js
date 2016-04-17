@@ -9394,8 +9394,25 @@ function EventManager(options) { // assumed to be a calendar
 
 			assignDatesToEvent(start, end, allDay, out);
 		}
+		
+		// add category class for background color
+		switch(input.category) {
+			case 'hike':
+				out.className = 'category-hike';
+				break;
+			case 'volunteer':
+				out.className = 'category-volunteer';
+				break;
+			case 'learn':
+				out.className = 'category-learn';
+				break;
+			case 'play':
+				out.className = 'category-play';
+			default:
+				out.className = 'category-play';
+		}
 
-        out.className = input.third_party ? 'third_party_organization' : 'main_organization';
+        // out.className = input.third_party ? 'third_party_organization' : 'main_organization';
 
 		return out;
 	}

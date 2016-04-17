@@ -143,7 +143,7 @@ describe EventsController do
   end
   
   describe "POST #create" do
-    let(:create_new_event) { post :create, event: {name: "Voldemort", start: 10.days.from_now} }
+    let(:create_new_event) { post :create, event: {name: "Voldemort", start: 10.days.from_now, status: 'approved'} }
     it { expect{ create_new_event }.not_to raise_error }
     context 'when error occurs' do
       before(:each) do
@@ -167,6 +167,14 @@ describe EventsController do
     it 'should not throw an error' do
       expect{ update_event }.not_to raise_error
     end
+    context "when #update_attributes throws an error" do
+      before(:each) do
+        allow_any_instance_of(Event).to receive(:update_attributes).and_raise(StandardError)
+      end
+      it "should not throw an error" do
+        expect{ update_event }.not_to raise_error
+      end
+    end
   end
   
   describe "DELETE #destroy" do
@@ -176,7 +184,10 @@ describe EventsController do
       allow(Event).to receive(:find).and_return(Event.find(@event_destroy.id))
     end
     context 'without errors' do
-      it { expect{ destroy_event }.not_to raise_error }
+      it 'should not raise errors' do
+        expect{ destroy_event }.not_to raise_error
+      end
+      
     end
     context 'when error' do
       let(:destroy_second_event) { delete :destroy, id: 2, event: {} }
@@ -201,7 +212,6 @@ describe EventsController do
     let(:accept_edit_past) { get :edit, { id: past_item_id, commit: 'accept' } }
     let(:item_to_edit) { Event.find(edit_item_id) }
     
-    
     it 'should not throw an error when no change is specified' do
       expect{ blank_edit_future }.not_to raise_error
       expect{ blank_edit_past }.not_to raise_error
@@ -225,4 +235,19 @@ describe EventsController do
       end
     end
   end
+  
+  describe "#assign_organization" do
+    let(:event_to_assign) { post :create, event: {name: "Assignment Event", start: 10.days.from_now, status: 'approved'} }
+    let(:pending_assign) { post :create, event: {name: "Assignment Event", start: 10.days.from_now, status: 'pending'} }
+    before(:each) do
+      allow(Event).to receive(:internal_third_party_group_name).and_return(nil)
+    end
+    it 'should assign the default organization name' do
+      expect{ event_to_assign }.not_to raise_error
+    end
+    it 'should not throw an error' do
+      expect{ pending_assign }.not_to raise_error
+    end
+  end
+  
 end

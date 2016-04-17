@@ -17,7 +17,7 @@
       <% end %>
     <% end %>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name) + "#page") do |f| %>
       <div class="field">
         <%= f.email_field :email, autofocus: true, class: 'edit_text_field', placeholder: 'Email', label: 'email', style: 'width:20em;' %>
       </div>

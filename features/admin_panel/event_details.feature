@@ -7,7 +7,7 @@ Feature: View event details on the admin page.
 Background: Events have already been added to the database
   Given the following events exist:
   | name  | start         | end           | st_number | st_name   | city  | description   | status    | contact_email |
-  | Hike1 | Jan-21-2016   | Jan-21-2016   | 1210      | street rd | SF    | A hike        | past      | joe@cnn.com   |
+  | Hike1 | Jan-21-2015   | Jan-21-2015   | 1210      | street rd | SF    | A hike        | approved  | joe@cnn.com   |
   | Hike2 | Dec-25-2016   | Dec-25-2016   | 1210      | street rd | SF    | A hike        | pending   | joe@cnn.com   |
   | Hike3 | Dec-27-2016   | Dec-27-2016   | 1210      | street rd | SF    | A hike        | rejected  | joe@cnn.com   |
   | Hike4 | Dec-30-2016   | Dec-30-2016   | 1210      | street rd | SF    | A hike        | approved  | joe@cnn.com   |

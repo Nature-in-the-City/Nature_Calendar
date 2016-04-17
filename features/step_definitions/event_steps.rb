@@ -1,4 +1,6 @@
-Given /^the following events exist on the calendar:$/ do |events_table|
+Capybara.javascript_driver = :webkit
+
+Given /^the following events exist(?: on the calendar)*:$/ do |events_table|
   events_table.hashes.each do |event|
     Event.create!(event)
   end
@@ -16,8 +18,12 @@ When /^I add new events:$/ do |events_table|
   end
 end
 
-Then /I should see the "(.*)" button$/ do |button_name|
-  expect(page).to have_button(button_name)
+Then /I should( not)? see the "(.*)" button$/ do |negated, button_name|
+  if negated
+    expect(page).not_to have_button(button_name)
+  else
+    expect(page).to have_button(button_name)
+  end
 end
 
 Then /I should see(?:| the) "(.*)" on the page$/ do |content|
@@ -146,10 +152,17 @@ Given(/^I click on the event "([^"]*)"$/) do |arg1|
   puts 'features/step_definitions/event_steps.rb'
 end
 
-Given(/^the event "([^"]*)" should be colored "([^"]*)"$/) do |arg1, arg2|
-  puts 'features/step_definitions/event_steps.rb'
+Given(/^the event "([^"]*)" should be colored "([^"]*)"$/) do |event_name, color|
+  #colors = {:blue => '#2E9AFE', :green => '#86B404', :yellow => '#F7FE2E', :pink => '#F781BE'}
+  colors = {"blue" => "category-hike", "green" => "category-volunteer", "yellow" => "category-learn", "pink" => "category-play"}
+  event = Event.where(name: event_name).first
+  event_link = page.find_link('', :href => "/events/#{event.id}")
+  event_class = event_link[:class].split(' ')
+  category = colors[color]
+  expect(event_class).to include(category)
 end
 
 Given /^the following events with category (?:exist:|exist on the calendar:)$/ do |events_table|
   puts 'features/step_definitions/event_steps.rb'
+  pending
 end

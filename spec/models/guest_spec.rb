@@ -51,4 +51,33 @@ describe Guest do
       expect(result.first).to eq(guest1)
     end
   end
+  
+  describe ".find_by_meetup_rsvp" do
+    
+    let(:rsvp_basic) { { meetup_id: 121121 } }
+    let(:basic_event) { create(:event, meetup_id: 121121) }
+    
+    before(:each) do
+      allow(Event).to receive(:find_by_meetup_id).and_return(basic_event)
+    end
+    
+    it 'should not throw and error' do
+      expect{ Guest.find_by_meetup_rsvp(rsvp_basic) }.not_to raise_error
+    end
+  end
+  
+  describe ".create_by_meetup_rsvp" do
+    let(:rsvp_basic) { { meetup_name: "Nature In The City",  meetup_id: 121121 } }
+    let(:create_action) { Guest.create_by_meetup_rsvp(rsvp_basic) }
+    before(:each) do
+      allow(Guest).to receive(:parse_meetup_name).and_return("Armando", "Fox")
+    end
+    it 'should not throw an error' do
+      expect{ create_action }.not_to raise_error
+    end
+    it "should create a guest with the name 'Armando'" do
+      create_action
+      expect(Guest.where("first_name = ?", 'Armondo')).not_to be_nil
+    end
+  end
 end

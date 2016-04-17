@@ -16,16 +16,18 @@ class Event < ActiveRecord::Base
   scope :approved, -> { where(status: "approved") }
   scope :family_friendly, -> { where(family_friendly: true) }
   scope :free, -> { where(free: true) }
-  scope :hike, -> { where(hike: true) }
-  scope :play, -> { where(play: true) }
-  scope :learn, -> { where(learn: true) }
-  scope :volunteer, -> { where(volunteer: true) }
-  scope :plant, -> { where(plant: true) }
+  scope :hike, -> { where(category: "hike") }
+  scope :play, -> { where(category: "play") }
+  scope :learn, -> { where(category: "learn") }
+  scope :volunteer, -> { where(category: "volunteer") }
+  scope :past, -> { where(%q{"end" < ?}, DateTime.now) }
+  scope :upcoming, -> { where(%q{"end" > ?}, DateTime.now) }
 
   def as_json(options={})
     {
       id: id,
       third_party: is_third_party?,
+      category: self.category,
       title: name,
       start: start.iso8601,
       url: Rails.application.routes.url_helpers.event_path(id)
@@ -45,11 +47,12 @@ class Event < ActiveRecord::Base
   end
   
   def tag_string
-    tag_options = %w(family_friendly free play plant hike learn volunteer)
+    tag_options = %w(family_friendly free)
     event_tags = []
     tag_options.each do |tag|
       event_tags.push(Event.format_tag(tag)) if self[tag]
     end
+    event_tags.push(Event.format_tag(self.category))
     formatted = event_tags.join(", ")
     return ((formatted.length > 0)? formatted : "None")
   end
@@ -59,11 +62,33 @@ class Event < ActiveRecord::Base
     to_join = split_capitalize.reject{ |s| s.empty? }
     return to_join.join("-")
   end
-
+  
   def self.get_remote_events(options={})
     meetup_events = Meetup.new.pull_events(options)
     if meetup_events.respond_to?(:each)
-      meetup_events.each_with_object([]) { |event, candidate_events| candidate_events << Event.new(event) }
+      meetup_events.each_with_object([]) {|event, candidate_events| candidate_events << Event.new(event)}
+    end
+  end
+
+  def self.get_remote_meetup_events(options={})
+    meetup_events = Meetup.new.pull_events({group_urlname: options[:group_urlname]})
+    if meetup_events.respond_to?(:each)
+      meetup_events.each do |event| 
+        e = Event.create(event)
+        e.update_attributes(:status => 'pending', :url => options[:url])
+        e.save!
+        end
+    end
+  end
+  
+  def self.get_remote_google_events(options={})
+    google_events = Google.new.pull_events(options)
+    if google_events.respond_to?(:each)
+      google_events.each do |event| 
+        e = Event.create(event)
+        e.update_attributes(:status => 'pending', :url => options[:url])
+        e.save!
+      end
     end
   end
 
@@ -81,7 +106,7 @@ class Event < ActiveRecord::Base
   def self.remove_remotely_deleted_events(remote_events)
     return if remote_events.nil?
     remotely_deleted_ids = Event.get_remotely_deleted_ids(remote_events)
-    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy_all }
+    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy }
   end
 
   # This only applies to present and upcoming events. Past events cannot be deleted
@@ -296,13 +321,6 @@ class Event < ActiveRecord::Base
       "#{start_time} to #{end_time}"
     else
       "#{start_time}"
-    end
-  end
-  
-  def self.update_statuses
-    upcoming_or_pending = Event.where.not(status: 'past')
-    upcoming_or_pending.each do |event|
-      event.update(status: 'past') if event.start < DateTime.now
     end
   end
   

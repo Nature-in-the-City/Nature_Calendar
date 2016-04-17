@@ -15,7 +15,7 @@
             Admin Panel
           %ul.dropdown-menu
             %li
-              = link_to "Sign Out", destroy_user_session_path, :method => :get
+              = link_to "Sign Out", destroy_user_session_path + "#page", :method => :get
             %li
               = link_to "Change your password", edit_user_registration_path
 
@@ -23,22 +23,18 @@
               %li
                 = link_to "Create new account", new_account_path, :method => :get
               %li
-                = link_to "Delete existing accounts", edit_account_path("root"), :method => :get
+                = link_to "Edit existing accounts", edit_account_path("root"), :method => :get
     - else
-      = link_to('Sign In', new_user_session_path)
+      = link_to 'Sign In', new_user_session_path, :method => :get
     
     #event_creation_box
       - if user_signed_in?
         = form_tag new_event_path, method: :get, id: 'new_event', format: :js, remote: true do
           -# this path does an ajax GET to the event controller action "new"
-          = submit_tag '+', class: ['main_organization', 'event_creation_button']
+          = submit_tag 'Add Event', class: ['main_organization', 'event_creation_button']
 
-        = form_tag third_party_events_path, method: :get, id: 'third_party', format: :js, remote: true  do
-          -# this path does an ajax GET to the event controller action "third_party"
-          = submit_tag '+ 3rd Party', class: ['event_creation_button','third_party_organization']
-          
       - else
-        = form_tag new_event_path, method: :get, id: 'suggest_event', format: :js, remote: true do
+        = form_tag suggest_new_event_path, method: :get, id: 'suggest_event', format: :js, remote: true do
           -# this path does an ajax GET to the event controller action "new"
           = hidden_field_tag 'suggested_event', 'True'
           = submit_tag 'Suggest Event', class: ['main_organization', 'event_creation_button', 'button_right']
@@ -62,12 +58,6 @@
           %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
             %rect{:width => 15, :height => 15, :fill => "#86B404"}
 
-        %td{:class => "color_category"} Plant
-        
-        %td{:class => "color_cube"}
-          %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
-            %rect{:width => 15, :height => 15, :fill => "#FAAC58"}
-
         %td{:class => "color_category"} Volunteer
         
         %td{:class => "color_cube"}
@@ -80,7 +70,7 @@
           %svg{:xmlns => "http://www.w3.org/2000/svg", :version => "1.1", :width => 15, :height => 15}
             %rect{:width => 15, :height => 15, :fill => "#F781BE"}
 
-        %td{:class => "color_category"} Performance
+        %td{:class => "color_category"} Play
           
           
 
@@ -138,7 +128,6 @@
         = render partial: 'sync_panel'
       #add_cal.container.col-sm-4
         %h3 Add New Calendar
-        = form_tag syncs_path do
-          = label :sync, :url, "URL"
-          = text_field :sync, :url
-          = submit_tag 'Add Calendar'
+        = form_tag syncs_path  + "#sync_status" do
+          = text_field :sync, 'url', label: 'URL', class: 'edit_text_field', placeholder: "Meetup or Google Calendar Link", style: 'width:20em;'
+          = submit_tag 'Add Calendar', class: 'button'
