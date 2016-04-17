@@ -679,4 +679,28 @@ RSpec.describe Event, type: :model do
     it { expect{ pull_google }.not_to raise_error }
   end
   
+  describe ".get_stored_past_third_party_ids" do
+    before(:each) do
+      allow(Event).to receive_message_chain(:where, :each_with_object).and_return([])
+    end
+    let(:action) { Event.get_stored_past_third_party_ids }
+    it { expect{ action }.not_to raise_error }
+  end
+  
+   describe ".store_third_party_events" do
+    before(:each) do
+      allow(Event).to receive(:process_remote_events)
+      allow(Event).to receive(:get_remote_events)
+    end
+    let(:action) { Event.store_third_party_events({}) }
+    it { expect{ action }.not_to raise_error }
+  end
+  
+  describe "#get_remote_rsvps" do
+    before(:each) do
+      allow(Meetup).to receive_message_chain(:new, :pull_rsvps)
+    end
+    let(:event_obj) { create(:event) }
+    it { expect{ event_obj.get_remote_rsvps }.not_to raise_error }
+  end
 end
