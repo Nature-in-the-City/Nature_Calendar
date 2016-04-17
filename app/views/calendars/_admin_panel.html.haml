@@ -4,7 +4,7 @@
 %br
 - if @event_relations[tab] && @event_relations[tab]
   - @event_relations[tab].each do |event|
-    .container{ id: "#{event.id}_title" }
+    .container-fluid{ id: "#{event.id}_title" }
       .col-sm-8
         %h3= "#{event.name}"
       .col-sm-4

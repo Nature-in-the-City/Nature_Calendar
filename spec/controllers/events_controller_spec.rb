@@ -226,14 +226,14 @@ describe EventsController do
     it 'should not throw an error' do
       expect{ update_event }.not_to raise_error
     end
-    #context "when #update_attributes throws an error" do
-     # before(:each) do
-     #   allow_any_instance_of(Event).to receive(:update_attributes).and_raise(StandardError)
-     # end
-      #it "should not throw an error" do
-       # expect{ update_event }.not_to raise_error
-      #end
-    #end
+    context "when #update_attributes throws an error" do
+      before(:each) do
+        allow_any_instance_of(Event).to receive(:update_attributes).and_raise(StandardError)
+      end
+      it "should not throw an error" do
+        expect{ update_event }.not_to raise_error
+      end
+    end
   end
   
   describe "#assign_organization" do

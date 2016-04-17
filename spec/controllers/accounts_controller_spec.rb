@@ -35,10 +35,10 @@ describe AccountsController do
       sign_in @root
     end
     context 'when given valid params' do
-      let(:valid_creation) { post :create, user: { email: "jon@doe.edu", password: "password", reset_password_token: "token" } }
+      let(:valid_creation) { post :create, user: { email: "jon@doe.edu", password: "password", reset_password_token: "token", level: 1 } }
       it 'should redirect to calendar_path with success message' do
         expect(valid_creation).to redirect_to calendar_path
-        expect(flash[:notice]).to eql("Account successfully created")
+        expect(flash[:notice]).to eql("jon@doe.edu successfully created!")
       end
     end
     context 'when given invalid params' do
@@ -56,11 +56,15 @@ describe AccountsController do
   end
   
   describe 'GET #edit' do
-    let(:edit_action) { get :edit, id: 'root' }
+    let(:edit_action) { get :edit, id: 1 }
     
     before(:each) do
       sign_in @root
     end
+    after(:each) do
+      sign_out @root
+    end
+    
     context "when no non-admin users exist" do
       it 'should render edit page with flash' do
         expect(edit_action).to render_template(:edit)
@@ -73,12 +77,22 @@ describe AccountsController do
       end
       it { expect(edit_action).to render_template(:edit) }
     end
+    context "when there are no users" do
+      before(:each) do
+        allow(User).to receive(:all).and_return(User.none)
+      end
+      it "should set flash" do
+        expect{ edit_action }.not_to raise_error
+        expect(flash.now[:notice]).not_to be_nil
+      end
+    end
   end
   
   describe 'DELETE #destroy' do
     before(:each) do
       sign_in @root
     end
+    
     context 'when the account being destroyed does not exist' do
       let(:destroy_100) { delete :destroy, { id: 100 } }
       
@@ -90,7 +104,6 @@ describe AccountsController do
         expect(flash[:notice]).to eql("Account does not exist")
       end
     end
-
     context 'when the account being destroyed does exist' do
       let(:destroy_3) { delete :destroy, { id: 3 } }
       
@@ -108,4 +121,27 @@ describe AccountsController do
       end
     end
   end
+  
+  describe 'PATCH/PUT #update' do
+    before(:each) do
+      @basic_account = create(:user, email: 'user@example.com')
+      @second_account = create(:user, email: 'user2@example.com', level: 1)
+      @account_id = @basic_account.id
+      @second_id = @second_account.id
+    end
+    let(:patch_event) { patch :update, id: @account_id }
+    let(:put_event) { put :update, id: @second_id }
+    
+    before(:each) do
+      sign_in @root
+    end
+    
+    context "when using 'put' or patch" do
+      it 'should not error' do
+        expect{ put_event }.not_to raise_error
+        expect{ patch_event }.not_to raise_error
+      end
+    end
+  end
+  
 end

@@ -337,13 +337,18 @@ RSpec.describe Event, type: :model do
   end
   
   describe ".get_events_by_status" do
-    let(:each_status) { %w(past pending approved rejected) }
+    let(:each_status) { %w(pending approved rejected) }
+    let(:each_filter) { %w(approved family_friendly free hike play learn volunteer past upcoming) }
     it 'does not raise errors for any status' do
       each_status.each do |status|
-        expect { Event.get_events_by_status(status) }.not_to raise_error
+        each_filter.each do |filter|
+          expect { Event.get_events_by_status(status, filter) }.not_to raise_error
+        end
+        expect { Event.get_events_by_status(status, "") }.not_to raise_error
       end
     end
   end
+   
   
   describe ".get_default_group_name" do
     it { expect{ Event.get_default_group_name }.not_to raise_error }
@@ -522,16 +527,16 @@ RSpec.describe Event, type: :model do
   
   describe "#tag_string" do
     before(:all) do
-      @with_tags = Event.new(name: "Event with tags", family_friendly: true, hike: true, free: true, start: DateTime.now + 1)
+      @with_tags = Event.new(name: "Event with tags", family_friendly: true, free: true, category:"hike", start: DateTime.now + 1)
       @without_tags = Event.new(name: "Event without tags", start: DateTime.now + 1)
     end
     context "when an event has no tags" do
       it "should not error" do
         expect{@without_tags.tag_string}.not_to raise_error
       end
-      it "should return 'None'" do
+      it "should return 'Uncategorized'" do
         value = @without_tags.tag_string
-        expect(value).to eql("None")
+        expect(value).to eql("Uncategorized")
       end
     end
     context "when an event does have tags" do
@@ -657,4 +662,21 @@ RSpec.describe Event, type: :model do
     it { expect{ action }.to change{ event_to_update.url }.from(nil).to(updated_event.url) }
     it { expect{ action }.not_to change{ event_to_update.updated } }
   end
+  
+  describe ".get_remote_meetup/google_events" do
+    before(:each) do
+        @event1 = build(:event, name: "event1", start: DateTime.now + 2)
+        @event2 = build(:event, name: "event2", start: DateTime.new + 3)
+        allow(Meetup).to receive_message_chain(:new, :pull_events).and_return([@event1, @event2])
+        
+        @google_event1 = build(:event, name: "Simple google event", start: DateTime.now + 2)
+        @google_event2 = build(:event, name: "Another google event", start: DateTime.new + 3)
+        allow(Google).to receive_message_chain(:new, :pull_events).and_return([@google_event1, @google_event2])
+    end
+    let(:pull_google) { Event.get_remote_google_events({ url: "www.google.com/natureinthecity", group_urlname: '12abc' }) }
+    let(:pull_meetup) { Event.get_remote_meetup_events({ url: "www.meetup.com/natureinthecity", group_urlname: 'abc123' }) }
+    it { expect{ pull_meetup }.not_to raise_error }
+    it { expect{ pull_google }.not_to raise_error }
+  end
+  
 end

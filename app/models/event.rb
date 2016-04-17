@@ -71,24 +71,33 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_remote_meetup_events(options={})
-    meetup_events = Meetup.new.pull_events({group_urlname: options[:group_urlname]})
-    if meetup_events.respond_to?(:each)
-      meetup_events.each do |event| 
-        e = Event.create(event)
-        e.update_attributes(:status => 'pending', :url => options[:url])
-        e.save!
+    begin
+      meetup_events = Meetup.new.pull_events({group_urlname: options[:group_urlname]})
+      if meetup_events.respond_to?(:each)
+        meetup_events.each do |event| 
+          e = Event.create(event)
+          e.update_attributes(:status => 'pending', :url => options[:url])
+          e.save!
         end
+      end
+    rescue Exception => e
+      @msg = " Unable to pull Meetup events: " + e.to_s
+      puts @msg
     end
   end
   
   def self.get_remote_google_events(options={})
-    google_events = Google.new.pull_events(options)
-    if google_events.respond_to?(:each)
-      google_events.each do |event| 
-        e = Event.create(event)
-        e.update_attributes(:status => 'pending', :url => options[:url])
-        e.save!
+    begin
+      google_events = Google.new.pull_events(options)
+      if google_events.respond_to?(:each)
+        google_events.each do |event| 
+          e = Event.create(event)
+          e.update_attributes(:status => 'pending', :url => options[:url])
+          e.save!
+        end
       end
+    rescue Exception => e
+      @msg = " Unable to pull Google events: " + e.to_s
     end
   end
 
