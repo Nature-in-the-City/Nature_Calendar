@@ -16,50 +16,50 @@
           %tr
             %td Start
             %td
-              %a{id: "#{event.id}_start", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %0d, %Y, %r")
+              %a.editable{id: "#{event.id}_start", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.start.strftime("%b %0d, %Y, %r")
           %tr
             %td End
             %td
-              %a{id: "#{event.id}_end", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %0d, %Y, %r")
+              %a.editable{id: "#{event.id}_end", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.end.strftime("%b %0d, %Y, %r")
           %tr
             %td Location
             %td
-              %a{id: "#{event.id}_location", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
+              %a.editable{id: "#{event.id}_location", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
           %tr
             %td Cost
             %td
-              %a{id: "#{event.id}_cost", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
+              %a.editable{id: "#{event.id}_cost", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= "$#{event.cost}"
           %tr
             %td Tags
             %td
-              %a{id: "#{event.id}_tags", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.tag_string}"
+              %a.editable{id: "#{event.id}_tags", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.tag_string}"
     .col-sm-4
       Description
       .container-fluid
-        %a{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.description
+        %a.editable{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.description
     .col-sm-4
       %table.table.table-striped.table-bordered.table-hover.table-condensed
         %tbody
           %tr
             %td Organization
             %td
-              %a{id: "#{event.id}_organization", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.organization
+              %a.editable{id: "#{event.id}_organization", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.organization
           %tr
             %td Contact
             %td
-              %a{id: "#{event.id}_contact", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.contact_first} #{event.contact_last}"
+              %a.editable{id: "#{event.id}_contact", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => "#"}= "#{event.contact_first} #{event.contact_last}"
           %tr
             %td Phone
             %td
-              %a{id: "#{event.id}_phone", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_phone
+              %a.editable{id: "#{event.id}_phone", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_phone
           %tr
             %td Email
             %td
-              %a{id: "#{event.id}_email", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_email
+              %a.editable{id: "#{event.id}_email", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.contact_email
           %tr
             %td Website
             %td
-              %a{id: "#{event.id}_website", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.url
+              %a.editable{id: "#{event.id}_website", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => "#"}= event.url
     .row-fluid
       .col-sm-6.container
       .col-sm-6.container
@@ -111,28 +111,10 @@
 %script{:src => "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"}
 :javascript
   $.fn.editable.defaults.mode = 'inline';
+  $.fn.editable.defaults.showbuttons = false;
   $(document).ready(function() {
-    var show_btns = $("a:contains('Show')");
-    show_btns.each(function(index){
-      $(this).on("click", function() {
-        $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
-      });
+    $("a:contains('Show')").on("click", function() {
+      $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
     });
-    
-    var event_details = $("[id$='details']")
-    for (i = 0; i < event_details.length; i++) {
-      event_detail = event_details[i]
-      event_id = event_detail.id.substr(0,event_detail.id.indexOf('_'))
-      $('#' + event_id + '_start').editable();
-      $('#' + event_id + '_end').editable();
-      $('#' + event_id + '_location').editable();
-      $('#' + event_id + '_cost').editable();
-      $('#' + event_id + '_tags').editable();
-      $('#' + event_id + '_description').editable();
-      $('#' + event_id + '_organization').editable();
-      $('#' + event_id + '_contact').editable();
-      $('#' + event_id + '_phone').editable();
-      $('#' + event_id + '_email').editable();
-      $('#' + event_id + '_website').editable();
-    }
+    $('.editable').editable();
   });
