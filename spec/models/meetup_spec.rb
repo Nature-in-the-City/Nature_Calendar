@@ -710,7 +710,25 @@ describe Meetup do
       end
     end
   end
-
-
+  
+  describe "#get_venues" do
+    before(:each) do
+      allow(HTTParty).to receive(:get)
+      allow(Meetup).to receive(:process_result)
+    end
+    let(:obj) { Meetup.new }
+    it { expect{ obj.get_venues }.not_to raise_error }
+  end
+  
+  describe ".build_date" do
+    it { expect(Meetup.build_date(nil)).to be_nil }
+    it { expect(Meetup.build_date(Time.now)).not_to be_nil }
+  end
+  
+  describe ".get_milliseconds" do
+    it { expect(Meetup.get_milliseconds(nil)).to be_nil }
+    it { expect(Meetup.get_milliseconds(Time.now)).not_to be_nil }
+  end
+  
 end
 
