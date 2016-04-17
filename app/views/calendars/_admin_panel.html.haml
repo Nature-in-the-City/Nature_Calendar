@@ -4,94 +4,97 @@
   = "There are no #{tab} events"
 
 - @event_relations[tab].each do |event|
-  .row{ id: "#{event.id}_title" }
-    .col-sm-6.nopadding
-      %h3= "#{event.name}"
-    .col-sm-2.nopadding
-      %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
-        Show More
-        %i.fa.fa-angle-down
-    .col-sm-4.nopadding
-  .row{ id: "#{event.id}_details", class: "collapse" }
-    .col-sm-4
-      %table.table.table-striped.table-bordered.table-hover.table-condensed
-        %tbody
-          %tr
-            %td Start
-            %td
-              %a.editable{id: "#{event.id}_start", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.start.strftime("%b %0d, %Y, %r")
-          %tr
-            %td End
-            %td
-              %a.editable{id: "#{event.id}_end", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.end.strftime("%b %0d, %Y, %r")
-          %tr
-            %td Location
-            %td
-              %a.editable{id: "#{event.id}_location", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
-          %tr
-            %td Cost
-            %td
-              %a.editable{id: "#{event.id}_cost", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "$#{event.cost}"
-          %tr
-            %td Tags
-            %td
-              %a.editable{id: "#{event.id}_tags", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "#{event.tag_string}"
-    .col-sm-4
-      Description
-      .container-fluid
-        %a.editable{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.description
-    .col-sm-4
-      %table.table.table-striped.table-bordered.table-hover.table-condensed
-        %tbody
-          %tr
-            %td Organization
-            %td
-              %a.editable{id: "#{event.id}_organization", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.organization
-          %tr
-            %td Contact
-            %td
-              %a.editable{id: "#{event.id}_contact", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "#{event.contact_first} #{event.contact_last}"
-          %tr
-            %td Phone
-            %td
-              %a.editable{id: "#{event.id}_phone", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.contact_phone
-          %tr
-            %td Email
-            %td
-              %a.editable{id: "#{event.id}_email", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.contact_email
-          %tr
-            %td Website
-            %td
-              %a.editable{id: "#{event.id}_website", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.url
+  .container{ id: "#{event.id}_title" }
+    .row
+      .col-sm-6.nopadding
+        %h3= "#{event.name}"
+      .col-sm-2.nopadding
+        %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
+          Show More
+          %i.fa.fa-angle-down
+      .col-sm-4.nopadding
+  .container{ id: "#{event.id}_details", class: "collapse" }
+    .row
+      .col-sm-4
+        %table.table.table-striped.table-bordered.table-hover.table-condensed
+          %tbody
+            %tr
+              %td Start
+              %td
+                %a.editable{id: "#{event.id}_start", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.start.strftime("%b %0d, %Y, %r")
+            %tr
+              %td End
+              %td
+                %a.editable{id: "#{event.id}_end", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.end.strftime("%b %0d, %Y, %r")
+            %tr
+              %td Location
+              %td
+                %a.editable{id: "#{event.id}_location", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
+            %tr
+              %td Cost
+              %td
+                %a.editable{id: "#{event.id}_cost", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "$#{event.cost}"
+            %tr
+              %td Tags
+              %td
+                %a.editable{id: "#{event.id}_tags", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "#{event.tag_string}"
+      .col-sm-4
+        Description
+        .container-fluid
+          %a.editable{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.description
+      .col-sm-4
+        %table.table.table-striped.table-bordered.table-hover.table-condensed
+          %tbody
+            %tr
+              %td Organization
+              %td
+                %a.editable{id: "#{event.id}_organization", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.organization
+            %tr
+              %td Contact
+              %td
+                %a.editable{id: "#{event.id}_contact", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= "#{event.contact_first} #{event.contact_last}"
+            %tr
+              %td Phone
+              %td
+                %a.editable{id: "#{event.id}_phone", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.contact_phone
+            %tr
+              %td Email
+              %td
+                %a.editable{id: "#{event.id}_email", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.contact_email
+            %tr
+              %td Website
+              %td
+                %a.editable{id: "#{event.id}_website", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.url
     .row-fluid
       .col-sm-4
-        %button.btn.btn-success{:type => "button"} Approve %i.fa.fa-check
+        %button.btn.btn-success{:type => "button"}
+          Approve
+          %i.fa.fa-check
       .col-sm-4
-        %button.btn.btn-danger{:type => "button"} Reject
+        %button.btn.btn-info{:type => "button"}
+          Edit
+          %i.fa.fa-times-edit
+      .col-sm-4
+        %button.btn.btn-danger{:type => "button"}
+          Reject
+          %i.fa.fa-times-circle
     .row-fluid
-      - if !tab.eql? "Past" 
-        .container-fluid.col-sm-4{ id: "accept_#{event.id}" }
+      .container-fluid.col-sm-6
+      .container-fluid.col-sm-2{ id: "edit_#{event.id}" }
+        %a{ role: "button", id: "#{event.id}_editButton", class: "button",
+            href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
+      - if tab.eql? "Pending" or tab.eql? "Upcoming"
+        .container-fluid.col-sm-2{ id: "accept_#{event.id}" }
           = form_tag edit_event_path(event.id) + '#admin', :method => 'get'  do
-            -# this will call editing
-            - if tab.eql? "Upcoming"
-              = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
-            - else
+            -# this will call accepting
               = submit_tag 'accept'
-        .container-fluid.col-sm-4{ id: "edit_#{event.id}" }
-          %a{ role: "button", id: "#{event.id}_editButton", class: "button",
-              href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
-        - if tab.eql? "Rejected"
-          .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
-            = form_tag event_path(event.id) + '#admin', :method => 'delete' do
-              -# this will permanently delete an event
-              = submit_tag 'delete', data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
-        - else
-          .container-fluid.col-sm-4{ id: "reject_#{event.id}" }
-            = form_tag edit_event_path(event.id), :method => 'get' do
-              -# this will move an event to the rejected area
-              = submit_tag 'reject'
+        .container-fluid.col-sm-4{ id: "reject_#{event.id}" }
+          = form_tag edit_event_path(event.id), :method => 'get' do
+            -# this will move an event to the rejected area
+            = submit_tag 'reject'
       - else
-        .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
+        .container-fluid.col-sm-2
+        .container-fluid.col-sm-2{ id: "delete_#{event.id}" }
           = form_tag event_path(event.id) + '#admin', :method => 'delete' do
             -# this will permanently delete an event
             = submit_tag 'delete', data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
