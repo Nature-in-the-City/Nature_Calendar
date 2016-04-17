@@ -20,8 +20,8 @@ class Event < ActiveRecord::Base
   scope :play, -> { where(category: "play") }
   scope :learn, -> { where(category: "learn") }
   scope :volunteer, -> { where(category: "volunteer") }
-  scope :past, -> { where("end < ? ", DateTime.now) }
-  scope :upcoming, -> { where("end > ?", DateTime.now) }
+  scope :past, -> { where(%q{"end" < ?}, DateTime.now) }
+  scope :upcoming, -> { where(%q{"end" > ?}, DateTime.now) }
 
   def as_json(options={})
     {
