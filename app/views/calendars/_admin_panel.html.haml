@@ -12,7 +12,7 @@
           Show More
           %i.fa.fa-angle-down
     
-    .container{ id: "#{event.id}_details", class: "collapse" }
+    .container-fluid{ id: "#{event.id}_details", class: "collapse" }
       #top{ class: "row" }
         #date.col-sm-2
           Date
@@ -166,7 +166,7 @@
           .col-sm-4.container-fluid
             %a{ role: "button", id: "#{event.id}_CancelEdit", class: "button",
                 href: "##{event.id}_edit", data: { toggle: "collapse" } } Cancel
-    %br
+          %br
 - else
   %ul
     %li= "There are no #{tab} events"
