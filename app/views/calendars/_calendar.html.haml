@@ -3,9 +3,9 @@
 #content_box
 
 #main
-  - flash.each do |_, msg|
+  - if flash[:notice]
     %div
-      = msg
+      = flash[:notice]
 
   #title_box
     - if user_signed_in?
@@ -86,7 +86,7 @@
 
     .clear
 
-#admin_panel
+#admin
   - if user_signed_in?
     %br
     %h2

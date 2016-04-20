@@ -1,5 +1,8 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
+  before_action :is_root
+  
+  
   
   def calendar_pull(url)
     @name = url.split("/")[-1]
@@ -27,25 +30,31 @@ class SyncsController < ApplicationController
   
   def create
     perform_create_transaction
-    flash[:notice] = @msg
+    flash[:sync] = @msg
     handle_response
   end
     
   def perform_create_transaction
-    begin
-      @sync = Sync.new(sync_params)
-      events = calendar_pull(params[:sync][:url])
-      if events.respond_to?(:each)
-        events.each do |event|
-          e = Event.new(event)
-          e.save!
+    url = params[:sync][:url]
+    if Sync.exists?(:url => url)
+      @msg = "'#{url}' already synced!"
+    else
+      begin
+        @sync = Sync.new(sync_params)
+        events = calendar_pull(url)
+        if events.respond_to?(:each)
+          events.each do |event|
+            e = Event.new(event)
+            e.update_attributes(:status => 'pending', :url => url)
+            e.save!
+          end
         end
+        @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
+        @sync.save!
+        @msg = "Successfully synced '#{url}'!"
+      rescue Exception => e
+        @msg = "Could not sync '#{url}': " + e.to_s
       end
-      @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
-      @sync.save!
-      @msg = "Successfully synced '#{@sync.url}'!"
-    rescue Exception => e
-      @msg = "Could not sync '#{@sync.url}': " + e.to_s
     end
   end
     
@@ -68,6 +77,14 @@ class SyncsController < ApplicationController
 
   def sync_params
     params.require(:sync).permit(:organization, :url, :last_sync, :calendar_id)
+  end
+  
+  def is_root
+    #if current_user.respond_to?('root?'); puts current_user.root?; end
+    if not current_user.respond_to?('root?') or not current_user.root?
+      flash[:notice] = "You must be root admin to access this action"
+      redirect_to calendar_path
+    end
   end
   
 end

@@ -97,7 +97,7 @@ class Event < ActiveRecord::Base
 
   def self.get_upcoming_events
     #Event.get_remote_events({ status: 'upcoming' })
-    Event.Upcoming
+    Event.upcoming
   end
 
   def self.get_past_events(from=nil, to=nil)

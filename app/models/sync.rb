@@ -16,8 +16,4 @@ class Sync < ActiveRecord::Base
   def needs_syncing?(current)
     last_sync < current
   end
-  
-  def self.get_events(options={})
-  end
-  
 end
