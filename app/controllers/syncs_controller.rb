@@ -37,9 +37,7 @@ class SyncsController < ApplicationController
       events = calendar_pull(params[:sync][:url])
       if events.respond_to?(:each)
         events.each do |event|
-          e = Event.new(event)
-          e.update_attributes(:status => 'pending')
-          e.save!
+          Event.new(event)
         end
       end
       @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
