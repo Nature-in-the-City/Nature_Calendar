@@ -122,7 +122,7 @@
           %br
 %br
 
-#sync_status
+#sync
   - if user_signed_in?
     %h2
       %strong Sync Status
@@ -134,7 +134,7 @@
         = render partial: 'sync_panel'
       #add_cal.container.col-sm-4
         %h3 Add New Calendar
-        = form_tag syncs_path  + "#sync_status" do
+        = form_tag syncs_path  + "#sync" do
           = text_field :sync, 'url', label: 'URL', class: 'edit_text_field', placeholder: "Meetup or Google Calendar Link", style: 'width:20em;'
           = submit_tag 'Add Calendar', class: 'button'
 

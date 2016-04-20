@@ -1,16 +1,20 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
   
-  def calendar_type(url)
-    name = url.split("/")[-1]
+  def calendar_pull(url)
+    @name = url.split("/")[-1]
     if url =~ /meetup.com/
-      Event.get_remote_meetup_events({group_urlname: name, url: url})
+      begin
+        Meetup.new.pull_events({group_urlname: @name})
+      rescue Exception => e
+        @msg = " Unable to pull Meetup events: " + e.to_s
+        puts @msg
+      end
     elsif url =~ /google/
-      Event.get_remote_google_events({calendar_id: name, url: url})
+      @name
     else
       raise Exception, 'Invalid URL', caller
     end
-    name
   end
 
   def show
@@ -30,8 +34,15 @@ class SyncsController < ApplicationController
   def perform_create_transaction
     begin
       @sync = Sync.new(sync_params)
-      @group = calendar_type(params[:sync][:url])
-      @sync.update_attributes(:organization => @group.gsub("-", " "), :last_sync => DateTime.now())
+      events = calendar_pull(params[:sync][:url])
+      if events.respond_to?(:each)
+        events.each do |event|
+          e = Event.new(event)
+          e.update_attributes(:status => 'pending')
+          e.save!
+        end
+      end
+      @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
       @sync.save!
       @msg = "Successfully synced '#{@sync.url}'!"
     rescue Exception => e
@@ -59,4 +70,5 @@ class SyncsController < ApplicationController
   def sync_params
     params.require(:sync).permit(:organization, :url, :last_sync, :calendar_id)
   end
+  
 end
