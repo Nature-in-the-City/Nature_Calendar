@@ -1,13 +1,5 @@
 -# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
 
-<<<<<<< HEAD
-%br
-%br
-- if @event_relations[tab] && @event_relations[tab]
-  - @event_relations[tab].each do |event|
-    .container-fluid{ id: "#{event.id}_title" }
-      .col-sm-8
-=======
 - if @event_relations[tab].empty?
   = "There are no #{tab} events"
 
@@ -15,81 +7,11 @@
   .container{ id: "#{event.id}_title" }
     .row
       .col-sm-6.nopadding
->>>>>>> 1392fa028928e0b0308cbbf4a3f400dcdd640561
         %h3= "#{event.name}"
       .col-sm-2.nopadding
         %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
           Show More
           %i.fa.fa-angle-down
-<<<<<<< HEAD
-    
-    .container{ id: "#{event.id}_details", class: "collapse" }
-      #top{ class: "row" }
-        #date.col-sm-2
-          Date
-          .container
-            = event.start.strftime("%b %-d, %Y")
-        #cost.col-sm-2
-          Cost
-          .container= "$#{event.cost}"
-        #tags.col-sm-3.container
-          Tags
-          .containers
-            %p="#{event.tag_string}"
-        #contact_1.col-sm-3.container
-          Contact Info
-          - if event.contact_first && event.contact_first.length > 0
-            .container="Name: #{event.contact_last}, #{event.contact_first}"
-          - else
-            .container="Name:"
-          .container= "Phone: #{event.contact_phone}"
-
-      #bottom{ class: "row container" }
-        #time{ id: "_Time", class: "container col-sm-2" }
-          Time
-          .container
-            #start="Start: #{event.start.strftime("%r")}"
-            #end= "End: #{event.end.strftime("%r")}"
-        #location.col-sm-2.container{ id: "_Location" }
-          Location
-          .container
-            #street= "#{event.street_address}"
-            #city= "#{event.city_state_zip}"
-        #description.col-sm-3.container{ id: "_Description" }
-          Description
-          .container-fluid
-            %p=event.description
-        #contact_2.col-sm-3.container{ id: "val_Email" }
-          .container
-            #email= "Email: #{event.contact_email}"
-            #org= "Org: #{event.organization}"
-          - if !tab.eql? "Past" 
-            .container-fluid.col-sm-4{ id: "accept_#{event.id}" }
-              = form_tag edit_event_path(event.id) + '#admin', :method => 'get'  do
-                -# this will call editing
-                - if tab.eql? "Upcoming"
-                  = submit_tag 'accept', disabled: 'true', class: [ 'disabled' ]
-                - else
-                  = submit_tag 'accept'
-            .container-fluid.col-sm-4{ id: "edit_#{event.id}" }
-              %a{ role: "button", id: "#{event.id}_editButton", class: "button",
-                  href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
-            - if tab.eql? "Rejected"
-              .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
-                = form_tag event_path(event.id) + '#admin', :method => 'delete' do
-                  -# this will permanently delete an event
-                  = submit_tag 'delete', data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
-            - else
-              .container-fluid.col-sm-4{ id: "reject_#{event.id}" }
-                = form_tag edit_event_path(event.id) + '#admin', :method => 'get' do
-                  -# this will move an event to the rejected area
-                  = submit_tag 'reject'
-          - else
-            .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
-              = form_tag event_path(event.id) + '#admin', :method => 'delete' do
-                -# this will permanently delete an event
-                = submit_tag 'delete', data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
-=======
       .col-sm-4.nopadding
   .container{ id: "#{event.id}_details", class: "collapse" }
     .row
@@ -176,7 +98,6 @@
           = form_tag event_path(event.id) + '#admin', :method => 'delete' do
             -# this will permanently delete an event
             = submit_tag 'delete', data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
->>>>>>> master
   
     %br
     .container-fluid{ id: "#{event.id}_edit", class: "collapse" }
