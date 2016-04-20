@@ -96,11 +96,13 @@ class Event < ActiveRecord::Base
   end
 
   def self.get_upcoming_events
-    Event.get_remote_events({ status: 'upcoming' })
+    #Event.get_remote_events({ status: 'upcoming' })
+    Event.Upcoming
   end
 
   def self.get_past_events(from=nil, to=nil)
-    Event.get_remote_events({ status: 'past' }.merge Event.date_range(from, to))
+    #Event.get_remote_events({ status: 'past' }.merge Event.date_range(from, to))
+    Event.past
   end
 
   def self.get_upcoming_third_party_events
@@ -145,22 +147,25 @@ class Event < ActiveRecord::Base
     upcoming_events = Event.get_upcoming_events
     past_events = Event.get_past_events
     remote_events = upcoming_events && past_events ? upcoming_events + past_events : nil
-    process_remote_events(remote_events)
+    #process_remote_events(remote_events)
+    remote_events
   end
 
   def self.synchronize_past_events
-    group_events = Event.get_past_events('-1d', '')
-    third_party_events = Event.get_past_third_party_events('-1d', '')
-    remote_events = group_events && third_party_events ? group_events + third_party_events : nil
-    process_remote_events(remote_events)
+    #group_events = Event.get_past_events('-1d', '')
+    #third_party_events = Event.get_past_third_party_events('-1d', '')
+    #remote_events = group_events && third_party_events ? group_events + third_party_events : nil
+    #process_remote_events(remote_events)
+    Event.get_past_events('-1d', '')
   end
 
   def self.synchronize_upcoming_events
-    group_events = Event.get_upcoming_events
-    third_party_events = Event.get_upcoming_third_party_events
-    remote_events = group_events && third_party_events ? group_events + third_party_events : nil
-    Event.remove_remotely_deleted_events(remote_events)
-    process_remote_events(remote_events)
+    #group_events = Event.get_upcoming_events
+    #third_party_events = Event.get_upcoming_third_party_events
+    #remote_events = group_events && third_party_events ? group_events + third_party_events : nil
+    #Event.remove_remotely_deleted_events(remote_events)
+    #process_remote_events(remote_events)
+    Event.all
   end
 
   def self.get_default_group_name
