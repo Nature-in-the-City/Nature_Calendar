@@ -74,10 +74,10 @@ class Event < ActiveRecord::Base
     begin
       meetup_events = Meetup.new.pull_events({group_urlname: options[:group_urlname]})
       if meetup_events.respond_to?(:each)
-        meetup_events.each do |event| 
-          e = Event.create(event)
+        meetup_events.each do |event|
+          e = Event.new(event)
           e.update_attributes(:status => 'pending', :url => options[:url])
-          e.save!
+          e.save()
         end
       end
     rescue Exception => e
@@ -91,7 +91,7 @@ class Event < ActiveRecord::Base
       google_events = Google.new.pull_events(options)
       if google_events.respond_to?(:each)
         google_events.each do |event| 
-          e = Event.create(event)
+          e = Event.new(event)
           e.update_attributes(:status => 'pending', :url => options[:url])
           e.save!
         end

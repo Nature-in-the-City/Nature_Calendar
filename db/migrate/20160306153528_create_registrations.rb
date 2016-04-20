@@ -3,6 +3,7 @@ class CreateRegistrations < ActiveRecord::Migration
     create_table :registrations do |t|
       t.integer   :event_id
       t.integer   :guest_id
+      t.integer   :invited_guests
       t.datetime  :updated
       t.timestamps
     end
