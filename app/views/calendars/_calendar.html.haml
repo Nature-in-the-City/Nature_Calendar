@@ -42,8 +42,8 @@
     .clear
         
   = form_for :event, :url => { :action => "show", :anchor => 'page' }, :method => "get", :html => {:id => 'filter_form'} do |f|
-    %h4 Filter by: 
-    = f.select(:filter, options_for_select([['Family Friendly', 'family_friendly'], ['Free', 'free']], :selected => @filter), {:include_blank=> 'No Filter', :class => 'filter_dropdown'}, onchange: "$('#filter_form').submit();")
+    %h4 Filter: 
+    = f.select(:filter, options_for_select([['Family Friendly', 'family_friendly'], ['Free', 'free']], :selected => @filter), {:include_blank=> 'None', :class => 'filter_dropdown'}, onchange: "$('#filter_form').submit();")
     
   #color_keys
     %table
