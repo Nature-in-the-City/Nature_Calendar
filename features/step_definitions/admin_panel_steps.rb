@@ -267,3 +267,31 @@ end
 Then /^I should see the (Sign Out|Sign In) button$/ do |direction|
   
 end
+
+Given(/^I see the search bar$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^I fill in "([^"]*)" in "([^"]*)"$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^I click "([^"]*)"$/) do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I should see "([^"]*)" in the results panel$/) do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I should see "([^"]*)" in the "([^"]*)"$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I should see events starting with today$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^I fill in "([^"]*)"$/) do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
