@@ -1,4 +1,4 @@
-@javascript
+@sync @javascript
 Feature:
   As an admin user
   If I have synced a google or meetup calendar

@@ -14,7 +14,7 @@ Background:
   And I select "No Filter" from "event_filter"
   
 Scenario: Filter by family friendly
-  And I select "Family Friendly" from "event_filter"
+  And I select "Family Friendly" from the "event_filter"
   And I press the "Upcoming" tab
   And the month is March 2016
   Then I should see "Market Street"

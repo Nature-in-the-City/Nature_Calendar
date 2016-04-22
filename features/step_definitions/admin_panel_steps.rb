@@ -295,3 +295,11 @@ end
 When(/^I fill in "([^"]*)"$/) do |arg1|
   pending # Write code here that turns the phrase above into concrete actions
 end
+
+Then(/^I should definitely see the event "([^"]*)" on "([^"]*)"$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^I select "([^"]*)" from the "([^"]*)"$/) do |arg1, arg2|
+  pending # Write code here that turns the phrase above into concrete actions
+end
