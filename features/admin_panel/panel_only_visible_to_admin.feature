@@ -16,6 +16,7 @@ Scenario: I can see the admin features once I have logged in
   Given I am logged in as the admin
   And I am on the calendar page
   Then I should see the Admin panel
-  And I should see the sync panel
+  #And I should see "There are no Upcoming events"
+  Then I should see the sync panel
   And I should see the Sign Out button
   And I should not see the "Suggest Event" button
