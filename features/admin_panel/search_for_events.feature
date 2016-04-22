@@ -1,4 +1,4 @@
-@javascript
+@javascript @admin_panel
 Feature: Search for events in admin panel
   As an admin
   So that I can quickly find a specific event
@@ -18,6 +18,12 @@ Scenario: search for event by name
   And I fill in "Hike in the city" in "Search field"
   And I click "Search"
   Then I should see "Hike in the city" in the results panel
+  
+Scenario: search for event by same (sad path)
+  When I select "Name" from "Search for event by"
+  And I fill in "nil" in "Search field"
+  And I click "Search"
+  Then I should see "Please provide valid search parameters"
 
 Scenario: search for event by date
   When I select "Start date" from "Search for event by"
@@ -25,6 +31,11 @@ Scenario: search for event by date
   And I click "Search"
   Then I should see "Hike in the city" in the "Results panel"
   And I should see "Rollerblade in the park" in the results panel
+
+Scenario: search for event by date (sad path)
+  When I select "Start date" from "Search for event by"
+  And I click "Search"
+  Then I should see events starting with today
 
 Scenario: search for event by name with incorrect name
   When I select "Name" from "Search for event by"
