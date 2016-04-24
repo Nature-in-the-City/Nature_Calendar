@@ -86,41 +86,35 @@
 
     .clear
 
-#admin
+#admin_panel
   - if user_signed_in?
-    %div{ class: 'container' }
-      %br
-      %h2
-        %strong Events
-      %br
-    #upcoming.container
-      %ul.nav.nav-tabs.containter.clearfix
-        - @tabs.each do |tab|
-          - if tab.eql? "Upcoming"
-            %li{class: 'active', id: "#{tab}"}
-              %a{ href: "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-          - else
-            %li{id: "#{tab}"}
-              - if tab.eql? "Pending"
-                %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
-              - else
-                %li{id: "#{tab}"}
-                  - if tab.eql? "Pending"
-                    %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
-                  - else
-                    %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-      
-        %div.tab-content.clearfix.container
-          %br
-          - @tabs.each do |tab|
-            - if tab.eql? "Upcoming"
-              %div{ class: 'tab-pane active scrollable container-fluid', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: { tab: tab, tags: @tags }
-            - else
-              %div{ class: 'tab-pane scrollable container-fluid', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: { tab: tab, tags: @tags }
-          %br
-%br
+    %br
+    %h2
+      %strong Events
+    %br
+    %ul.nav.nav-tabs.clearfix.container
+      - @tabs.each do |tab|
+        - if tab.eql? "Upcoming"
+          %li{ class: 'active', id: "#{tab}"}
+            %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
+        - elsif tab.eql? "Pending"
+          %li{id: "#{tab}"}
+            %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' }
+              #{tab}
+              %span.badge #{@pending_count}
+        - else
+          %li{id: "#{tab}"}
+            %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
+    %br
+    .tab-content.nopadding.nomargin.container
+      - @tabs.each do |tab|
+        - if tab.eql? "Upcoming"
+          .container{ class: 'tab-pane active scrollable', id: "#{tab.downcase}_events" }
+            = render partial: 'admin_panel', locals: { tab: tab }
+        - else
+          .container{ class: 'tab-pane scrollable',        id: "#{tab.downcase}_events" }
+            = render partial: 'admin_panel', locals: { tab: tab }
+    %br
 
 #sync
   - if user_signed_in?
