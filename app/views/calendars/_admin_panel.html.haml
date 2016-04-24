@@ -2,7 +2,7 @@
 
 %br
 %br
-- if @event_relations[tab] && @event_relations[tab]
+- if @event_relations[tab] && @event_relations[tab].count > 0
   - @event_relations[tab].each do |event|
     .container-fluid{ id: "#{event.id}_title" }
       .col-sm-8
@@ -12,44 +12,44 @@
           Show More
           %i.fa.fa-angle-down
     
-    .container{ id: "#{event.id}_details", class: "collapse" }
+    .container-fluid{ id: "#{event.id}_details", class: "collapse" }
       #top{ class: "row" }
         #date.col-sm-2
           Date
-          .container
+          .container-fluid
             = event.start.strftime("%b %-d, %Y")
         #cost.col-sm-2
           Cost
-          .container= "$#{event.cost}"
-        #tags.col-sm-3.container
+          .container-fluid= "$#{event.cost}"
+        #tags.col-sm-3
           Tags
-          .containers
+          .container-fluid
             %p="#{event.tag_string}"
-        #contact_1.col-sm-3.container
+        #contact_1.col-sm-3
           Contact Info
           - if event.contact_first && event.contact_first.length > 0
-            .container="Name: #{event.contact_last}, #{event.contact_first}"
+            .container-fluid="Name: #{event.contact_last}, #{event.contact_first}"
           - else
-            .container="Name:"
-          .container= "Phone: #{event.contact_phone}"
+            .container-fluid="Name:"
+          .container-fluid= "Phone: #{event.contact_phone}"
 
-      #bottom{ class: "row container" }
-        #time{ id: "_Time", class: "container col-sm-2" }
+      #bottom{ class: "row container-fluid" }
+        #time{ id: "_Time", class: "container-fluid col-sm-2" }
           Time
-          .container
+          .container-fluid
             #start="Start: #{event.start.strftime("%r")}"
             #end= "End: #{event.end.strftime("%r")}"
-        #location.col-sm-2.container{ id: "_Location" }
+        #location.col-sm-2.container-fluid{ id: "_Location" }
           Location
-          .container
+          .container-fluid
             #street= "#{event.street_address}"
             #city= "#{event.city_state_zip}"
-        #description.col-sm-3.container{ id: "_Description" }
+        #description.col-sm-3.container-fluid{ id: "_Description" }
           Description
           .container-fluid
-            %p=event.description
-        #contact_2.col-sm-3.container{ id: "val_Email" }
-          .container
+            =event.description
+        #contact_2.col-sm-3.container-fluid{ id: "val_Email" }
+          .container-fluid
             #email= "Email: #{event.contact_email}"
             #org= "Org: #{event.organization}"
           - if !tab.eql? "Past" 
@@ -166,7 +166,7 @@
           .col-sm-4.container-fluid
             %a{ role: "button", id: "#{event.id}_CancelEdit", class: "button",
                 href: "##{event.id}_edit", data: { toggle: "collapse" } } Cancel
-    %br
+          %br
 - else
   %ul
     %li= "There are no #{tab} events"

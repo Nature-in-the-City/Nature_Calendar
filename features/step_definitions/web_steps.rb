@@ -55,6 +55,9 @@ When /^(?:|I )follow "([^"]*)"$/ do |link|
 end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
+  if field.eql? "url"
+    pending
+  end
   fill_in(field, with: value)
 end
 
@@ -80,6 +83,7 @@ When /^(?:|I )fill in the following:$/ do |fields|
 end
 
 When /^(?:|I )select "([^"]*)" from "([^"]*)"$/ do |value, field|
+  pending
   select(value, from: field)
 end
 
