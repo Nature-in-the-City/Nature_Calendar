@@ -9,9 +9,9 @@ class EventsController < ApplicationController
   end
 
   def index
-    start_date = params[:start]
-    end_date = params[:end]
-    @events = (start_date && end_date) ? Event.approved.where(start: start_date.to_datetime..end_date.to_datetime) : Event.approved
+    @start_date = params[:start]
+    @end_date = params[:end]
+    @events = (@start_date && @end_date) ? Event.approved.where(start: @start_date.to_datetime..@end_date.to_datetime) : Event.approved
 
     @filter = params[:filter]
     case @filter
@@ -42,9 +42,9 @@ class EventsController < ApplicationController
 
   def third_party
     begin
-      url = params[:url]
-      if url.present?
-        @event = Event.get_remote_events({url: url})
+      @url = params[:url]
+      if @url.present?
+        @event = Event.get_remote_events({url: @url})
       end
       handle_response
     rescue Exception => e
@@ -55,10 +55,10 @@ class EventsController < ApplicationController
 
   def pull_third_party
     begin
-      ids = Event.get_event_ids(params)
-      raise 'You must select at least one event. \nPlease retry.' if ids.blank?
-      events = Event.store_third_party_events(ids)
-      @msg = 'Successfully added:' + '<br/>' + events.map { |event| event.name }.join('<br/>')
+      @ids = Event.get_event_ids(params)
+      raise 'You must select at least one event. \nPlease retry.' if @ids.blank?
+      @events = Event.store_third_party_events(@ids)
+      @msg = 'Successfully added:' + '<br/>' + @events.map { |event| event.name }.join('<br/>')
       handle_response
     rescue Exception => e
       @msg = 'Could not pull events:' + '\n' + e.to_s
@@ -67,9 +67,7 @@ class EventsController < ApplicationController
   end
 
   def run_rsvp_update(event)
-    Thread.new do
-      event.merge_meetup_rsvps
-    end
+    event.merge_meetup_rsvps
   end
 
   def new
@@ -85,8 +83,8 @@ class EventsController < ApplicationController
   end
 
   def assign_organization
-    org = params[:event_type_check] == 'third_party' ? Event.internal_third_party_group_name : Event.get_default_group_name
-    @event.update_attributes(organization: org)
+    @org = params[:event_type_check] == 'third_party' ? Event.internal_third_party_group_name : Event.get_default_group_name
+    @event.update_attributes(organization: @org)
   end
 
   # handles panel add new event
@@ -97,8 +95,8 @@ class EventsController < ApplicationController
       @event = Event.new(event_params)
       if @is_approved then
         assign_organization
-        remote_event = Meetup.new.push_event(@event)
-        @event.update_meetup_fields(remote_event)
+        @remote_event = Meetup.new.push_event(@event)
+        @event.update_meetup_fields(@remote_event)
         @event.status = "approved"
         @msg = "Successfully added '#{@event.name}'!"
       else
@@ -122,9 +120,9 @@ class EventsController < ApplicationController
     begin
       @new_status = params[:commit]
       if @new_status
-        statuses = {'accept' => 'approved', 'reject' => 'rejected'}
-        statuses.default = 'pending'
-        @event.update(:status => statuses[@new_status]) 
+        @statuses = {'accept' => 'approved', 'reject' => 'rejected'}
+        @statuses.default = 'pending'
+        @event.update(:status => @statuses[@new_status]) 
         @event.save
       end
       @event.save!
@@ -147,12 +145,12 @@ class EventsController < ApplicationController
   def perform_update_transaction
     #puts 'inside EventsController#perform_update_transaction'
     #byebug
-    event = Event.new(event_params)
-    #assign_organization
+    @event = Event.new(event_params)
+    assign_organization
     begin
-      #remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
+      @remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
       @event.update_attributes(event_params)
-      #@event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
+      @event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
       @success = true
       @msg = "#{@event.name} successfully updated!"
     rescue Exception => e

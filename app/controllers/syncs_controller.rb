@@ -4,16 +4,16 @@ class SyncsController < ApplicationController
   
   
   
-  def calendar_pull(url)
-    @name = url.split("/")[-1]
-    if url =~ /meetup.com/
+  def calendar_pull
+    @name = @url.split("/")[-1]
+    if @url =~ /meetup.com/
       begin
-        Meetup.new.pull_events({group_urlname: @name})
+        @events = Meetup.new.pull_events({group_urlname: @name})
       rescue Exception => e
         @msg = " Unable to pull Meetup events: " + e.to_s
         puts @msg
       end
-    elsif url =~ /google/
+    elsif @url =~ /google/
       @name
     else
       raise Exception, 'Invalid URL', caller
@@ -35,26 +35,26 @@ class SyncsController < ApplicationController
   end
     
   def perform_create_transaction
-    url = params[:sync][:url]
-    if Sync.exists?(:url => url)
-      @msg = "'#{url}' already synced!"
-    else
+    @url = params[:sync][:url]
+    if Sync.where(:url => @url).blank?
       begin
         @sync = Sync.new(sync_params)
-        events = calendar_pull(url)
-        if events.respond_to?(:each)
-          events.each do |event|
-            e = Event.new(event)
-            e.update_attributes(:status => 'pending', :url => url)
-            e.save!
+        calendar_pull
+        if @events.respond_to?(:each)
+          @events.each do |event|
+            @e = Event.new(event)
+            @e.update_attributes(:status => 'pending', :url => @url)
+            @e.save!
           end
         end
         @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
         @sync.save!
-        @msg = "Successfully synced '#{url}'!"
+        @msg = "Successfully synced '#{@url}'!"
       rescue Exception => e
-        @msg = "Could not sync '#{url}': " + e.to_s
+        @msg = "Could not sync '#{@url}': " + e.to_s
       end
+    else
+      @msg = "Already synced '#{@url}'!"
     end
   end
     

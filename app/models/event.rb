@@ -14,6 +14,8 @@ class Event < ActiveRecord::Base
   DEFAULT_TIME_FORMAT = '%l:%M%P'
   
   scope :approved, -> { where(status: "approved") }
+  scope :pending, -> { where(status: "pending") }
+  scope :rejected, -> { where(status: "rejected") }
   scope :family_friendly, -> { where(family_friendly: true) }
   scope :free, -> { where(free: true) }
   scope :hike, -> { where(category: "hike") }
@@ -89,20 +91,18 @@ class Event < ActiveRecord::Base
 
   # This only applies to present and upcoming events. Past events cannot be deleted
   def self.get_remotely_deleted_ids(remote_events)
-    target_events = Event.where("start >= ?", DateTime.now)
+    target_events = Event.upcoming.approved
     local_event_ids = target_events.inject([]) { |array, event| array << event.meetup_id }
     remote_event_ids = remote_events.inject([]) { |array, event| array << event.meetup_id }
     local_event_ids - remote_event_ids
   end
 
   def self.get_upcoming_events
-    #Event.get_remote_events({ status: 'upcoming' })
-    Event.upcoming
+    Event.get_remote_events({ status: 'upcoming' })
   end
 
   def self.get_past_events(from=nil, to=nil)
-    #Event.get_remote_events({ status: 'past' }.merge Event.date_range(from, to))
-    Event.past
+    Event.get_remote_events({ status: 'past' }.merge Event.date_range(from, to))
   end
 
   def self.get_upcoming_third_party_events
@@ -116,11 +116,11 @@ class Event < ActiveRecord::Base
   end
   
   # get all of the events with specified status
-  def self.get_events_by_status(some_status, filter)
+  def self.filtered(events, filter)
     if filter and not filter.empty?
-      return Event.where("status = ? AND #{filter} = ?", some_status, true)
+      return events.where("#{filter} = ?", true)
     end
-    Event.where(status: some_status)
+    events
   end
   
   def self.get_past_third_party_events(from=nil, to=nil)
@@ -147,24 +147,24 @@ class Event < ActiveRecord::Base
     upcoming_events = Event.get_upcoming_events
     past_events = Event.get_past_events
     remote_events = upcoming_events && past_events ? upcoming_events + past_events : nil
-    #process_remote_events(remote_events)
+    process_remote_events(remote_events)
     remote_events
   end
 
   def self.synchronize_past_events
-    #group_events = Event.get_past_events('-1d', '')
-    #third_party_events = Event.get_past_third_party_events('-1d', '')
-    #remote_events = group_events && third_party_events ? group_events + third_party_events : nil
-    #process_remote_events(remote_events)
-    Event.get_past_events('-1d', '')
+    group_events = Event.get_past_events('-1d', '')
+    third_party_events = Event.get_past_third_party_events('-1d', '')
+    remote_events = group_events && third_party_events ? group_events + third_party_events : nil
+    process_remote_events(remote_events)
+    Event.past
   end
 
   def self.synchronize_upcoming_events
-    #group_events = Event.get_upcoming_events
-    #third_party_events = Event.get_upcoming_third_party_events
-    #remote_events = group_events && third_party_events ? group_events + third_party_events : nil
-    #Event.remove_remotely_deleted_events(remote_events)
-    #process_remote_events(remote_events)
+    group_events = Event.get_upcoming_events
+    third_party_events = Event.get_upcoming_third_party_events
+    remote_events = group_events && third_party_events ? group_events + third_party_events : nil
+    Event.remove_remotely_deleted_events(remote_events)
+    process_remote_events(remote_events)
     Event.all
   end
 

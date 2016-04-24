@@ -23,10 +23,10 @@
             %td &nbsp;&nbsp;
             %td= user.email
             %td &nbsp;&nbsp;
-            %td= link_to (user.level == 0 ? "Super" : "Regular"), "/accounts/#{user.id}", :method => :put, data: (user.level == 0 ? {confirm: "Are you sure you want to change #{user.email}'s level to Regular Admin?"} : {confirm: "Are you sure you want to change #{user.email}'s level to Super Admin?"})
+            %td= link_to (user.root? ? "Super" : "Regular"), "/accounts/#{user.id}", :method => :put, data: (user.root? ? {confirm: "Are you sure you want to change #{user.email}'s level to Regular Admin?"} : {confirm: "Are you sure you want to change #{user.email}'s level to Super Admin?"})
             %td &nbsp;&nbsp;
-            %td= link_to "Delete Account", "/accounts/#{user.id}", :method => :delete, data: {:confirm => "Are you sure you want to delete #{user.email}? Accounts are deleted permanently."}
+            %td= link_to "Delete Account", "/accounts/#{user.id}" + "#page", :method => :delete, data: {confirm: "Are you sure you want to delete #{user.email}? Accounts are deleted permanently."}
     </br>
     
-    =link_to 'Back to calendar', calendar_path, style: 'font-weight:200;'
+    = link_to 'Back to calendar', calendar_path + "#main", style: 'font-weight:200;', :method => :get
   %h1{class: 'title', style: "border-bottom: 4px solid #A6C55F; border-top: 0px;"}

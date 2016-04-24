@@ -5,18 +5,8 @@ class User < ActiveRecord::Base
          :lockable, :validatable, :timeoutable
   #:omniauthable, omniauth_providers: [:meetup]
 
-  def self.create_non_root(params)
-    #puts "User.rb"
-    ret = create do |user|
-      #puts params
-      user.email = params["user"]["email"]
-      user.password = params["user"]["password"]
-    end
-    return ret
-  end
-
   def root?
-    level == 0
+    level
   end
 
   # The following methods are NOT USED and are deprecated.

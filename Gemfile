@@ -46,6 +46,8 @@ gem 'remotipart'
 gem 'rufus-scheduler'
 # Font Awesome Icons
 gem 'font-awesome-sass'
+# Puma Worker Killer
+gem 'puma_worker_killer'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record

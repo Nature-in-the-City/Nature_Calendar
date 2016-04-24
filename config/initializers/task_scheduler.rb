@@ -19,17 +19,14 @@ unless Rails.env.test?
   end
 
 
-  scheduler.every '1m', first: Time.now + 2 * 60  do |job|
-    minutes = Time.now.min
-    if minutes % 5 == 0
-      WebScraper.instance.fetch_page_data
-      puts 'Joomla Data Fetched.' if DEBUG
-      if minutes % 30 == 0
-        Event.synchronize_past_events
-        puts 'Past Events Synchronized.' if DEBUG
-      end
-    end
-
+  scheduler.every '5m', first: Time.now + 2 * 60  do |job|
+    WebScraper.instance.fetch_page_data
+    puts 'Joomla Data Fetched.' if DEBUG
+  end
+  
+  scheduler.every '15m', first: Time.now + 2 * 60 do |job|
+    Event.synchronize_past_events
+    puts 'Past Events Synchronized.' if DEBUG
     Event.synchronize_upcoming_events
     puts 'Upcoming Events Synchronized.' if DEBUG
   end
