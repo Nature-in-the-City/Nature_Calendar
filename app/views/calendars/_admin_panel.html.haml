@@ -41,7 +41,7 @@
       .col-sm-4
         Description
         .container-fluid
-          %a.editable{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/post", :href => event_path(event.id)}= event.description
+          %a.editable{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "textarea", "data-url" => "/post", :href => event_path(event.id)}= event.description
       .col-sm-4
         %table.table.table-striped.table-bordered.table-hover.table-condensed
           %tbody
@@ -195,7 +195,7 @@
 :javascript
   $.fn.editable.defaults.mode = 'inline';
   $.fn.editable.defaults.ajaxOptions = {type: "PUT"}
-  // $.fn.editable.defaASDults.showbuttons = false;
+  $.fn.editable.defaults.showbuttons = false;
   $(document).ready(function() {
     var show_btns = $("a:contains('Show')");
     show_btns.each(function(index){
