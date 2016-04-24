@@ -1,6 +1,6 @@
 Capybara.javascript_driver = :webkit
 
-Then /^I(?:| should) see the event "(.*)" on "(.*)"$/ do |title, date|
+Then /^I(?:| should) see the event "(.*)" on the "(.*)"$/ do |title, date|
   @date = date.to_datetime.iso8601.to_s
   @title = title
   page.execute_script("$('#calendar').fullCalendar( 'gotoDate', '#{@date}' )")

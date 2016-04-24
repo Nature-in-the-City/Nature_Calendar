@@ -18,6 +18,7 @@ Given /^the following calendars have been linked:$/  do |calendar_list|
 end
 
 Then /^I should see events from "(.*)"$/  do |calendar_name|
+  pending
   events = Events.where(name: calendar_name, status: "upcoming")
   events.each do |event|
       expect(page).to have_content(event.name)
