@@ -11,7 +11,7 @@ def create_user
   @user = User.create(email: "example@example.com",
                       password: "changeme",
                       reset_password_token: "token",
-                      level: 0)
+                      level: true)
 end
 
 def create_root
@@ -19,7 +19,7 @@ def create_root
   @user = User.create(email: "example@example.com",
                       password: "changeme",
                       reset_password_token: "token",
-                      level: 0)
+                      level: true)
 end
 
 def delete_user
@@ -28,11 +28,7 @@ def delete_user
 end
 
 def sign_in(level)
-  if level == 0
-    create_root
-  elsif level == 1
-    create_user
-  end
+  level ? create_root : create_user
   sign_out
   visit '/users/sign_in'
   find_field("user_email").set @user[:email]
@@ -41,11 +37,7 @@ def sign_in(level)
 end
 
 def invalid_sign_in(level)
-  if level == 0
-    create_root
-  elsif level == 1
-    create_user
-  end
+  level ? create_root : create_user
   sign_out
   visit '/users/sign_in'
   find_field("user_email").set "example@example.com"
@@ -79,18 +71,18 @@ Given /^I am( not | )logged in as the( root | | non-root )admin$/ do |negative, 
   if negative == ' not '
     sign_out 
   elsif root == ' root '
-    sign_in(0)
+    sign_in(true)
   else
-    sign_in(1)
+    sign_in(false)
   end
 end
 
 Given /^I log in as admin$/ do
-  sign_in(0)
+  sign_in(true)
 end
 
 Given /^I log in as Super Admin$/ do
-  sign_in(0)
+  sign_in(true)
 end
 
 Given /^I log in as Regular Admin$/ do 
@@ -119,17 +111,17 @@ end
 
 When /^I sign in with valid credentials( as root|)$/ do |root|
   if root == ' as root'
-    sign_in(0)
+    sign_in(true)
   else
-    sign_in(1)
+    sign_in(false)
   end
 end
 
 When /^I sign in with the wrong password( as root|)$/ do |root|
   if root == ' as root'
-    invalid_sign_in(0)
+    invalid_sign_in(true)
   else
-    invalid_sign_in(1)
+    invalid_sign_in(false)
   end
 end
 

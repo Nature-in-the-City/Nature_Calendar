@@ -139,9 +139,9 @@ end
 
 Then /^I should( not)? see the sync panel$/ do |negated|
   if negated
-    expect(page).to have_selector("#sync_status", visible: false)
+    expect(page).to have_selector("#sync", visible: false)
   else
-    expect(page).to have_selector("#sync_status", visible: true)
+    expect(page).to have_selector("#sync", visible: true)
   end
 end
 
