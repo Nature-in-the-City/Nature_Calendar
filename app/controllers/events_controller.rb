@@ -150,7 +150,7 @@ class EventsController < ApplicationController
 
   def perform_update_transaction(options={})
     #puts 'inside EventsController#perform_update_transaction'
-    byebug
+    #byebug
     @event = Event.new(event_params)
     if options[:approved]
       assign_organization
