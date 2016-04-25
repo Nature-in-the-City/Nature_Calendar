@@ -18,7 +18,6 @@ Given /^the following calendars have been linked:$/  do |calendar_list|
 end
 
 Then /^I should see events from "(.*)"$/  do |calendar_name|
-  pending
   events = Events.where(name: calendar_name, status: "upcoming")
   events.each do |event|
       expect(page).to have_content(event.name)
@@ -37,12 +36,12 @@ Then /^I should see "(.*)" in the "(.*)" panel$/ do |event, panel_name|
   with_scope(panel_name) { step %{I should see "#{event}"}}
 end
 
-Given /^I create( super | regular )admin "(.*)" with password "(.*)"$/ do |root, email, password|
+Given /^I create a new( super | regular )admin "(.*)" with password "(.*)"$/ do |root, email, password|
   visit '/accounts/new'
   find_field("user_email").set email
   find_field("user_password").set password
   if root == ' super '
-    check("user_level")
+    find("user_level").check
   end
   click_button "Create Admin"
 end
@@ -52,4 +51,8 @@ When /^I sign in as "(.*)" with password "(.*)"$/ do |email, password|
   find_field("user_email").set email
   find_field("user_password").set password
   click_button "Log in"
+end
+
+When(/^I fill in "([^"]*)" field with "([^"]*)"$/) do |field, value|
+  find_field(field).set value
 end
