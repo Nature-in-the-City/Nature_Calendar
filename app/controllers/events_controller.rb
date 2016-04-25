@@ -140,30 +140,40 @@ class EventsController < ApplicationController
 
   # does panel update event
   def update
-    puts 'inside EventsController#update'
+    #puts 'inside EventsController#update'
     #byebug
     @event = Event.find params[:id]
-    perform_update_transaction
+    @is_approved = event_params[:status] == "approved"
+    perform_update_transaction({ approved: @is_approved })
     @success ? handle_response : (render 'errors', format: :js)
   end
 
-  def perform_update_transaction
+  def perform_update_transaction(options={})
     #puts 'inside EventsController#perform_update_transaction'
-    #byebug
+    byebug
     @event = Event.new(event_params)
-    assign_organization
-    begin
-      if @event.meetup_id
-        @remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
-      else
-        @remote_event = Meetup.new.push_event(@event)
+    if options[:approved]
+      assign_organization
+      begin
+        if @event.meetup_id
+          @remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
+        else
+          @remote_event = Meetup.new.push_event(@event)
+        end
+        @event.update_attributes(event_params)
+        @event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
+        @success = true
+        @msg = "#{@event.name} successfully updated!"
+      rescue Exception => e
+        @msg = "Could not update '#{@event.name}':" + '\n' + e.to_s
       end
-      @event.update_attributes(event_params)
-      @event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
+    else
+      puts params
+      original_event = Event.find(params[:id])
+      puts original_event
+      original_event.update_attributes(event_params)
       @success = true
       @msg = "#{@event.name} successfully updated!"
-    rescue Exception => e
-      @msg = "Could not update '#{@event.name}':" + '\n' + e.to_s
     end
   end
 
@@ -202,6 +212,7 @@ class EventsController < ApplicationController
     params.require(:event).permit(:name, :status, :organization, :venue_name, :st_number, :st_name, :city,
                                   :state, :country, :start, :end, :description, :how_to_find_us, :image,
                                   :street_number,  :cost, :route, :locality, :family_friendly, :free,
-                                  :contact_email, :contact_first, :contact_last, :contact_phone, :zip, :url)
+                                  :contact_email, :contact_first, :contact_last, :contact_phone, :zip, :url,
+                                  :category)
   end
 end
