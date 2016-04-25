@@ -83,7 +83,11 @@ class EventsController < ApplicationController
   end
 
   def assign_organization
-    @org = params[:event_type_check] == 'third_party' ? Event.internal_third_party_group_name : Event.get_default_group_name
+    begin
+      @org = params[:event_type_check] == 'third_party' ? Event.internal_third_party_group_name : Event.get_default_group_name
+    rescue Exception
+      @org = 'Unassigned'
+    end
     @event.update_attributes(organization: @org)
   end
 
@@ -111,7 +115,7 @@ class EventsController < ApplicationController
   end
 
   def edit
-    #puts 'inside EventsController#edit'
+    puts 'inside EventsController#edit'
     @event = Event.find params[:id]
     if @event.is_past?
       @msg = "Sorry, past events cannot be edited. You may only delete them."
@@ -136,7 +140,8 @@ class EventsController < ApplicationController
 
   # does panel update event
   def update
-    #puts 'inside EventsController#update'
+    puts 'inside EventsController#update'
+    #byebug
     @event = Event.find params[:id]
     perform_update_transaction
     @success ? handle_response : (render 'errors', format: :js)
@@ -148,7 +153,11 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     assign_organization
     begin
-      @remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
+      if @event.meetup_id
+        @remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
+      else
+        @remote_event = Meetup.new.push_event(@event)
+      end
       @event.update_attributes(event_params)
       @event.update_attributes(venue_name: remote_event[:venue_name])  # Necessary if meetup refused to create the venue
       @success = true
