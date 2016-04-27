@@ -1,0 +1,7 @@
+-# in app/views/calendars/_update_errors.html.haml
+.container-fluid{ id: "#{task}_error" }
+    %h2
+        = pluralize(@event.errors.count, "error") prohibited this task from being saved
+    %ul
+        - @event.errors.full_messages.each do |msg|
+            %li=msg

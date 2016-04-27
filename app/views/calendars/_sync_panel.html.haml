@@ -16,6 +16,10 @@
       %i.fa.fa-times.isa_error
       )
     %td.text-center Last Sync
+  %tfoot
+    %td.text-center
+      %br
+      = submit_tag "Delete", disabled: true
   %tbody
     %tr
       %td.text-center= check_box_tag  "calendar"

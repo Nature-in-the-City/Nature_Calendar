@@ -60,6 +60,7 @@ class Meetup
 
   # ASK ABOUT ANNOUNCING EVENTS... If necessary it can be done here automatically...or with edit_event
   def push_event(event)
+    #byebug
     options = {}
     options[:body] = {group_id: default_group_id, group_urlname: default_group_urlname}.merge(default_auth)
     options[:body].merge!(get_event_data(event))
@@ -181,6 +182,7 @@ class Meetup
   end
 
   def get_event_data(event, id=nil)
+    #byebug
     start = event['start']
     stop = event['end']
     duration = (stop && start) ? stop - start : nil
