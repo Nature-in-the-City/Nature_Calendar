@@ -10,7 +10,7 @@ Background:
     | Hike in the city        | Aug-21-2018 12:00 PM  | Aug-21-2018 4:00 PM | pending   |
     | Rollerblade in the park | Aug-31-2018 9:00 AM   | Aug-31-2018 1:00 PM | approved  |
     And I am logged in as the admin
-    And I see the Admin panel
+    And I see the "Admin" panel
     And I see the search bar
 
 Scenario: search for event by name

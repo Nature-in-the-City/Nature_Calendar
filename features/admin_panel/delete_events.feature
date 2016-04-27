@@ -13,7 +13,7 @@ Background:
   | Think | May-30-2016 2:00pm  | May-30-2016 7:00pm    | pending   |
 
   And I am logged in as the admin
-  And I see the Admin panel
+  And I see the "Admin" panel
 
 Scenario: Admin can reject upcoming events
   Given I am displaying the "Upcoming" events
