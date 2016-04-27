@@ -48,6 +48,14 @@ class Event < ActiveRecord::Base
     DateTime.now >= self.end
   end
   
+  def is_approved?
+    self.status == 'approved'
+  end
+  
+  def is_third_party?
+    organization != Event.get_default_group_name
+  end
+  
   def tag_string
     tag_options = %w(family_friendly free)
     event_tags = []
@@ -79,17 +87,24 @@ class Event < ActiveRecord::Base
 
   def self.process_event(event)
     stored_event = Event.find_by_meetup_id(event[:meetup_id])
-    return event.save if stored_event.nil?
+    if stored_event.nil?
+      event.update_attributes(:status => 'approved')
+      return event.save
+    end
     stored_event.apply_update(event) if stored_event.needs_updating?(event[:updated])
   end
 
   def self.remove_remotely_deleted_events(remote_events)
     return if remote_events.nil?
     remotely_deleted_ids = Event.get_remotely_deleted_ids(remote_events)
-    remotely_deleted_ids.each { |id| Event.find_by_meetup_id(id).destroy }
+    remotely_deleted_ids.each do |id| 
+      stored_event = Event.find_by_meetup_id(id)
+      stored_event.update_attributes(:status => 'rejected')
+      stored_event.save
+    end
   end
 
-  # This only applies to present and upcoming events. Past events cannot be deleted
+  # This only applies to approved upcoming events. Past/Pending events cannot be deleted from meetup
   def self.get_remotely_deleted_ids(remote_events)
     target_events = Event.upcoming.approved
     local_event_ids = target_events.inject([]) { |array, event| array << event.meetup_id }
@@ -104,16 +119,6 @@ class Event < ActiveRecord::Base
   def self.get_past_events(from=nil, to=nil)
     Event.get_remote_events({ status: 'past' }.merge Event.date_range(from, to))
   end
-
-  def self.get_upcoming_third_party_events
-    ids = Event.get_stored_upcoming_third_party_ids
-    if ids.size > 0
-      options = { event_id: ids.join(',') }
-      events = Event.get_remote_events({ status: 'upcoming' }.merge options)
-      return events if events
-    end
-    []
-  end
   
   # get all of the events with specified status
   def self.filtered(events, filter)
@@ -122,84 +127,30 @@ class Event < ActiveRecord::Base
     end
     events
   end
-  
-  def self.get_past_third_party_events(from=nil, to=nil)
-    ids = Event.get_stored_past_third_party_ids
-    if ids.size > 0
-      options = { event_id: ids.join(',') }
-      range = Event.date_range(from, to)
-      events = Event.get_remote_events(({ status: 'past' }.merge options).merge range)
-      return events if events
-    end
-    []
-  end
 
   def self.date_range(from=nil, to=nil)
     (from || to) ? {time: "#{from},#{to}"} : {}
   end
 
-  def self.store_third_party_events(ids)
-    options = ids.respond_to?(:join) ? { event_id: ids.join(',') } : {}
-    Event.process_remote_events(Event.get_remote_events(options))
-  end
-
   def self.initialize_calendar_db
     upcoming_events = Event.get_upcoming_events
     past_events = Event.get_past_events
-    remote_events = upcoming_events && past_events ? upcoming_events + past_events : nil
+    remote_events = upcoming_events + past_events
     process_remote_events(remote_events)
-    remote_events
   end
 
   def self.synchronize_past_events
-    group_events = Event.get_past_events('-1d', '')
-    third_party_events = Event.get_past_third_party_events('-1d', '')
-    remote_events = group_events && third_party_events ? group_events + third_party_events : nil
-    process_remote_events(remote_events)
-    Event.past
+    Event.process_remote_events(Event.get_past_events)
   end
 
   def self.synchronize_upcoming_events
     group_events = Event.get_upcoming_events
-    third_party_events = Event.get_upcoming_third_party_events
-    remote_events = group_events && third_party_events ? group_events + third_party_events : nil
-    Event.remove_remotely_deleted_events(remote_events)
-    process_remote_events(remote_events)
-    Event.all
+    Event.remove_remotely_deleted_events(group_events)
+    Event.process_remote_events(group_events)
   end
 
   def self.get_default_group_name
     Meetup::GROUP_NAME
-  end
-
-  def self.internal_third_party_group_name
-    'affiliate'
-  end
-
-  def self.get_stored_upcoming_third_party_ids
-    ids = Event.where("start >= ?", DateTime.now).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
-    ids[0...200]    # Meetup limits the number of ids you can send to them to 200
-  end
-
-  ##
-  # Only get third party events which ended the day before
-  #
-  def self.get_stored_past_third_party_ids
-    ids = Event.where(end: (DateTime.now - 1...DateTime.now)).each_with_object([]) { |event, ids| ids << event.meetup_id if event.is_third_party? }
-    ids[0...200]    # Meetup limits the number of ids you can send to them to 200
-  end
-
-  def is_third_party?
-    is_external_third_party? || (organization != Event.get_default_group_name)
-  end
-
-  ##
-  # NOTE: Because of the many events in the db where the organization was erroneously set to nil, here I am going to
-  # consider any event with nil organization as external third party.
-  # FROM 11-28-2015 THIS WILL NOT BE AN ISSUE ANYMORE since there will not be a nil organization name anymore
-  #
-  def is_external_third_party?
-    organization != Event.get_default_group_name && organization != Event.internal_third_party_group_name || organization.nil?
   end
 
   def apply_update(new_event)

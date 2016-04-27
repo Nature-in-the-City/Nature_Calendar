@@ -16,7 +16,6 @@ class CalendarsController < ApplicationController
     @curr = @all.upcoming
     
     @past = @all.past.approved
-    
     @pending = Event.filtered(@curr.pending, @filter)
     @upcoming = Event.filtered(@curr.approved, @filter)
     @rejected = Event.filtered(@curr.rejected, @filter)

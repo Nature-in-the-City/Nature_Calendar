@@ -2,8 +2,6 @@ class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
   before_action :is_root
   
-  
-  
   def calendar_pull
     @name = @url.split("/")[-1]
     if @url =~ /meetup.com/
@@ -33,7 +31,7 @@ class SyncsController < ApplicationController
     flash[:sync] = @msg
     handle_response
   end
-    
+
   def perform_create_transaction
     @url = params[:sync][:url]
     if Sync.where(:url => @url).blank?
@@ -59,10 +57,11 @@ class SyncsController < ApplicationController
   end
     
   def update
-      handle_response
+    handle_response
   end
     
   def destroy
+    handle_response
   end
     
   def handle_response
