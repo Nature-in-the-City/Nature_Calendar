@@ -1,9 +1,12 @@
 
-
-- if flash[:sync]
-  %div
-    = flash[:sync]
-
+#status.container.col-sm-1
+  .button_right
+    Sync
+    %i.fa.fa-refresh
+#status.container.col-sm-6
+  .button_left
+    Delete
+    %i.fa.fa-trash-o
 %table
   %thead
     %td.text-center Select

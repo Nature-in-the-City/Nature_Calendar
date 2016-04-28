@@ -19,11 +19,7 @@ class Sync < ActiveRecord::Base
   
   def self.pull_calendar_events(name, url)
     if url =~ /meetup.com/
-      begin
-        return Meetup.new.pull_events({group_urlname: name})
-      rescue Exception => e
-        return "Unable to pull Meetup events: " + e.to_s
-      end
+      return Meetup.new.pull_events({group_urlname: name})
     elsif url =~ /google/
       return name
     else

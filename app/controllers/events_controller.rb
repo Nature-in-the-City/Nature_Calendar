@@ -58,7 +58,6 @@ class EventsController < ApplicationController
 
   # handles panel add new event
   def create
-    #byebug
     @is_approved = event_params[:status] == "approved"
     begin
       @event = Event.new(event_params)
@@ -79,7 +78,6 @@ class EventsController < ApplicationController
   end
 
   def edit
-    puts 'inside EventsController#edit'
     @event = Event.find params[:id]
     if @event.is_past?
       @msg = "Sorry, past events cannot be edited. You may only delete them."
@@ -104,8 +102,6 @@ class EventsController < ApplicationController
 
   # does panel update event
   def update
-    #puts 'inside EventsController#update'
-    #byebug
     @event = Event.find params[:id]
     @is_approved = event_params[:status] == "approved"
     perform_update_transaction({ approved: @is_approved })
@@ -113,8 +109,6 @@ class EventsController < ApplicationController
   end
 
   def perform_update_transaction(options={})
-    #puts 'inside EventsController#perform_update_transaction'
-    #byebug
     @event = Event.new(event_params)
     if options[:approved]
       begin
@@ -167,7 +161,6 @@ class EventsController < ApplicationController
       format.js
     end
   end
-
 
   private
 

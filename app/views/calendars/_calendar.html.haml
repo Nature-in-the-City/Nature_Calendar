@@ -25,7 +25,7 @@
               %li
                 = link_to "Edit existing accounts", edit_account_path("root"), :method => :get
     - else
-      = link_to 'Sign In', new_user_session_path, :method => :get
+      = link_to image_tag("HoneyBee.jpg", border: 0, width: 50, height: 50), new_user_session_path, :method => :get
     
     #event_creation_box
       - if user_signed_in?
@@ -127,14 +127,10 @@
     %h2
       %strong Sync Status
     .container.row
-      #status.container.col-sm-1
-        .button_right
-          Sync
-          %i.fa.fa-refresh
-      #status.container.col-sm-4
-        .button_left
-          Delete
-          %i.fa.fa-trash-o
+      #flash.container.col-sm-12
+        - if flash[:sync]
+          = flash[:sync]
+    .container.row
       #status.container.col-sm-8
         = render partial: 'sync_panel'
       #add_cal.container.col-sm-4

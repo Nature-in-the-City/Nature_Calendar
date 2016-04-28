@@ -11,9 +11,9 @@ class SyncsController < ApplicationController
   end
   
   def create
-    Thread.new do
-      flash[:sync] = Sync.sync_calendar(params[:sync][:url])
-    end
+    thread = Thread.new { Thread.current[:output] = Sync.sync_calendar(params[:sync][:url]) }
+    thread.join
+    flash[:sync] = thread[:output]
     handle_response
   end
     
@@ -21,6 +21,7 @@ class SyncsController < ApplicationController
     Thread.new do
       Sync.synchronize_calendars
     end
+    flash[:sync] = "Calendars Synced!"
     handle_response
   end
     
@@ -41,14 +42,6 @@ class SyncsController < ApplicationController
   end
     
   private
-
-  def event_params
-    params.require(:event).permit(:name, :status, :organization, :venue_name, :st_number, :st_name, :city,
-                                  :state, :country, :start, :end, :description, :how_to_find_us, :image,
-                                  :street_number,  :cost, :route, :locality, :family_friendly, :free,
-                                  :contact_email, :contact_first, :contact_last, :contact_phone, :zip, :url,
-                                  :category)
-  end
   
   def is_root
     #if current_user.respond_to?('root?'); puts current_user.root?; end
