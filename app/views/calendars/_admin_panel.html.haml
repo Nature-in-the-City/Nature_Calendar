@@ -61,8 +61,8 @@
                 - else
                   = submit_tag 'accept', class: 'ap_submit'
             .container-fluid.col-sm-4{ id: "edit_#{event.id}" }
-              = link_to 'edit', event_edit_form_path(event.id), {:remote => true, 'data-toggle' =>  "modal",
-                'data-target' => '#edit-modal', :class => "ap_submit" }
+              %a.ap_submit{ role: "button", id: "#{event.id}_editButton",
+                  href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
             - if tab.eql? "Rejected"
               .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
                 = form_tag event_path(event.id) + '#admin', :method => 'delete' do
@@ -81,7 +81,142 @@
                 = submit_tag 'delete', class: "ap_submit",
                 data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
     
-    #edit-modal.modal.hide.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog" }    
+    .container-fluid{ id: "#{event.id}_edit", class: "collapse" }
+      = tinymce_assets
+      = form_for(event, url: event_path(event.id) + '#admin',
+      html: { method: 'patch', class: "form-horizontal" }) do |f|
+        %legend Event Info
+        .row.container-fluid
+          .col-sm-6.container-fluid
+            .control-group
+              = f.label :name, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.text_field :name, :class => "form-control"
+            %br
+            %br
+            .control-group
+              = f.label :start_time, :class => "control-label col-sm-4", :for => "event_start"
+              .controls.col-sm-8
+                = f.datetime_select(:start, :datetime_separator => ", ", :ampm => true,
+                                    :order => [:month, :day, :year, :hour, :minute],
+                                    :class => "form-control")
+            %br
+            .control-group
+              = f.label :end_time, :for => "event_end", :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.datetime_select(:end, :datetime_separator => ', ', :ampm => true,
+                                    :order => [:month, :day, :year, :hour, :minute],
+                                    :class => "form-control")
+            
+          .col-sm-6.container-fluid
+            Location
+            .control-group
+              = f.label :street_number, :class => "control-label col-sm-4", :for => "st_number"
+              .controls.col-sm-8
+                = f.number_field :st_number, :class => "form-control"
+            %br
+            .control-group
+              = f.label :street_name, :class => "control-label col-sm-4", :for => "st_name"
+              .controls.col-sm-8
+                = f.text_field :st_name, :class => "form-control"
+            %br
+            .control-group
+              =f.label :city, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.text_field :city, :class => "form-control"
+            .control-group
+              =f.label :state, :class => "control-label col-sm-4"
+              .controls.col-sm-8 
+                = f.text_field :state, :class => "form-control"
+            .control-group
+              =f.label :zip, :class => "control-label col-sm-4"
+              .controls.col-sm-8 
+                = f.number_field :zip, :class => "form-control"
+        %br
+        
+        .row.container-fluid
+          .col-sm-5
+          .col-sm-3
+            Cost information
+          .col-sm-4
+            Event category information
+        
+        .row.container-fluid
+          .col-sm-5.container-fluid
+            .control-group
+              = f.label :description, :class => "control-label col-sm-4", :for => "event_description"
+              .controls.col-sm-8
+                = f.text_area :description, :rows => 3, :class => "form-control tinymce"
+                = tinymce
+          
+          .col-sm-3.container-fluid
+            .control-group
+              = f.label :free, :class => "control-label col-sm-6"
+            .controls.col-sm-6
+              = f.check_box :free, :class => "form-control"
+            or
+            .control-group
+              = f.label :cost, :class => "control-label col-sm-6"
+              .controls.col-sm-6.input-prepend
+                = f.number_field :cost, :class => "form-control", :id => "inputPrepend"
+          
+          .col-sm-4.container-fluid
+            .control-group
+              = f.label :category, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.text_field :category, :class => "form-control"
+            .control-group
+              = f.label :family_friendly, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.check_box :family_friendly, :class => "form-control"
+        
+        %legend Contact Info
+        .row.container-fluid
+          .col-sm-4
+            Full name
+          .col-sm-4
+          .col-sm-4
+            Organization information
+        
+        .row.container-fluid
+          .col-sm-4
+            .control-group
+              = f.label :first, :for => "event_contact_first",  :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.text_field :contact_first, :class => "form-control"
+            .control-group
+              = f.label :last, :for => "event_contact_contact", :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.text_field :contact_last, :class => "form-control"
+          
+          .col-sm-4.container-fluid
+            .control-group
+              = f.label :email, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.email_field :contact_email, :class => "form-control"
+            .control-group
+              = f.label :phone, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.telephone_field :contact_phone, :class => "form-control"
+          
+          .col-sm-4.container-fluid
+            .control-group
+              = f.label :organization, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.text_field :organization, :class => "form-control"
+            .control-group
+              = f.label :website, :class => "control-label col-sm-4"
+              .controls.col-sm-8
+                = f.url_field :url, :class => "form-control"
+        
+        .actions.row.container-fluid
+          .col-sm-4.container-fluid
+            =f.submit "Update", :class => "ap_submit" 
+          .col-sm-4.container-fluid
+            = button_tag "Reset", type: :reset, class: "ap_submit"
+          .col-sm-4.container-fluid
+            %a{ role: "button", id: "#{event.id}_CancelEdit", class: "ap_submit",
+                href: "##{event.id}_edit", data: { toggle: "collapse" } } Cancel   
                   
 - else
   %ul
