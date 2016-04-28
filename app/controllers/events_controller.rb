@@ -167,6 +167,15 @@ class EventsController < ApplicationController
       format.js
     end
   end
+  
+  def edit_event_form
+    #byebug
+    @event = Event.find(params[:event_id])
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
 
 
   private
