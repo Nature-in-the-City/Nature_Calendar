@@ -103,8 +103,8 @@ users = [{ email: 'admin123@admin.com',
   
 syncs = [{ organization: 'Nature in the City',
            url: 'http://www.meetup.com/Nature-in-the-City/',
-           last_sync: 'May 15 2016 06:00',
-           calendar_id: 656555558 }
+           last_sync: 'January 15 2016 06:00',
+           calendar_id: 8870202 }
         ]
 
 events.each do |event|

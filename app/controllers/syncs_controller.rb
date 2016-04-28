@@ -1,22 +1,6 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
   before_action :is_root
-  
-  def calendar_pull
-    @name = @url.split("/")[-1]
-    if @url =~ /meetup.com/
-      begin
-        @events = Meetup.new.pull_events({group_urlname: @name})
-      rescue Exception => e
-        @msg = " Unable to pull Meetup events: " + e.to_s
-        puts @msg
-      end
-    elsif @url =~ /google/
-      @name
-    else
-      raise Exception, 'Invalid URL', caller
-    end
-  end
 
   def show
     handle_response
@@ -27,40 +11,24 @@ class SyncsController < ApplicationController
   end
   
   def create
-    perform_create_transaction
-    flash[:sync] = @msg
-    handle_response
-  end
-
-  def perform_create_transaction
-    @url = params[:sync][:url]
-    if Sync.where(:url => @url).blank?
-      begin
-        @sync = Sync.new(sync_params)
-        calendar_pull
-        if @events.respond_to?(:each)
-          @events.each do |event|
-            @e = Event.new(event)
-            @e.update_attributes(:status => 'pending', :url => @url)
-            @e.save!
-          end
-        end
-        @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
-        @sync.save!
-        @msg = "Successfully synced '#{@url}'!"
-      rescue Exception => e
-        @msg = "Could not sync '#{@url}': " + e.to_s
-      end
-    else
-      @msg = "Already synced '#{@url}'!"
+    Thread.new do
+      flash[:sync] = Sync.sync_calendar(params[:sync][:url])
     end
+    handle_response
   end
     
   def update
+    Thread.new do
+      Sync.synchronize_calendars
+    end
     handle_response
   end
     
   def destroy
+    params[:url_list].each do |url|
+      Sync.find_by_url(url).destroy
+    end
+    flash[:sync] = "Calendars Removed!"
     handle_response
   end
     
@@ -74,8 +42,12 @@ class SyncsController < ApplicationController
     
   private
 
-  def sync_params
-    params.require(:sync).permit(:organization, :url, :last_sync, :calendar_id)
+  def event_params
+    params.require(:event).permit(:name, :status, :organization, :venue_name, :st_number, :st_name, :city,
+                                  :state, :country, :start, :end, :description, :how_to_find_us, :image,
+                                  :street_number,  :cost, :route, :locality, :family_friendly, :free,
+                                  :contact_email, :contact_first, :contact_last, :contact_phone, :zip, :url,
+                                  :category)
   end
   
   def is_root

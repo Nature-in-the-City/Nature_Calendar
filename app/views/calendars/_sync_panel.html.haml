@@ -16,17 +16,7 @@
       %i.fa.fa-times.isa_error
       )
     %td.text-center Last Sync
-  %tfoot
-    %td.text-center
-      %br
-      = submit_tag "Delete", disabled: true
   %tbody
-    %tr
-      %td.text-center= check_box_tag  "calendar"
-      %td.text-center Calendar Organization
-      %td.text-center
-        %i.fa.fa-check.isa_success
-      %td.text-center= 1.day.since.strftime("%c")
     - @calendars.each do |calendar|
       %tr
         %td.text-center= check_box_tag  calendar.url

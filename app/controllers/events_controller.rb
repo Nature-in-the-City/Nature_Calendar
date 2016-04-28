@@ -39,7 +39,9 @@ class EventsController < ApplicationController
   end
 
   def run_rsvp_update(event)
-    event.merge_meetup_rsvps
+    Thread.new do
+      event.merge_meetup_rsvps
+    end
   end
 
   def new
