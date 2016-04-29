@@ -82,7 +82,6 @@
                 data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
     
     .container-fluid{ id: "#{event.id}_edit", class: "collapse" }
-      = tinymce_assets
       = form_for(event, url: event_path(event.id) + '#admin',
       html: { method: 'patch', class: "form-horizontal" }) do |f|
         %legend Event Info
