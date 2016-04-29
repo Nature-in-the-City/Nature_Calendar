@@ -8,18 +8,18 @@ class CalendarsController < ApplicationController
   end
 
   def show
-    filter = nil
+    @filter = nil
     if params[:event] then
-      filter = params[:event][:filter]
+      @filter = params[:event][:filter]
     end
     
     all = Event.order(:start)
     curr = all.upcoming
     
     past = all.past.approved
-    pending = Event.filtered(curr.pending, filter)
-    upcoming = Event.filtered(curr.approved, filter)
-    rejected = Event.filtered(curr.rejected, filter)
+    pending = Event.filtered(curr.pending, @filter)
+    upcoming = Event.filtered(curr.approved, @filter)
+    rejected = Event.filtered(curr.rejected, @filter)
     
     @tags = ["Free", "Family-friendly", "Play", "Volunteer", "Hike", "Learn"]
     @event_relations = {"Upcoming" => upcoming, "Pending" => pending,
