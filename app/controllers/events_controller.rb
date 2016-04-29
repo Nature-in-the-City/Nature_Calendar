@@ -59,6 +59,7 @@ class EventsController < ApplicationController
   # handles panel add new event
   def create
     @is_approved = event_params[:status] == "approved"
+    event_params[:free] = event_params[:cost] == 0
     begin
       @event = Event.new(event_params)
       if @is_approved then
