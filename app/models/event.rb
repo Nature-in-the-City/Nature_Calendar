@@ -17,7 +17,7 @@ class Event < ActiveRecord::Base
   scope :pending, -> { where(status: "pending") }
   scope :rejected, -> { where(status: "rejected") }
   scope :family_friendly, -> { where(family_friendly: true) }
-  scope :free, -> { where(free: true) }
+  scope :free, -> { where(%q{"cost" > 0}) }
   scope :hike, -> { where(category: "hike") }
   scope :play, -> { where(category: "play") }
   scope :learn, -> { where(category: "learn") }
@@ -57,11 +57,17 @@ class Event < ActiveRecord::Base
   end
   
   def tag_string
-    tag_options = %w(family_friendly free)
+    # add boolean tags
+    tag_options = %w(family_friendly)
     event_tags = []
     tag_options.each do |tag|
       event_tags.push(Event.format_tag(tag)) if self[tag]
     end
+    # add free tag
+    if self.cost > 0 then
+      event_tags.push("Free")
+    end
+    # add category
     event_tags.push(Event.format_tag(self.category))
     formatted = event_tags.join(", ")
     return ((formatted.length > 0)? formatted : "None")
