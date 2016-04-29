@@ -17,7 +17,7 @@ class Event < ActiveRecord::Base
   scope :pending, -> { where(status: "pending") }
   scope :rejected, -> { where(status: "rejected") }
   scope :family_friendly, -> { where(family_friendly: true) }
-  scope :free, -> { where(%q{"cost" > 0}) }
+  scope :free, -> { where(cost: 0) }
   scope :hike, -> { where(category: "hike") }
   scope :play, -> { where(category: "play") }
   scope :learn, -> { where(category: "learn") }
@@ -48,6 +48,10 @@ class Event < ActiveRecord::Base
     DateTime.now >= self.end
   end
   
+  def free
+    self.cost == 0
+  end
+  
   def is_approved?
     self.status == 'approved'
   end
@@ -64,7 +68,7 @@ class Event < ActiveRecord::Base
       event_tags.push(Event.format_tag(tag)) if self[tag]
     end
     # add free tag
-    if self.cost > 0 then
+    if self.free then
       event_tags.push("Free")
     end
     # add category
