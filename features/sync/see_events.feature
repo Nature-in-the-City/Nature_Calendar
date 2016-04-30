@@ -6,7 +6,7 @@ Feature:
 
   Background:
     Given I am logged in as the admin
-    And I see the "Sync Status" panel
+    And I see the "Sync" panel
 
   Scenario: Events of linked Meetup Calendars should auto-populate
     Given the following calendars have been linked:

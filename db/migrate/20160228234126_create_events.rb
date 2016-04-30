@@ -9,7 +9,7 @@ class CreateEvents < ActiveRecord::Migration
       t.datetime  :start, :null => false
       t.datetime  :end
       t.text      :how_to_find_us
-      t.integer   :meetup_id
+      t.string    :meetup_id
       t.string    :status, :default => 'pending'
       t.datetime  :updated
       t.timestamps

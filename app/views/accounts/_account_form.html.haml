@@ -8,5 +8,5 @@
   = password_field :user, 'password', label: 'password', class: 'edit_text_field', id: 'user_password', placeholder: "Password", style: 'width:20em;'
 <br/>
 %div
-  = check_box_tag :user, id: 'user_level'
+  = check_box :user, "level", id: 'user_value', value: true
   Super Admin

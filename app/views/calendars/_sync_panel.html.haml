@@ -1,9 +1,12 @@
 
-
-- if flash[:sync]
-  %div
-    = flash[:sync]
-
+#status.container.col-sm-1
+  .button_right
+    Sync
+    %i.fa.fa-refresh
+#status.container.col-sm-6
+  .button_left
+    Delete
+    %i.fa.fa-trash-o
 %table
   %thead
     %td.text-center Select
@@ -17,12 +20,6 @@
       )
     %td.text-center Last Sync
   %tbody
-    %tr
-      %td.text-center= check_box_tag  "calendar"
-      %td.text-center Calendar Organization
-      %td.text-center
-        %i.fa.fa-check.isa_success
-      %td.text-center= 1.day.since.strftime("%c")
     - @calendars.each do |calendar|
       %tr
         %td.text-center= check_box_tag  calendar.url

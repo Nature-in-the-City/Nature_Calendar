@@ -11,10 +11,10 @@ Background:
   | Market Street   | Mar-21-2017 | Mar-21-2017 | 1210      | street rd | SF    | A past hike     | approved  | joe@cnn.com   | true            | true  |
   | Nerds on Safari | Apr-15-2017 | Apr-15-2017 | 1210      | street rd | SF    | A Nerd Safari   | approved  | joe@cnn.com   | true            | false |
   And I am logged in as the admin
-  And I select "No Filter" from "event_filter"
+  And I select "None" from "event_filter"
   
 Scenario: Filter by family friendly
-  And I select "Family Friendly" from the "event_filter"
+  And I select "Family Friendly" from "event_filter"
   And I press the "Upcoming" tab
   And the month is March 2016
   Then I should see "Market Street"

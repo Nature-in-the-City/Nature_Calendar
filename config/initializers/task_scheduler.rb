@@ -18,7 +18,6 @@ unless Rails.env.test?
     end
   end
 
-
   scheduler.every '5m', first: Time.now + 2 * 60  do |job|
     WebScraper.instance.fetch_page_data
     puts 'Joomla Data Fetched.' if DEBUG
@@ -29,5 +28,7 @@ unless Rails.env.test?
     puts 'Past Events Synchronized.' if DEBUG
     Event.synchronize_upcoming_events
     puts 'Upcoming Events Synchronized.' if DEBUG
+    Sync.synchronize_calendars
+    puts 'Calendars Synchronized.' if DEBUG
   end
 end

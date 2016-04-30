@@ -3,7 +3,6 @@ class AccountsController < ApplicationController
   before_action :is_root
   
   def create
-    puts(params[:user][:level])
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "#{@user[:email]} successfully created!"

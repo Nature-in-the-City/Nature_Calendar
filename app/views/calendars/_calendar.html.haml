@@ -25,7 +25,7 @@
               %li
                 = link_to "Edit existing accounts", edit_account_path("root"), :method => :get
     - else
-      = link_to 'Sign In', new_user_session_path, :method => :get
+      = link_to image_tag("HoneyBee.jpg", border: 0, width: 50, height: 50), new_user_session_path, :method => :get
     
     #event_creation_box
       - if user_signed_in?
@@ -121,13 +121,40 @@
     %h2
       %strong Sync Status
     .container.row
+      #flash.container.col-sm-12
+        - if flash[:sync]
+          = flash[:sync]
+    .container.row
       #status.container.col-sm-8
-        .button_right
-          Sync
-          %i.fa.fa-refresh
         = render partial: 'sync_panel'
       #add_cal.container.col-sm-4
         %h3 Add New Calendar
         = form_tag syncs_path  + "#admin" do
           = text_field :sync, 'url', label: 'URL', class: 'edit_text_field', placeholder: "Meetup or Google Calendar Link", style: 'width:20em;'
           = submit_tag 'Add Calendar', class: 'button'
+          
+:javascript
+  $(document).ready(function(){
+    var show_btns = $("a:contains('Show')");
+    show_btns.each(function(index){
+      $(this).on("click", function() {
+        $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
+      });
+    });
+    
+    var edit_btns = $("a[id*='editButton']");
+    edit_btns.each(function(index) {
+      var show_id = "#showbtn_" + edit_btns[index].id.split("_")[0]
+      $(this).on("click", function() {
+        $(show_id).trigger("click");
+      });
+    });
+    
+    var cancel_btns = $("a[id*='_CancelEdit']");
+    cancel_btns.each(function(index) {
+      var show_id = "#showbtn_" + cancel_btns[index].id.split("_")[0]
+      $(this).on("click", function() {
+        $(show_id).trigger("click");
+      });
+    });
+  });

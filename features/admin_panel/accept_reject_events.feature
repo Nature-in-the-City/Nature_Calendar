@@ -12,7 +12,7 @@ Background:
     | Sleep walking         | Insomniac             | 12345     | Union St      | San Francisco | 94123 | Aug-30-2016 1:00      | Aug-30-2016 3:00      | approved  |
     | WORDS                 | ORG                   | 567       | Hearst Ave    | Berkeley      | 94707 | Apr-10-2017 1:00      | Apr-10-2017 4:00      | rejected  |
   And I am logged in as the admin
-  And I see the Admin panel
+  And I see the "Admin" panel
 
 Scenario: Accept a pending event
   Given I am displaying the "Pending" events

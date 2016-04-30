@@ -1,24 +1,6 @@
 class SyncsController < ApplicationController
   #before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
   before_action :is_root
-  
-  
-  
-  def calendar_pull
-    @name = @url.split("/")[-1]
-    if @url =~ /meetup.com/
-      begin
-        @events = Meetup.new.pull_events({group_urlname: @name})
-      rescue Exception => e
-        @msg = " Unable to pull Meetup events: " + e.to_s
-        puts @msg
-      end
-    elsif @url =~ /google/
-      @name
-    else
-      raise Exception, 'Invalid URL', caller
-    end
-  end
 
   def show
     handle_response
@@ -29,40 +11,26 @@ class SyncsController < ApplicationController
   end
   
   def create
-    perform_create_transaction
-    flash[:sync] = @msg
+    thread = Thread.new { Thread.current[:output] = Sync.sync_calendar(params[:sync][:url]) }
+    thread.join
+    flash[:sync] = thread[:output]
     handle_response
   end
     
-  def perform_create_transaction
-    @url = params[:sync][:url]
-    if Sync.where(:url => @url).blank?
-      begin
-        @sync = Sync.new(sync_params)
-        calendar_pull
-        if @events.respond_to?(:each)
-          @events.each do |event|
-            @e = Event.new(event)
-            @e.update_attributes(:status => 'pending', :url => @url)
-            @e.save!
-          end
-        end
-        @sync.update_attributes(:organization => @name.gsub("-", " "), :last_sync => DateTime.now())
-        @sync.save!
-        @msg = "Successfully synced '#{@url}'!"
-      rescue Exception => e
-        @msg = "Could not sync '#{@url}': " + e.to_s
-      end
-    else
-      @msg = "Already synced '#{@url}'!"
-    end
-  end
-    
   def update
-      handle_response
+    Thread.new do
+      Sync.synchronize_calendars
+    end
+    flash[:sync] = "Calendars Synced!"
+    handle_response
   end
     
   def destroy
+    params[:url_list].each do |url|
+      Sync.find_by_url(url).destroy
+    end
+    flash[:sync] = "Calendars Removed!"
+    handle_response
   end
     
   def handle_response
@@ -74,10 +42,6 @@ class SyncsController < ApplicationController
   end
     
   private
-
-  def sync_params
-    params.require(:sync).permit(:organization, :url, :last_sync, :calendar_id)
-  end
   
   def is_root
     #if current_user.respond_to?('root?'); puts current_user.root?; end

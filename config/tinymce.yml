@@ -2,8 +2,14 @@ default:
   browser_spellcheck:
     - true
   menubar: false
-  toolbar: bold italic | bullist | link image media
+  toolbar: styleselect | bold italic | bullist | link image media | undo redo
   plugins:
     - link
     - image
     - media
+
+alternate:
+  selector: textarea.table-editor
+  toolbar: styleselect | bold italic | undo redo | table
+  plugins:
+    - table

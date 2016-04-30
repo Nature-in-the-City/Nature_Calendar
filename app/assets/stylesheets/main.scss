@@ -639,8 +639,13 @@ a.button {
 
 // Scroll container
 .scrollable {
-  height: 350px;
+  height: 450px;
   width: 90%;
+  overflow-y: scroll;
+}
+
+.scroll_small {
+  height: 200px;
   overflow-y: scroll;
 }
 .isa_success{
@@ -653,6 +658,24 @@ a.button {
 .borederless {
   border-top: none;
   border-bottom: none;
+}
+
+.ap_submit {
+  padding: 2px 3px 2px !important;
+  font-size: 12px !important;
+  font-family: "arial" !important;
+  background-color: #d6d6c2;
+  text-shadow: 1px 1px #DCE2E2;
+  color: #000000 !important;
+  text-transform: lowercase;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid #d6d6c2;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 .trimmed {

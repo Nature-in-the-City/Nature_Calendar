@@ -101,11 +101,11 @@ users = [{ email: 'admin123@admin.com',
            reset_password_token: 'token' },
   ]
   
-syncs = [{ organization: 'Nature in the City',
-           url: 'http://www.meetup.com/Nature-in-the-City/',
-           last_sync: 'May 15 2016 06:00',
-           calendar_id: 656555558 }
-        ]
+#syncs = [{ organization: 'Nature in the City',
+#           url: 'http://www.meetup.com/Nature-in-the-City/',
+#           last_sync: 'January 15 2016 06:00',
+#           calendar_id: 8870202 }
+#        ]
 
 events.each do |event|
   Event.create!(event)
@@ -123,6 +123,6 @@ users.each do |user|
   User.create!(user)
 end
 
-syncs.each do |sync|
-  Sync.create!(sync)
-end
+#syncs.each do |sync|
+#  Sync.create!(sync)
+#end

@@ -151,7 +151,7 @@ end
 
 Given /^I click "Update Event" for "(.*)"$/ do |event|
   within(:css, "#edit_event_#{Event.where(name: event).first.id}") do
-    find_button("Update Event").click
+    find_button("Update").click
   end
 end
 

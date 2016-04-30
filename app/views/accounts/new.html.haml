@@ -12,7 +12,7 @@
     - flash.each do |name, msg|
       = msg
 
-    = form_tag accounts_path do
+    = form_tag accounts_path + "#page" do
       = render 'account_form'
       <br/>
       = submit_tag "Create Admin", class: 'button'

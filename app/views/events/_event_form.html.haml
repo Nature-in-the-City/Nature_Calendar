@@ -1,16 +1,23 @@
 #e_name
-  .field Name
+  .field Event Name
   = text_field :event, 'name', class: 'edit_text_field', required: true
+
+#o_name
+  .field Organization
+  = text_field :event, 'organization', class: 'edit_text_field', required: true
   
 #e_category
   Category 
   =select :event, :category, { "Select" => "uncategorized", "Hike" => "hike", "Volunteer" => "volunteer", "Learn" => "learn", "Play" => "play" }, required: true
   
 #e_tags
-  Free
-  =check_box_tag 'event[free]', 1, true
+  -#Free
+  -#=check_box_tag 'event[free]', 1, true
   Family friendly
-  =check_box_tag 'event[family_friendly]', 1, true
+  =check_box_tag 'event[family_friendly]', 1, false
+  .field
+  Cost $
+  =number_field_tag 'event[cost]', 0.0, required: true
 
 #e_image.colored
   .field Image Upload
@@ -62,6 +69,3 @@
 #e_description.colored
   .field Description
   = text_area :event, 'description', :cols =>'40', :rows => '10', class: 'edit_text_field', required: true
-
-//= tinymce_assets
-//= tinymce
