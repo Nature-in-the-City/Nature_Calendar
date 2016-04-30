@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get 'suggest', on: :new
     get "events/edit_event_form" => 'events#edit_event_form', :as => :edit_form
     collection do
+      get 'search_events', :as => :search
       get 'third_party'
       post 'third_party'
       post 'pull_third_party'

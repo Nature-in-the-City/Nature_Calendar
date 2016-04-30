@@ -27,8 +27,9 @@ class CalendarsController < ApplicationController
     
     @tabs = %w(Upcoming Pending Rejected Past)
     @pending_count = pending.count
-    
     @head, @body = WebScraper.instance.page_data
     @calendars = Sync.find_each
+    @remote = false
   end
+  
 end

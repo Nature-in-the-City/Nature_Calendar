@@ -109,16 +109,19 @@
                     %a{ :href =>"#pending_events", 'data-toggle' => 'tab' } Pending (#{@pending_count})
                   - else
                     %a{ :href =>"##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
-      
+        %li{ id: "search_tab" }
+          %a{ :href => "#search", 'data-toggle' => 'tab' } Search
         %div.tab-content.clearfix.container
           %br
           - @tabs.each do |tab|
             - if tab.eql? "Upcoming"
               %div{ class: 'tab-pane active scrollable container-fluid', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: { tab: tab, tags: @tags }
+                = render partial: 'admin_panel', locals: { tab: tab, tab_events: @event_relations[tab] }
             - else
               %div{ class: 'tab-pane scrollable container-fluid', id: "#{tab.downcase}_events" }
-                = render partial: 'admin_panel', locals: { tab: tab, tags: @tags }
+                = render partial: 'admin_panel', locals: { tab: tab, tab_events: @event_relations[tab] }
+          %div{ class: 'tab-pane container-fluid', id: "search" }
+            = render partial: 'search_events'
           %br
 %br
 
@@ -140,29 +143,3 @@
         = form_tag add_calendar_syncs_path  + "#admin" do
           = text_field :sync, 'url', label: 'URL', class: 'edit_text_field', placeholder: "Meetup or Google Calendar Link", style: 'width:20em;'
           = submit_tag 'Add Calendar', class: 'button'
-          
-:javascript
-  $(document).ready(function(){
-    var show_btns = $("a:contains('Show')");
-    show_btns.each(function(index){
-      $(this).on("click", function() {
-        $(this).html("" + (($(this).attr("aria-expanded") == "true") ? "Show More <i class='fa fa-angle-down'></i>" : "Show Less <i class='fa fa-angle-up'></i>") );
-      });
-    });
-    
-    var edit_btns = $("a[id*='editButton']");
-    edit_btns.each(function(index) {
-      var show_id = "#showbtn_" + edit_btns[index].id.split("_")[0]
-      $(this).on("click", function() {
-        $(show_id).trigger("click");
-      });
-    });
-    
-    var cancel_btns = $("a[id*='_CancelEdit']");
-    cancel_btns.each(function(index) {
-      var show_id = "#showbtn_" + cancel_btns[index].id.split("_")[0]
-      $(this).on("click", function() {
-        $(show_id).trigger("click");
-      });
-    });
-  });
