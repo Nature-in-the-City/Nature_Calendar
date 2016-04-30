@@ -104,6 +104,9 @@ class EventsController < ApplicationController
   # does panel update event
   def update
     @event = Event.find params[:id]
+    if params.key?(:name) && params.key?(:value)  # x-editable update
+      params[:event] = {params[:name] => params[:value]}
+    end
     @is_approved = event_params[:status] == "approved"
     perform_update_transaction({ approved: @is_approved })
     @success ? handle_response : (render 'errors', format: :js)
@@ -114,7 +117,7 @@ class EventsController < ApplicationController
     if options[:approved]
       begin
         if @event.meetup_id
-          @remote_event = Meetup.new.edit_event({ event: event, id: @event.meetup_id })
+          @remote_event = Meetup.new.edit_event({ event: @event, id: @event.meetup_id })
         else
           @remote_event = Meetup.new.push_event(@event)
         end
@@ -156,6 +159,11 @@ class EventsController < ApplicationController
   end
 
   def handle_response
+    # debugger
+    if params.key?(:name) && params.key?(:value)  # x-editable update
+      render json: {:data => "hi"}
+      return
+    end
     respond_to do |format|
       format.html { redirect_to calendar_path }
       format.json { render nothing: true }

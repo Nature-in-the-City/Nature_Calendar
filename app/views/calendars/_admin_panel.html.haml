@@ -114,5 +114,9 @@
       });
     });
     
-    $('.editable').editable();
+    $('.editable').editable({
+      success: function(data, requestStatus, xhrObject) {
+        $(this).text(data);
+      }
+    });
   });
