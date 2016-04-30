@@ -21,50 +21,50 @@
             %tr
               %td Start
               %td
-                %a.editable{id: "#{event.id}_start", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= event.start.strftime("%b %0d, %Y, %r")
+                %a.editable{id: "start", "data-title" => "Enter start date", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.start.strftime("%b %0d, %Y, %r")
             %tr
               %td End
               %td
-                %a.editable{id: "#{event.id}_end", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= event.end.strftime("%b %0d, %Y, %r")
+                %a.editable{id: "end", "data-title" => "Enter end date", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.end.strftime("%b %0d, %Y, %r")
             %tr
               %td Location
               %td
-                %a.editable{id: "#{event.id}_location", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
+                %a.editable{id: "location", "data-title" => "Enter street", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= "#{event.st_number} #{event.st_name}, #{event.city}, CA #{event.zip}"
             %tr
               %td Cost
               %td
-                %a.editable{id: "#{event.id}_cost", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= "$#{event.cost}"
+                %a.editable{id: "cost", "data-title" => "Enter cost", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= "$#{event.cost}"
             %tr
               %td Tags
               %td
-                %a.editable{id: "#{event.id}_tags", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= "#{event.tag_string}"
+                %a.editable{id: "tags", "data-title" => "Enter tags", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= "#{event.tag_string}"
       .col-sm-4
         Description
         %p
-          %a.editable{id: "#{event.id}_description", "data-title" => "Enter tags", "data-type" => "textarea", "data-url" => "/put", :href => event_path(event.id)}= event.description
+          %a.editable{id: "description", "data-title" => "Enter tags", "data-type" => "textarea", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.description
       .col-sm-4
         %table.table.table-striped.table-bordered.table-hover.table-condensed
           %tbody
             %tr
               %td Organization
               %td
-                %a.editable{id: "#{event.id}_organization", "data-title" => "Enter cost", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= event.organization
+                %a.editable{id: "organization", "data-title" => "Enter cost", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.organization
             %tr
               %td Contact
               %td
-                %a.editable{id: "#{event.id}_contact", "data-title" => "Enter start date", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= "#{event.contact_first} #{event.contact_last}"
+                %a.editable{id: "contact", "data-title" => "Enter start date", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= "#{event.contact_first} #{event.contact_last}"
             %tr
               %td Phone
               %td
-                %a.editable{id: "#{event.id}_phone", "data-title" => "Enter end date", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= event.contact_phone
+                %a.editable{id: "phone", "data-title" => "Enter end date", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.contact_phone
             %tr
               %td Email
               %td
-                %a.editable{id: "#{event.id}_email", "data-title" => "Enter street", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= event.contact_email
+                %a.editable{id: "email", "data-title" => "Enter street", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.contact_email
             %tr
               %td Website
               %td
-                %a.editable{id: "#{event.id}_website", "data-title" => "Enter tags", "data-type" => "text", "data-url" => "/put", :href => event_path(event.id)}= event.url
+                %a.editable{id: "website", "data-title" => "Enter tags", "data-type" => "text", "data-url" => event_path(event.id), :href => event_path(event.id)}= event.url
     .row.trimmed
       .col-sm-9
       .col-sm-1
@@ -89,6 +89,7 @@
   $.fn.editable.defaults.mode = 'inline';
   $.fn.editable.defaults.ajaxOptions = {type: "PUT"}
   // $.fn.editable.defaults.showbuttons = false;
+  $.fn.editable.defaults.send = "always";
   $(document).ready(function() {
     var show_btns = $("a:contains('Show')");
     show_btns.each(function(index){
