@@ -53,7 +53,7 @@
           .container-fluid
             #email= "Email: #{event.contact_email}"
             #org= "Org: #{event.organization}"
-          - if !tab.eql? "Past" 
+          - if !event.status.eql? "Past" 
             .container-fluid.col-sm-4{ id: "accept_#{event.id}" }
               = form_tag edit_event_path(event.id) + '#admin', :method => 'get'  do
                 -# this will call editing
@@ -64,7 +64,7 @@
             .container-fluid.col-sm-4{ id: "edit_#{event.id}" }
               %a.ap_submit{ role: "button", id: "#{event.id}_editButton",
                   href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
-            - if tab.eql? "Rejected"
+            - if event.status.eql? "Rejected"
               .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
                 = form_tag event_path(event.id) + '#admin', :method => 'delete' do
                   -# this will permanently delete an event
@@ -86,5 +86,9 @@
       = render partial: 'calendars/edit_event', locals: { event: event, cancel_addition: '' }   
                   
 - else
-  %ul
-    %li= "There are no #{tab} events"
+  - if tab
+    %ul
+      %li= "There are no #{tab} events"
+  - else
+    %ul
+      %li= "Sorry, no events were found"
