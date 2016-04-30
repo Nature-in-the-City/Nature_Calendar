@@ -53,7 +53,7 @@
           .container-fluid
             #email= "Email: #{event.contact_email}"
             #org= "Org: #{event.organization}"
-          - if !event.status.eql? "Past" 
+          - if !tab.eql? "Past" 
             .container-fluid.col-sm-4{ id: "accept_#{event.id}" }
               = form_tag edit_event_path(event.id) + '#admin', :method => 'get'  do
                 -# this will call editing
@@ -64,12 +64,12 @@
             .container-fluid.col-sm-4{ id: "edit_#{event.id}" }
               %a.ap_submit{ role: "button", id: "#{event.id}_editButton",
                   href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
-            - if event.status.eql? "Rejected"
+            - if tab.eql? "Rejected"
               .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
                 = form_tag event_path(event.id) + '#admin', :method => 'delete' do
                   -# this will permanently delete an event
                   = submit_tag 'delete', class: "ap_submit",
-                  data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
+                  data: { confirm: "Are you sure you want to delete '#{event.name}'? This cannot be undone." }
             - else
               .container-fluid.col-sm-4{ id: "reject_#{event.id}" }
                 = form_tag edit_event_path(event.id) + '#admin', :method => 'get' do

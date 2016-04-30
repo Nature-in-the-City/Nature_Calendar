@@ -1,5 +1,5 @@
 # in features/admin_panel/delete_events.feature
-@javascript @admin_panel
+@javascript
 Feature: Delete events
   As an admin
   So that I can remove cancelled or obsolete events from the calendar
