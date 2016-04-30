@@ -1,4 +1,4 @@
-@sync @javascript
+@javascript
 Feature:
   As a Super Admin
   I can create other admins

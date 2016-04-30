@@ -24,6 +24,18 @@ class SyncsController < ApplicationController
     flash[:sync] = "Calendars Synced!"
     handle_response
   end
+  
+  def destroy
+    if params[:url].blank?
+      @msg = "No Calendars Selected!"
+    else
+      cal = Sync.find_by_url(params[:url])
+      cal.destroy
+      @msg = "#{params[:url]} removed!"
+    end
+    flash[:sync] = @msg
+    handle_response
+  end
     
   def destroy_multiple
     if params[:url_list].blank?
