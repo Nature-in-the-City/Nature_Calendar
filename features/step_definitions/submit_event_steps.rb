@@ -10,6 +10,7 @@ When /^I fill in the required suggest event form details for event "(.*)" on "(.
     step %Q{I fill in event form field "contact_phone" with "(555)555-5555"}
     step %q{I fill in event form field "contact_email" with "email@gmail.com"}
     step %Q{I fill in event form field "name" with "#{name}"}
+    step %Q{I fill in event form field "organization" with "Test Org"}
     step %Q{I fill in event form field "venue_name" with "SF Park"}
     step %q{I fill in "autocomplete" with "Golden Gate Park"}
     step %q{I accept the google maps suggested address}

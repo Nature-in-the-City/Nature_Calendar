@@ -12,7 +12,7 @@ Feature: Guests can suggest Events for approval by an admin
     Then I should see the "Suggest Your Event" in the panel
   
   Scenario: Submit an Event
-    When I fill in the required suggest event form details for event "Garden Party" on "3/22/2017" and submit
+    When I fill in the required suggest event form details for event "Garden Party" on "5/22/2017" and submit
     Then I log in as admin
     And I press the "Pending" tab
     Then I should see "Garden Party"
