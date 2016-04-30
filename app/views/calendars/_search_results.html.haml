@@ -47,7 +47,8 @@
         #description.col-sm-3.container-fluid{ id: "_Description" }
           Description
           .container-fluid.scroll_small
-            = event.description.html_safe
+            - if event.description
+              = event.description.html_safe
         #contact_2.col-sm-3.container-fluid{ id: "val_Email" }
           .container-fluid
             #email= "Email: #{event.contact_email}"

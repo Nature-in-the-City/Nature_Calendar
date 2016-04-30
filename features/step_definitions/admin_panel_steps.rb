@@ -269,19 +269,29 @@ Then /^I should see the (Sign Out|Sign In) button$/ do |direction|
 end
 
 Given(/^I see the search bar$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  within(:css, ".tab-pane.active") do
+    expect(find_button("Search")).to be_truthy
+  end
 end
 
-When(/^I fill in "([^"]*)" in "([^"]*)"$/) do |arg1, arg2|
-  pending # Write code here that turns the phrase above into concrete actions
+When(/^I fill in "([^"]*)" in "Search"$/) do |value|
+  within(:css, ".tab-pane.active") do
+    fill_in("search", with: value)
+  end
 end
 
-When(/^I click "([^"]*)"$/) do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
+When(/^I click "Search"$/) do
+  within(:css, ".tab-pane.active") do
+    click_button("Search")
+  end
 end
 
 Then(/^I should see "([^"]*)" in the results panel$/) do |arg1|
-  pending # Write code here that turns the phrase above into concrete actions
+  within(:css, ".tab-pane.active") do
+    within(:css, "#results") do
+      expect(page.has_text? arg1).to be_truthy
+    end
+  end
 end
 
 Then(/^I should see "([^"]*)" in the "([^"]*)"$/) do |arg1, arg2|
@@ -303,3 +313,4 @@ end
 Given(/^I select "([^"]*)" from the "([^"]*)"$/) do |arg1, arg2|
   pending # Write code here that turns the phrase above into concrete actions
 end
+
