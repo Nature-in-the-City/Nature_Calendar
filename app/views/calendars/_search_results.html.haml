@@ -1,4 +1,4 @@
--# in app/views/calendars/_admin_panel.html.haml, rendered from _calendar.html.haml
+-# in app/views/calendars/_search_results.html.haml
 
 %br
 %br
@@ -8,11 +8,11 @@
       .col-sm-8
         %h3= "#{event.name}"
       .col-sm-4
-        %a{ id: "showbtn_#{event.id}", class: "", href: "##{event.id}_details", data: { toggle: "collapse" } }
+        %a{ id: "showbtn_#{event.id}2", class: "", href: "##{event.id}2_details", data: { toggle: "collapse" } }
           Show More
           %i.fa.fa-angle-down
     
-    .container-fluid{ id: "#{event.id}_details", class: "collapse" }
+    .container-fluid{ id: "#{event.id}2_details", class: "collapse" }
       #top{ class: "row" }
         #date.col-sm-2
           Date
@@ -60,11 +60,11 @@
                   = submit_tag 'accept', class: 'ap_submit disabled', disabled: 'true'
                 - else
                   = submit_tag 'accept', class: 'ap_submit'
-            .container-fluid.col-sm-4{ id: "edit_#{event.id}" }
-              %a.ap_submit{ role: "button", id: "#{event.id}_editButton",
-                  href: "##{event.id}_edit", data: { toggle: "collapse" } } Edit
+            .container-fluid.col-sm-4{ id: "edit_#{event.id}2" }
+              %a.ap_submit{ role: "button", id: "#{event.id}2_editButton",
+                  href: "##{event.id}2_edit", data: { toggle: "collapse" } } Edit
             - if event.status.eql? "Rejected"
-              .container-fluid.col-sm-4{ id: "delete_#{event.id}" }
+              .container-fluid.col-sm-4{ id: "delete_#{event.id}2" }
                 = form_tag event_path(event.id) + '#admin', :method => 'delete' do
                   -# this will permanently delete an event
                   = submit_tag 'delete', class: "ap_submit",
@@ -81,13 +81,8 @@
                 = submit_tag 'delete', class: "ap_submit",
                 data: { confirm: "Are you sure you want to delete '#{event.name}'?\n This cannot be undone." }
     
-    .container-fluid{ id: "#{event.id}_edit", class: "collapse" }
-      = render partial: 'calendars/edit_event', locals: { event: event, cancel_addition: '' }   
-                  
+    .container-fluid{ id: "#{event.id}2_edit", class: "collapse" }
+      = render partial: 'calendars/edit_event', locals: { event: event, cancel_addition: '2' }   
 - else
-  - if tab
-    %ul
-      %li= "There are no #{tab} events"
-  - else
-    %ul
-      %li= "Sorry, no events were found"
+  %ul
+    %li= "Sorry, no events were found"

@@ -1,0 +1,11 @@
+%br
+.row
+  .col-sm-1
+  .container-fluid.col-sm-8
+    = form_tag search_events_path, :method => 'get', remote: true, class: 'input-group' do
+      = text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Search by full or partial event name...'
+      %span.input-group-btn
+        = submit_tag "Search", class: 'btn btn-default'
+  .col-sm-1
+.row
+  #results.scrollable

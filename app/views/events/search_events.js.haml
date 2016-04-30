@@ -1,0 +1,5 @@
+// In app/assests/javascripts/search_events.js
+// AJAX call for searching for events
+$('#results').addClass('containter-fluid scrollable');
+$('#results').html("#{j render partial: 'calendars/search_results', locals: { tab_events: @events, search: true, tab: nil }}")
+$(AdminAnimations.setup);
