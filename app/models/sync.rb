@@ -20,8 +20,8 @@ class Sync < ActiveRecord::Base
   def self.pull_calendar_events(name, url)
     if url =~ /meetup.com/
       return Meetup.new.pull_events({group_urlname: name})
-    elsif url =~ /google/
-      return name
+    elsif url =~ /gmail.com/
+      return Google.new.pull_events({calendar_id: name})
     else
       raise Exception, 'Invalid URL', caller
     end
@@ -69,16 +69,6 @@ class Sync < ActiveRecord::Base
     end
   end
   
-  def self.create_events(events, url)
-    if events.respond_to?(:each)
-      events.each do |event|
-        e = Event.new(event)
-        e.update_attributes(:status => 'pending', :url => url)
-        e.save!
-      end
-    end
-  end
-  
   def self.sync_calendar(url)
     if Sync.where(:url => url).blank?
       begin
@@ -87,7 +77,7 @@ class Sync < ActiveRecord::Base
         sync.update_attributes(:organization => name.gsub("-", " "), :last_sync => DateTime.now(), :url => url)
         sync.save!
         events = Sync.pull_calendar_events(name, url)
-        Sync.create_events(events, url)
+        Sync.process_updates(events, url)
         return "Successfully synced '#{url}'!"
       rescue Exception => e
         return "Could not sync '#{url}': " + e.to_s

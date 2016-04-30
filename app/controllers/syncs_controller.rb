@@ -10,7 +10,7 @@ class SyncsController < ApplicationController
     # Provides defualt path
   end
   
-  def create
+  def add_calendar
     thread = Thread.new { Thread.current[:output] = Sync.sync_calendar(params[:sync][:url]) }
     thread.join
     flash[:sync] = thread[:output]
@@ -25,11 +25,17 @@ class SyncsController < ApplicationController
     handle_response
   end
     
-  def destroy
-    params[:url_list].each do |url|
-      Sync.find_by_url(url).destroy
+  def destroy_multiple
+    if params[:url_list].blank?
+      @msg = "No Calendars Selected!"
+    else
+      params[:url_list].each do |url|
+        cal = Sync.find_by_url(url)
+        cal.destroy
+      end
+      @msg = "Calendars Removed!"
     end
-    flash[:sync] = "Calendars Removed!"
+    flash[:sync] = @msg
     handle_response
   end
     

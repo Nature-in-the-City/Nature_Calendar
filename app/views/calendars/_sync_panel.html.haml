@@ -1,29 +1,23 @@
-
-#status.container.col-sm-1
-  .button_right
-    Sync
-    %i.fa.fa-refresh
-#status.container.col-sm-6
-  .button_left
-    Delete
-    %i.fa.fa-trash-o
-%table
-  %thead
-    %td.text-center Select
-    %td.text-center Calendar
-    %td.text-center
-      Status
-      (
-      %i.fa.fa-check.isa_success
-      or
-      %i.fa.fa-times.isa_error
-      )
-    %td.text-center Last Sync
-  %tbody
-    - @calendars.each do |calendar|
-      %tr
-        %td.text-center= check_box_tag  calendar.url
-        %td.text-center= calendar.organization
+#status.container.col-sm-12
+  = form_tag destroy_multiple_syncs_path + "#sync", :method => :delete do
+    %table
+      %thead
+        %td.text-center Select
+        %td.text-center Calendar
         %td.text-center
+          Status
+          (
           %i.fa.fa-check.isa_success
-        %td.text-center= calendar.last_sync.strftime("%c")
+          or
+          %i.fa.fa-times.isa_error
+          )
+        %td.text-center Last Sync
+      %tbody
+        - @calendars.each do |calendar|
+          %tr
+            %td.text-center= check_box_tag "url_list[]", calendar.url
+            %td.text-center= calendar.organization
+            %td.text-center
+              %i.fa.fa-check.isa_success
+            %td.text-center= calendar.last_sync.strftime("%c")
+    = submit_tag "Delete", class: "button i.fa.fa-trash-o"

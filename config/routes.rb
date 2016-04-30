@@ -18,6 +18,14 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :syncs do
+    collection do
+      get 'update'
+      post 'add_calendar'
+      delete 'destroy_multiple'
+    end
+  end
+  
   resources :guests, only: [:new, :create]
 
   resources :accounts

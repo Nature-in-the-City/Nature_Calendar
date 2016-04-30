@@ -132,10 +132,12 @@
           = flash[:sync]
     .container.row
       #status.container.col-sm-8
+        = button_to "Sync", syncs_path + "#sync", class: "button fa fa-refresh", :method => :get
+      #status.container.col-sm-8
         = render partial: 'sync_panel'
       #add_cal.container.col-sm-4
         %h3 Add New Calendar
-        = form_tag syncs_path  + "#admin" do
+        = form_tag add_calendar_syncs_path  + "#admin" do
           = text_field :sync, 'url', label: 'URL', class: 'edit_text_field', placeholder: "Meetup or Google Calendar Link", style: 'width:20em;'
           = submit_tag 'Add Calendar', class: 'button'
           
