@@ -38,6 +38,7 @@ gem 'devise'
 gem 'tinymce-rails'
 # Template framework set to HAML
 gem 'haml-rails'
+# codeclimate style checking
 gem 'rubocop', require: false
 gem 'paperclip'
 gem 'rails-html-sanitizer'
@@ -48,6 +49,8 @@ gem 'rufus-scheduler'
 gem 'font-awesome-sass'
 # Puma Worker Killer
 gem 'puma_worker_killer'
+# text editor
+gem 'tinymce-rails'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record

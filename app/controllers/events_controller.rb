@@ -59,6 +59,7 @@ class EventsController < ApplicationController
   # handles panel add new event
   def create
     @is_approved = event_params[:status] == "approved"
+    event_params[:free] = event_params[:cost] == 0
     begin
       @event = Event.new(event_params)
       if @is_approved then
@@ -158,6 +159,15 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to calendar_path }
       format.json { render nothing: true }
+      format.js
+    end
+  end
+  
+  def edit_event_form
+    #byebug
+    @event = Event.find(params[:event_id])
+    respond_to do |format|
+      format.html
       format.js
     end
   end

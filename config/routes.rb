@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   resources :events do
     get 'suggest', on: :new
+    get "events/edit_event_form" => 'events#edit_event_form', :as => :edit_form
     collection do
       get 'third_party'
       post 'third_party'
@@ -31,4 +32,6 @@ Rails.application.routes.draw do
   resources :accounts
   
   resources :syncs
+  
+  
 end

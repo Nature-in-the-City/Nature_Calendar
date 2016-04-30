@@ -12,25 +12,25 @@ Feature:
     When I fill in the "sync_url" field with "http://www.meetup.com/Truve-Oakland-Exercise-Meetup/"
     And I press "Add Calendar"
     And I see the "Sync" panel
-    And I should see "Successfully added 'http://www.meetup.com/Truve-Oakland-Exercise-Meetup/'!"
+    And I should see "Successfully synced 'http://www.meetup.com/Truve-Oakland-Exercise-Meetup/'!"
     
   Scenario: I should be able to add a meetup calendar to sync with by URL
     When I fill in the "sync_url" field with "http://www.meetup.com/codeselfstudy/"
     And I press "Add Calendar"
     And I see the "Sync" panel
-    And I should see "Successfully added 'http://www.meetup.com/codeselfstudy/'!"
+    And I should see "Successfully synced 'http://www.meetup.com/codeselfstudy/'!"
   
   Scenario: I should be able to add a meetup calendar to sync with by URL
     When I fill in the "sync_url" field with "http://www.meetup.com/sanfranciscobay/"
     And I press "Add Calendar"
     And I see the "Sync" panel
-    And I should see "Successfully added 'http://www.meetup.com/sanfranciscobay/'!"
+    And I should see "Successfully synced 'http://www.meetup.com/sanfranciscobay/'!"
     
   Scenario: I should be able to add a meetup calendar to sync with by URL
     When I fill in the "sync_url" field with "http://www.meetup.com/Women-Who-Code-East-Bay/"
     And I press "Add Calendar"
     And I see the "Sync" panel
-    And I should see "Successfully added 'http://www.meetup.com/Women-Who-Code-East-Bay/"
+    And I should see "Successfully synced 'http://www.meetup.com/Women-Who-Code-East-Bay/"
   
   Scenario: Bad meetup calendar links should redirect with message
     When I fill in the "sync_url" field with "http://badcalendarlink.com/fail_to/link_to=1232312"

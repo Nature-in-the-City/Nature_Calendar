@@ -16,6 +16,8 @@
 //= require jquery.remotipart
 //= require moment
 //= require tinymce
+//= require tinymce-jquery
 //= require fullcalendar
 //= require bootstrap
 //= require_tree .
+//= require bootstrap/modal
