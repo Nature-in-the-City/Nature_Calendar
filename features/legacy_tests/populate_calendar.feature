@@ -1,4 +1,4 @@
-@javascript @legacy
+@javascript
 Feature: Populate calendar with events
 
   As an admin
@@ -14,5 +14,5 @@ Background: Events have already been added to the database
 
 Scenario: see events on calendar page
   Given I am on the calendar page
-  Then I should definitely see the event "Market Street Prototyping Festival" on "April 09, 2020"
-  And I should definitely see the event "Nerds on Safari: Market Street" on "April 11, 2020"
+  Then I should see the event "Market Street Prototyping Festival" on "April 09, 2020"
+  And I should see the event "Nerds on Safari: Market Street" on "April 11, 2020"

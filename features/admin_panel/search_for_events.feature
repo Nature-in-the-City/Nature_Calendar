@@ -1,4 +1,4 @@
-@javascript @admin_panel @inprog
+@javascript @admin_panel
 Feature: Search for events in admin panel
   As an admin
   So that I can quickly find a specific event

@@ -5,7 +5,6 @@ Then(/^I should see the default panel$/) do
 end
 
 When(/^(?:|when )I click on "(.*)" in the calendar$/) do |name|
-  pending
   sleep(2)
   all('.fc-title', text: name)[0].click
 end

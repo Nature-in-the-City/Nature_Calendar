@@ -1,4 +1,4 @@
-@javascript @legacy
+@javascript
 Feature: populate the event panel with event details
   As a user and admin
   to clearly convey and understand the location of an event
