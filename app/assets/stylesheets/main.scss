@@ -654,3 +654,37 @@ a.button {
   border-top: none;
   border-bottom: none;
 }
+
+.trimmed {
+  border: 0;
+  border-collapse: collapse;
+  padding: 0;
+  margin: 0;
+}
+
+.padded {
+  padding: 15;
+}
+
+.no-overflow {
+  overflow: hidden;
+}
+
+.row {
+  margin-right: 0;
+}
+
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+
+
+.navbar {
+  margin-right: 0;
+}
+
+body {
+  overflow-x: hidden;
+}

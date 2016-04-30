@@ -106,13 +106,13 @@
           %li{id: "#{tab}"}
             %a{ :href => "##{tab.downcase}_events", 'data-toggle' => 'tab' } #{tab}
     %br
-    .tab-content.nopadding.nomargin.container
+    .tab-content.no-overflow
       - @tabs.each do |tab|
         - if tab.eql? "Upcoming"
-          .container{ class: 'tab-pane active scrollable', id: "#{tab.downcase}_events" }
+          .container-fluid.trimmed{ class: 'tab-pane active scrollable', id: "#{tab.downcase}_events", border: 0, margin: 0, padding: 0}
             = render partial: 'admin_panel', locals: { tab: tab }
         - else
-          .container{ class: 'tab-pane scrollable',        id: "#{tab.downcase}_events" }
+          .container-fluid.trimmed{ class: 'tab-pane scrollable',        id: "#{tab.downcase}_events" }
             = render partial: 'admin_panel', locals: { tab: tab }
     %br
 
