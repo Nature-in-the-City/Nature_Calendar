@@ -34,9 +34,11 @@ module CalendarsHelper
     if not social_icons.nil? then
       social_icons.each_with_index do |elem, index|
         data = svgs[keys[index]]
-        elem.child.replace  data[:background]
-        elem.child.next.replace  data[:icon]
-        elem.child.next.next.replace  data[:mask]
+        if not data.nil? then
+          elem.child.replace  data[:background]
+          elem.child.next.replace  data[:icon]
+          elem.child.next.next.replace  data[:mask]
+        end
       end
     end
   end
