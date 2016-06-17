@@ -30,11 +30,14 @@ module CalendarsHelper
     url = File.join(Rails.root, 'lib', 'squarespace_svgs.rb')
     svgs = eval(File.read(url))
     keys = svgs.keys
-    body.css('.sqs-svg-icon--list svg').each_with_index do |elem, index|
-      data = svgs[keys[index]]
-      elem.child.replace  data[:background]
-      elem.child.next.replace  data[:icon]
-      elem.child.next.next.replace  data[:mask]
+    social_icons = body.css('.sqs-svg-icon--list svg')
+    if not social_icons.nil? then
+      social_icons.each_with_index do |elem, index|
+        data = svgs[keys[index]]
+        elem.child.replace  data[:background]
+        elem.child.next.replace  data[:icon]
+        elem.child.next.next.replace  data[:mask]
+      end
     end
   end
 
