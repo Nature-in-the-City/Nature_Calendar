@@ -1,10 +1,10 @@
 class Google
   include HTTParty
     
-  attr_reader :default_calendar_id, :default_auth
+  attr_reader :default_calendar_id
     
   BASE_URL = 'https://www.googleapis.com/calendar/v3/calendars/'
-    
+  
   def default_calendar_id=(calendar_id='')
     @default_calendar_id = calendar_id
   end
@@ -14,14 +14,15 @@ class Google
   end
     
   def pull_events(options={})
-    data = HTTParty.get("#{BASE_URL}/#{@default_calendar_id}/events")
+    puts default_calendar_id
+    data = HTTParty.get("#{BASE_URL}/#{default_calendar_id}/events")
     Google.process_result(data[:items], lambda {|arg| Google.parse_event(arg)}, ['200'])
   end
     
   def self.process_result(result, handler, success_codes)
-    success = (success_codes.include?(result.code.to_s))
-    return success if handler.nil?
-    if success
+    #success = (success_codes.include?(result.code.to_s))
+    #return success if handler.nil?
+    if true #success
       parse_data(result, handler)
     else
       message = parse_error(result)

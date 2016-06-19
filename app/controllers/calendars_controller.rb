@@ -16,7 +16,7 @@ class CalendarsController < ApplicationController
     all = Event.order(:start)
     curr = all.upcoming
     
-    past = all.past.approved
+    past = all.past.approved.reverse
     pending = Event.filtered(curr.pending, @filter)
     upcoming = Event.filtered(curr.approved, @filter)
     rejected = Event.filtered(curr.rejected, @filter)

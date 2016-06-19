@@ -21,7 +21,7 @@ class Sync < ActiveRecord::Base
     if url =~ /meetup.com/
       return Meetup.new.pull_events({group_urlname: name})
     elsif url =~ /gmail.com/
-      return Google.new.pull_events({calendar_id: name})
+      return Google.new.pull_events({calendar_id: url})
     else
       raise Exception, 'Invalid URL', caller
     end

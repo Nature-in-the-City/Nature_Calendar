@@ -23,7 +23,7 @@ unless Rails.env.test?
     puts 'Joomla Data Fetched.' if DEBUG
   end
   
-  scheduler.every '15m', first: Time.now + 2 * 60 do |job|
+  scheduler.every '1m', first: Time.now + 2 * 60 do |job|
     Event.synchronize_past_events
     puts 'Past Events Synchronized.' if DEBUG
     Event.synchronize_upcoming_events
